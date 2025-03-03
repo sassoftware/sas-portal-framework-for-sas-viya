@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" type="image/x-icon" href="./static/favicon.ico" />
+        <title>SAS Portal</title>
+        <!-- Bootstrap Style -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+            crossorigin="anonymous"
+        />
+        <style>
+            button {
+                margin-right: 1em;
+            }
+        </style>
+        <link rel="stylesheet" type="text/css" href="./css/global.css" />
+    </head>
+    <body>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" id="PORTALNAME"></a>
+                <form class="d-flex" role="Login">
+                    <button
+                        class="btn btn-outline-success"
+                        id="SASLOGIN"
+                        type="button"
+                    >
+                        Login
+                    </button>
+                </form>
+            </div>
+        </nav>
+        <div id="SASPORTAL"></div>
+        <!-- Import SAS SDKs and Third-Party Utilities -->
+        <script src="https://cdn.developer.sas.com/packages/sas-auth-browser/latest/dist/index.min.js"></script>
+        <script src="https://cdn.developer.sas.com/packages/content-components/latest/dist/umd/content-sdk-components.js"></script>
+        <script src="https://cdn.developer.sas.com/packages/va-report-components/latest/dist/umd/va-report-components.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"
+        ></script>
+        <script
+            type="module"
+            src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@2/dist/zero-md.min.js"
+        ></script>
+
+        <!-- Import Utility JS -->
+        <script src="./js/utility/create-file.js"></script>
+        <script src="./js/utility/get-folder-content.js"></script>
+        <script src="./js/utility/get-file-content.js"></script>
+        <script src="./js/utility/get-interface-language.js"></script>
+        <script src="./js/utility/get-user-info.js"></script>
+        <script src="./js/utility/get-mas-modules.js"></script>
+        <script src="./js/utility/get-mas-module-information.js"></script>
+        <script src="./js/utility/create-accordion-item.js"></script>
+        <script src="./js/utility/add-accordion-body.js"></script>
+        <script src="./js/utility/get-mas-module-code.js"></script>
+        <script src="./js/utility/create-table.js"></script>
+        <script src="./js/utility/add-row-to-table.js"></script>
+        <script src="./js/utility/get-mas-module-inputs.js"></script>
+        <script src="./js/utility/score-mas-module.js"></script>
+        <script src="./js/utility/convert-table-to-csv.js"></script>
+        <script src="./js/utility/download-content-as-file.js"></script>
+        <script src="./js/utility/get-compute-contexts.js"></script>
+        <script src="./js/utility/get-oauth-clients.js"></script>
+        <script src="./js/utility/get-specific-oauth-client.js"></script>
+        <script src="./js/utility/call-LLM.js"></script>
+        <script src="./js/utility/search-information-catalog.js"></script>
+        <script src="./js/utility/create-carousel.js"></script>
+        <script src="./js/utility/add-item-to-carousel.js"></script>
+        <script src="./js/utility/get-information-catalog-instance.js"></script>
+        <script src="./js/utility/create-sas-session.js"></script>
+        <script src="./js/utility/create-machine-learning-pipeline-automation.js"></script>
+        <script src="./js/utility/get-machine-learning-pipeline-automation-state.js"></script>
+        <script src="./js/utility/get-data-mining-project-summary-report.js"></script>
+        <script src="./js/utility/get-data-mining-project-resources-document.js"></script>
+        <script src="./js/utility/publish-machine-learning-pipeline-automation-champion.js"></script>
+        <script src="./js/utility/delete-client.js"></script>
+        <script src="./js/utility/create-client.js"></script>
+        <script src="./js/utility/update-client.js"></script>
+        <script src="./js/utility/update-clientSecret.js"></script>
+        <script src="./js/utility/get-file.js"></script>
+        <script src="./js/utility/update-file-content.js"></script>
+        <script src="./js/utility/create-report-with-data.js"></script>
+        <script src="./js/utility/refresh-full-va-report.js"></script>
+        <script src="./js/utility/get-model-projects.js"></script>
+        <script src="./js/utility/get-model-project-models.js"></script>
+        <script src="./js/utility/create-model-project.js"></script>
+        <script src="./js/utility/get-model-repository-information.js"></script>
+        <script src="./js/utility/create-model.js"></script>
+        <script src="./js/utility/get-model-contents.js"></script>
+        <script src="./js/utility/call-SCR-LLM.js"></script>
+        <script src="./js/utility/delete-model-content.js"></script>
+        <script src="./js/utility/create-model-content.js"></script>
+        <script src="./js/utility/create-model-version.js"></script>
+
+        <!-- Import Object Builder -->
+        <script src="./js/objects/add-end-to-end.js"></script>
+        <script src="./js/objects/add-text-objects.js"></script>
+        <script src="./js/objects/add-linklist-objects.js"></script>
+        <script src="./js/objects/add-interactiveContent-objects.js"></script>
+        <script src="./js/objects/add-portalBuilder-object.js"></script>
+        <script src="./js/objects/add-masScore-object.js"></script>
+        <script src="./js/objects/add-client-administrator.js"></script>
+        <script src="./js/objects/add-vaReport-object.js"></script>
+        <script src="./js/objects/add-chat-with-data.js"></script>
+        <script src="./js/objects/add-prompt-builder.js"></script>
+
+        <!-- Import Prompts -->
+        <script src="./js/promptStore/chatWithDataPrompts.js"></script>
+
+        <!-- Import Page Builing -->
+        <script src="./js/generate-tabs.js"></script>
+        <script src="./js/generate-panes.js"></script>
+        <script src="./js/generate-pages.js"></script>
+        <script src="./js/generate-portal.js"></script>
+        <script src="./js/add-user-profile.js"></script>
+
+        <!-- Authenticate with Viya -->
+        <script src="./js/viya-auth.js"></script>
+
+        <!-- Baseline configuration -->
+        <script src="./config.js"></script>
+
+        <script>
+            // Name that appears in the top left of the portal - set via the config.js
+            document.getElementById('PORTALNAME').innerText = PORTALNAME;
+
+            const SASPORTAL = document.getElementById('SASPORTAL');
+            const SASLOGIN = document.getElementById('SASLOGIN');
+
+            // Generate Portal
+            authWithViya(VIYA, SASLOGIN, PORTAL, SASPORTAL);
+        </script>
+    </body>
+</html>

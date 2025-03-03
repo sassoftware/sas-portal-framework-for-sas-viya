@@ -1,0 +1,463 @@
+<div id="portalBuilderSite" style="width: 100%">
+    <!-- Bootstrap Style -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+        crossorigin="anonymous"
+    />
+    <style>
+        .moveButton {
+            margin: 0 5px;
+            cursor: pointer;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="../css/global.css" />
+    <!-- Bootstrap SDK -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"
+    ></script>
+    <!-- Button trigger modal -->
+    <div id="portalBuilderMainButtons">
+        <button
+            id="portalBuilderCreatePageButton"
+            type="button"
+            class="btn btn-primary"
+            onclick="changePage('create')"
+        ></button>
+        <button
+            id="portalBuilderPageButton"
+            type="button"
+            class="btn btn-primary"
+            onclick="changePage('edit')"
+        ></button>
+        <button
+            id="portalBuilderOrderButton"
+            type="button"
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#portalBuilderOrderModal"
+        ></button>
+    </div>
+    <!-- Modals -->
+    <br />
+    <div id="portalBuilderPageContainer"></div>
+    <div id="portalBuilderMainModals">
+        <div
+            class="modal fade"
+            id="portalBuilderOrderModal"
+            tabindex="-1"
+            aria-labelledby="portalBuilderOrderModalHeader"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1
+                            class="modal-title fs-5"
+                            id="portalBuilderOrderModalHeader"
+                        ></h1>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <div class="modal-body">
+                        <ol
+                            id="portalBuilderOrderModalList"
+                            class="list-group list-group-numbered"
+                        ></ol>
+                    </div>
+                    <div class="modal-footer">
+                        <button
+                            id="portalBuilderOrderModalClose"
+                            type="button"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        ></button>
+                        <button
+                            id="portalBuilderOrderModalSave"
+                            type="button"
+                            class="btn btn-primary"
+                            onclick="saveChanges('portalBuilderOrderModalList', 'orderexists')"
+                        ></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        /**
+         * Create the interface for editing the general layout of the page
+         * @param mode {String} - is either set to create or edit based on the button the user clicks
+         * @param glDefinition {Object} - optional, contains the general section of the portal-page-layout.json, defaults to empty
+         * @return {HTML object} - returns a div to be added to the page
+         **/
+        async function pageGeneralLayout(mode, glDefinition = {}) {
+            let pglContainer = document.createElement('div');
+            pglContainer.id = 'portalBuilder-General-Layout-Container';
+
+            // Create empty definition for  the glDefinition object
+            if (mode === 'create') {
+                glDefinition = {
+                    contact: '',
+                    name: '',
+                    numCols: 2,
+                    shorthand: '',
+                    visible: true,
+                    showNameOnPage: false,
+                };
+            }
+
+            // Create the general interface
+            // Page Name
+            let pglNameInputText = document.createElement('p');
+            pglNameInputText.innerText = `${window.portalBuilderLanguage?.enterPageName}:`;
+            pglNameInputText.className = 'fs-3';
+            let pglNameInput = document.createElement('input');
+            pglNameInput.type = 'text';
+            pglNameInput.className = 'form-control';
+            pglNameInput.value = glDefinition.name;
+            pglNameInput.id = 'pglNameInput';
+            pglNameInput.required = true;
+            // Page Shorthand
+            let pglShorthandInputText = document.createElement('p');
+            pglShorthandInputText.innerText = `${window.portalBuilderLanguage?.enterPageShorthand}:`;
+            pglShorthandInputText.className = 'fs-3';
+            let pglShorthandInput = document.createElement('input');
+            pglShorthandInput.type = 'text';
+            pglShorthandInput.className = 'form-control';
+            pglShorthandInput.value = glDefinition.shorthand;
+            pglShorthandInput.id = 'pglShorthandInput';
+            pglShorthandInput.required = true;
+            pglShorthandInput.onkeydown = 'return /[a-z]/i.test(event.key)';
+            // Page Visible
+            let pglVisibleCheckboxContainer = document.createElement('div');
+            let pglVisibleCheckbox = document.createElement('input');
+            pglVisibleCheckbox.type = 'checkbox';
+            pglVisibleCheckbox.checked = glDefinition?.visible;
+            pglVisibleCheckbox.id = 'pglVisibleCheckbox';
+            pglVisibleCheckbox.classList = 'form-check-input';
+            let pglVisibleCheckboxLabel = document.createElement('label');
+            pglVisibleCheckboxLabel.classList = 'from-check-label fs-3';
+            pglVisibleCheckboxLabel.for = 'pglVisibleCheckbox';
+            pglVisibleCheckboxLabel.innerText = `${window.portalBuilderLanguage?.enterPageVisible}:`;
+            pglVisibleCheckboxContainer.appendChild(pglVisibleCheckbox);
+            pglVisibleCheckboxContainer.appendChild(pglVisibleCheckboxLabel);
+            // Page Show Name
+            let pglShowNameCheckboxContainer = document.createElement('div');
+            let pglShowNameCheckbox = document.createElement('input');
+            pglShowNameCheckbox.type = 'checkbox';
+            pglShowNameCheckbox.checked = glDefinition?.showNameOnPage
+                ? true
+                : false;
+            pglShowNameCheckbox.id = 'pglVisibleCheckbox';
+            pglShowNameCheckbox.classList = 'form-check-input';
+            let pglShowNameCheckboxLabel = document.createElement('label');
+            pglShowNameCheckboxLabel.classList = 'from-check-label fs-3';
+            pglShowNameCheckboxLabel.for = 'pglVisibleCheckbox';
+            pglShowNameCheckboxLabel.innerText = `${window.portalBuilderLanguage?.enterPageShowName}:`;
+            pglShowNameCheckboxContainer.appendChild(pglShowNameCheckbox);
+            pglShowNameCheckboxContainer.appendChild(pglShowNameCheckboxLabel);
+            // Page Number of Columns
+            let pglNumColsInputText = document.createElement('p');
+            pglNumColsInputText.innerText = `${window.portalBuilderLanguage?.enterPageNumCols}:`;
+            pglNumColsInputText.className = 'fs-3';
+            let pglNumColsInput = document.createElement('input');
+            pglNumColsInput.type = 'number';
+            pglNumColsInput.className = 'form-control';
+            pglNumColsInput.value = glDefinition.numCols;
+            pglNumColsInput.id = 'pglNumColsInput';
+            pglNumColsInput.onkeydown = 'return /[0-9]/i.test(event.key)';
+            // Page Contact
+            let pglContactInputText = document.createElement('p');
+            pglContactInputText.innerText = `${window.portalBuilderLanguage?.enterPageContact}:`;
+            pglContactInputText.className = 'fs-3';
+            let pglContactInput = document.createElement('input');
+            pglContactInput.type = 'email';
+            pglContactInput.className = 'form-control';
+            pglContactInput.value = glDefinition.contact;
+            pglContactInput.id = 'pglContactInput';
+
+            // Add Interface response
+            pglContainer.appendChild(pglNameInputText);
+            pglContainer.appendChild(pglNameInput);
+            pglContainer.appendChild(pglShorthandInputText);
+            pglContainer.appendChild(pglShorthandInput);
+            pglContainer.appendChild(pglVisibleCheckboxContainer);
+            pglContainer.appendChild(pglShowNameCheckboxContainer);
+            pglContainer.appendChild(pglNumColsInputText);
+            pglContainer.appendChild(pglNumColsInput);
+            pglContainer.appendChild(pglContactInputText);
+            pglContainer.appendChild(pglContactInput);
+
+            return pglContainer;
+        }
+
+        window.pageGeneralLayout = pageGeneralLayout;
+    </script>
+    <script type="module">
+        //DAVID
+        /**
+         * Create the interface for page editing or creation
+         * @param mode {String} - is either set to create or edit based on the button the user clicks
+         * @return directly updates the content of the div with the ID portalBuilderPageContainer
+         **/
+        async function changePage(mode) {
+            let portalPageContainer = document.getElementById(
+                'portalBuilderPageContainer'
+            );
+            portalPageContainer.innerHTML = '';
+
+            if (mode === 'edit') {
+                // Create dropdown to select the existing page that should be edited
+                // Get all existing pages
+                let existingPages = await window.parent.getFolderContent(
+                    window.parent.VIYA,
+                    `/folders/folders/${window.parent.PORTAL}`,
+                    '?filter=eq(contentType,folder)&sortBy=name&limit=1000'
+                );
+
+                // Create dropdown and add selection text
+                let editExistingPagesDropdownText = document.createElement('p');
+                editExistingPagesDropdownText.innerText = `${window.portalBuilderLanguage?.editSelectPage}:`;
+                editExistingPagesDropdownText.className = 'fs-3';
+                let editExistingPagesDropdown =
+                    document.createElement('select');
+                editExistingPagesDropdown.setAttribute('class', 'form-select');
+                // On change function to fill the next content
+                editExistingPagesDropdown.onchange = async function () {
+                    let currentPage = this.options[this.selectedIndex].value;
+                    let currentPageLayoutURIDefinition =
+                        await window.parent.getFolderContent(
+                            window.parent.VIYA,
+                            currentPage,
+                            '?filter=eq("name","portal-page-layout.json")'
+                        );
+                    let currentPageDefinitionJSON =
+                        await window.parent.getFileContent(
+                            window.parent.VIYA,
+                            currentPageLayoutURIDefinition[0]?.uri
+                        );
+                    let currentPageDefinition =
+                        await currentPageDefinitionJSON.json();
+
+                    let generalLayout = await pageGeneralLayout(
+                        mode,
+                        currentPageDefinition?.general
+                    );
+                    portalPageContainer.append(generalLayout);
+                    console.log(currentPageDefinition);
+                };
+
+                // Add the page options
+                let firstPageOption = document.createElement('option');
+                firstPageOption.value = '';
+                firstPageOption.innerText =
+                    window.portalBuilderLanguage?.editSelectPage;
+                editExistingPagesDropdown.append(firstPageOption);
+
+                // Add all the different pages to the dropdown
+                for (const page in existingPages) {
+                    let pageOption = document.createElement('option');
+                    pageOption.value = existingPages[page]?.uri;
+                    pageOption.innerText = existingPages[page]?.name;
+                    editExistingPagesDropdown.append(pageOption);
+                }
+
+                portalPageContainer.append(editExistingPagesDropdownText);
+                portalPageContainer.append(editExistingPagesDropdown);
+            } else {
+                let generalLayout = await pageGeneralLayout(mode);
+                portalPageContainer.append(generalLayout);
+            }
+        }
+
+        window.changePage = changePage;
+    </script>
+    <script type="module">
+        async function saveChanges(contentElement, createCase) {
+            let saveContent = document.getElementById(contentElement);
+            // If true updates the existing or if false creates a new order
+            let updateFile;
+            let contentJSON;
+            let fileName;
+            let modalID;
+            switch (createCase) {
+                case 'orderexists':
+                    let contentID = 0;
+                    contentJSON = { displayOrder: [] };
+                    while (contentID < saveContent.childElementCount) {
+                        const currentContent =
+                            saveContent.childNodes[contentID];
+                        if (contentID === 0) {
+                            updateFile =
+                                currentContent?.getAttribute('orderexists');
+                            fileName = 'portal-layout.json';
+                            modalID = 'portalBuilderOrderModal';
+                        }
+                        contentJSON.displayOrder.push({
+                            name: currentContent?.getAttribute('name'),
+                            uri: currentContent?.getAttribute('folderuri'),
+                        });
+                        contentID++;
+                    }
+                    break;
+                default:
+                    console.log('Unkown Save Case.');
+            }
+
+            const jsonstringContent = JSON.stringify(contentJSON);
+            const blobContent = new Blob([jsonstringContent], {
+                type: 'text/json',
+            });
+
+            if (updateFile === 'false') {
+                let creationResp = await window.parent.createFile(
+                    window.parent.VIYA,
+                    `/folders/folders/${window.parent.PORTAL}`,
+                    blobContent,
+                    fileName
+                );
+                let dismissModalElement = document.getElementById(modalID);
+                let dismissModal =
+                    bootstrap.Modal.getInstance(dismissModalElement);
+                dismissModal.hide();
+            } else {
+                let updateResp = await window.parent.updateFileContent(
+                    window.parent.VIYA,
+                    window.PORTALLAYOUTPAGEURI,
+                    blobContent
+                );
+                let dismissModalElement = document.getElementById(modalID);
+                let dismissModal =
+                    bootstrap.Modal.getInstance(dismissModalElement);
+                dismissModal.hide();
+            }
+        }
+
+        function moveUp(element) {
+            let wrapper = element.parentElement;
+            let parentWrapper = wrapper.parentElement;
+
+            if (parentWrapper.previousElementSibling)
+                parentWrapper.parentNode.insertBefore(
+                    parentWrapper,
+                    parentWrapper.previousElementSibling
+                );
+        }
+
+        function moveDown(element) {
+            let wrapper = element.parentElement;
+            let parentWrapper = wrapper.parentElement;
+
+            if (parentWrapper.nextElementSibling)
+                parentWrapper.parentNode.insertBefore(
+                    parentWrapper.nextElementSibling,
+                    parentWrapper
+                );
+        }
+
+        window.saveChanges = saveChanges;
+        window.moveUp = moveUp;
+        window.moveDown = moveDown;
+    </script>
+    <script type="module">
+        const portalBuilderCreatePageButton = document.getElementById(
+            'portalBuilderCreatePageButton'
+        );
+        const portalBuilderPageButton = document.getElementById(
+            'portalBuilderPageButton'
+        );
+        const portalBuilderOrderButton = document.getElementById(
+            'portalBuilderOrderButton'
+        );
+        const portalBuilderOrderModalHeader = document.getElementById(
+            'portalBuilderOrderModalHeader'
+        );
+        const portalBuilderOrderModalClose = document.getElementById(
+            'portalBuilderOrderModalClose'
+        );
+        const portalBuilderOrderModalSave = document.getElementById(
+            'portalBuilderOrderModalSave'
+        );
+        const portalBuilderOrderModalList = document.getElementById(
+            'portalBuilderOrderModalList'
+        );
+
+        // Get the interface language
+        const languageContent = await window.parent.getInterfaceLanguage();
+        let portalBuilderLanguage = languageContent?.portalBuilder;
+        window.portalBuilderLanguage = portalBuilderLanguage;
+
+        portalBuilderCreatePageButton.innerText =
+            portalBuilderLanguage?.createNewPage;
+
+        portalBuilderPageButton.innerText =
+            portalBuilderLanguage?.editExistingPages;
+
+        // Check if there is already an order
+        let portalLayout = await window.parent.getFolderContent(
+            window.parent.VIYA,
+            `/folders/folders/${window.parent.PORTAL}`,
+            '?filter=eq(name,"portal-layout.json")'
+        );
+        let potentialPage;
+        let orderExists = false;
+        if (portalLayout?.length > 0) {
+            // An order already exists
+            orderExists = true;
+            // Cusomtize the interface
+            portalBuilderOrderButton.innerText =
+                portalBuilderLanguage?.editDefaultOrder;
+            portalBuilderOrderModalHeader.innerText =
+                portalBuilderLanguage?.editDefaultOrderHeader;
+            portalBuilderOrderModalClose.innerText =
+                portalBuilderLanguage?.close;
+            portalBuilderOrderModalSave.innerText = portalBuilderLanguage?.save;
+            // Get the current order
+            let portLayoutResponse = await window.parent.getFileContent(
+                window.parent.VIYA,
+                portalLayout[0]?.uri
+            );
+            window.PORTALLAYOUTPAGEURI = portalLayout[0]?.uri;
+            let portalPageJSON = await portLayoutResponse.json();
+            potentialPage = portalPageJSON?.displayOrder;
+        } else {
+            // Create a new Order
+            // Cusomtize the interface
+            portalBuilderOrderButton.innerText =
+                portalBuilderLanguage?.createDefaultOrder;
+            portalBuilderOrderModalHeader.innerText =
+                portalBuilderLanguage?.createDefaultOrderHeader;
+            portalBuilderOrderModalClose.innerText =
+                portalBuilderLanguage?.close;
+            portalBuilderOrderModalSave.innerText =
+                portalBuilderLanguage?.create;
+            // Get all available elements
+            potentialPage = await window.parent.getFolderContent(
+                window.parent.VIYA,
+                `/folders/folders/${window.parent.PORTAL}`,
+                '?filter=eq(contentType,folder)&sortBy=name&limit=1000'
+            );
+        }
+
+        for (let pageElement in potentialPage) {
+            let orderElement = document.createElement('li');
+            orderElement.setAttribute('class', 'list-group-item');
+            orderElement.setAttribute('orderExists', orderExists);
+            orderElement.setAttribute('name', potentialPage[pageElement]?.name);
+            orderElement.setAttribute(
+                'folderURI',
+                potentialPage[pageElement]?.uri
+            );
+            orderElement.innerHTML = `${potentialPage[pageElement]?.name} <span class="position-absolute end-0"><b onclick="moveUp(this)" class="moveButton">&uarr;</b><b onclick="moveDown(this)" class="moveButton">&darr;</b></span>`;
+
+            portalBuilderOrderModalList.appendChild(orderElement);
+        }
+    </script>
+</div>

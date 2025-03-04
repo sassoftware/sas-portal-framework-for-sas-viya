@@ -6,7 +6,7 @@
  * @param {Blob} content - The content of the file as a blob
  * @param {String} fileName - The full name of the file
  * @param {String} contentType - [Optional] The type of content the file should be - [Default] application/json
- * @returns {Promise/Object of created file} - Returns a Promise that should resolve into the created file
+ * @returns {Promise/Object of User Infos} - Returns a Promise that should resolve into the users information
  */
 async function createFile(
     VIYAHOST,

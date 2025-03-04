@@ -1,4 +1,4 @@
-<div id="portalBuilderSite" style="width: 100%">
+<div id="portalBuilderSite" style="width: 100%; padding: 4px">
     <!-- Bootstrap Style -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
@@ -92,14 +92,27 @@
     </div>
     <script type="module">
         /**
+         * Helper function to remove elements from the DOM by ID
+         * @param elementId {String} - is the ID of the element to remove
+         **/
+        function removeElementIfExists(elementId) {
+            const REMOVEELEMENT = document.getElementById(elementId);
+            if(REMOVEELEMENT) {
+                REMOVEELEMENT.remove();
+            }
+        }
+
+        /**
          * Create the interface for editing the general layout of the page
          * @param mode {String} - is either set to create or edit based on the button the user clicks
          * @param glDefinition {Object} - optional, contains the general section of the portal-page-layout.json, defaults to empty
          * @return {HTML object} - returns a div to be added to the page
          **/
         async function pageGeneralLayout(mode, glDefinition = {}) {
+            let pglContainerID = 'portalBuilder-General-Layout-Container';
+            removeElementIfExists(pglContainerID);
             let pglContainer = document.createElement('div');
-            pglContainer.id = 'portalBuilder-General-Layout-Container';
+            pglContainer.id = pglContainerID;
 
             // Create empty definition for  the glDefinition object
             if (mode === 'create') {
@@ -201,7 +214,6 @@
         window.pageGeneralLayout = pageGeneralLayout;
     </script>
     <script type="module">
-        //DAVID
         /**
          * Create the interface for page editing or creation
          * @param mode {String} - is either set to create or edit based on the button the user clicks

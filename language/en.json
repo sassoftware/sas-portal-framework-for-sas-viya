@@ -19,7 +19,13 @@
     "enterPageVisible": "Select if the page should be visible",
     "enterPageShowName": "Select if the page name should be shown",
     "enterPageNumCols": "Enter the number of columns on the page",
-    "enterPageContact": "Enter an e-mail contact"
+    "enterPageContact": "Enter an e-mail contact",
+    "savePage": "Save page",
+    "pageAlreadyExistsAlert": "Error: A page with this name alreay exists. Page names must be unique!",
+    "pageCreatedMessage": "The new page was created",
+    "invalidName": "Please enter a page name",
+    "invalidShorthand": "Please enter a shorthand name",
+    "pageUpdatedMessage": "The page was updated"
   },
   "masScore": {
     "moduleSelect": "Please select a MAS Module",

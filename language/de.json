@@ -19,7 +19,13 @@
     "enterPageVisible": "Wählen Sie ob die Seite sichtbar sein soll",
     "enterPageShowName": "Wählen Sie ob der Seitenname angezeigt werden soll",
     "enterPageNumCols": "Wählen Sie wie viele Spalten die Seite haben soll",
-    "enterPageContact": "Geben Sie einen E-Mail Kontakt an"
+    "enterPageContact": "Geben Sie einen E-Mail Kontakt an",
+    "savePage": "Seite speichern",
+    "pageAlreadyExistsAlert": "Fehler: Es gibt bereits eine Seite mit diesem Namen. Namen müssen eindeutig sein!",
+    "pageCreatedMessage": "Die neue Seite wurde erstellt",
+    "invalidName": "Bitte geben Sie einen Seitenname ein",
+    "invalidShorthand": "Bitte geben Sie eine Abkürzung ein",
+    "pageUpdatedMessage": "Die Seite wurde aktualisiert"
   },
   "masScore": {
     "moduleSelect": "Wähle ein MAS Modul",

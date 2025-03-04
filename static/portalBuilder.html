@@ -106,9 +106,11 @@
          * Create the interface for editing the general layout of the page
          * @param mode {String} - is either set to create or edit based on the button the user clicks
          * @param glDefinition {Object} - optional, contains the general section of the portal-page-layout.json, defaults to empty
+         * @param glObjects {Array} - optional, contains the objects section of the portal-page-layout.json, defaults to empty
+         * @param glFileURI {String} - optional, contains the folder URI of the existing file, defaults to empty
          * @return {HTML object} - returns a div to be added to the page
          **/
-        async function pageGeneralLayout(mode, glDefinition = {}) {
+        async function pageGeneralLayout(mode, glDefinition = {}, glObjects = [], glFileURI = '') {
             let pglContainerID = 'portalBuilder-General-Layout-Container';
             removeElementIfExists(pglContainerID);
             let pglContainer = document.createElement('div');
@@ -195,6 +197,77 @@
             pglContactInput.className = 'form-control';
             pglContactInput.value = glDefinition.contact;
             pglContactInput.id = 'pglContactInput';
+            // Page Save
+            let pglSavePageButton = document.createElement('button');
+            pglSavePageButton.setAttribute('type', 'button');
+            pglSavePageButton.setAttribute('class', 'btn btn-primary');
+            pglSavePageButton.innerText = `${window.portalBuilderLanguage?.savePage}`;
+            pglSavePageButton.id = 'pglSavePageButton';
+            pglSavePageButton.onclick = async function () {
+                // Gather the information
+                let newPageDefinition = {
+                    "general": {
+                        "name": document.getElementById('pglNameInput').value,
+                        "shorthand": document.getElementById('pglShorthandInput').value,
+                        "visible": document.getElementById('pglVisibleCheckbox').checked,
+                        "numCols": document.getElementById('pglNumColsInput').value,
+                        "contact": document.getElementById('pglContactInput').value
+                    },
+                    "objects": glObjects.length > 0 ? glObjects : []
+                }
+                // Validate the information
+                if (newPageDefinition.general.name.trim() === '') {
+                    document.getElementById('pglResponseText').innerText = `${window.portalBuilderLanguage?.invalidName}`;
+                    return null;
+                } else if (newPageDefinition.general.shorthand.trim() === '') {
+                    document.getElementById('pglResponseText').innerText = `${window.portalBuilderLanguage?.invalidShorthand}`;
+                    return null;
+                }
+                // Check that no page, i.e. folder with that name already exists
+                if(mode === 'create') {
+                    let pageExistingCheck = await window.parent.getFolderContent(
+                        window.parent.VIYA,
+                        `/folders/folders/${window.parent.PORTAL}`,
+                        `?filter=eq(name,'${newPageDefinition.general.name}')`
+                    );
+                    if(pageExistingCheck.length > 0) {
+                        document.getElementById('pglResponseText').innerText = `${window.portalBuilderLanguage?.pageAlreadyExistsAlert}`;
+                        return null;
+                    } else {
+                        let newPageFolder = await window.parent.createFolder(
+                            window.parent.VIYA,
+                            newPageDefinition.general.name,
+                            `/folders/folders/${window.parent.PORTAL}`
+                        )
+                        let newPageFolderResult = await newPageFolder.json()
+                        const jsonstringContent = JSON.stringify(newPageDefinition);
+                        const blobContent = new Blob([jsonstringContent], {
+                            type: 'text/json',
+                        });
+                        let creationResp = await window.parent.createFile(
+                            window.parent.VIYA,
+                            `/folders/folders/${newPageFolderResult.id}`,
+                            blobContent,
+                            'portal-page-layout.json'
+                        );
+                        document.getElementById('pglResponseText').innerText = `${window.portalBuilderLanguage?.pageCreatedMessage}`;
+                    }
+                } else {
+                    const jsonstringContent = JSON.stringify(newPageDefinition);
+                    const blobContent = new Blob([jsonstringContent], {
+                        type: 'text/json',
+                    });
+                    let updateResp = await window.parent.updateFileContent(
+                        window.parent.VIYA,
+                        glFileURI,
+                        blobContent
+                    );
+                    document.getElementById('pglResponseText').innerText = `${window.portalBuilderLanguage?.pageUpdatedMessage}`;
+                }
+            }
+            // Result text
+            let pglResponseText = document.createElement('p');
+            pglResponseText.id = 'pglResponseText';
 
             // Add Interface response
             pglContainer.appendChild(pglNameInputText);
@@ -207,6 +280,8 @@
             pglContainer.appendChild(pglNumColsInput);
             pglContainer.appendChild(pglContactInputText);
             pglContainer.appendChild(pglContactInput);
+            pglContainer.appendChild(pglSavePageButton);
+            pglContainer.appendChild(pglResponseText);
 
             return pglContainer;
         }
@@ -231,7 +306,7 @@
                 let existingPages = await window.parent.getFolderContent(
                     window.parent.VIYA,
                     `/folders/folders/${window.parent.PORTAL}`,
-                    '?filter=eq(contentType,folder)&sortBy=name&limit=1000'
+                    '?filter=eq(contentType,folder)&sortBy=name&limit=10000'
                 );
 
                 // Create dropdown and add selection text
@@ -260,10 +335,11 @@
 
                     let generalLayout = await pageGeneralLayout(
                         mode,
-                        currentPageDefinition?.general
+                        currentPageDefinition?.general,
+                        currentPageDefinition?.objects,
+                        currentPageLayoutURIDefinition[0]?.uri
                     );
                     portalPageContainer.append(generalLayout);
-                    console.log(currentPageDefinition);
                 };
 
                 // Add the page options

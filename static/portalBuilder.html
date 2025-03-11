@@ -1,551 +1,1154 @@
-<div id="portalBuilderSite" style="width: 100%; padding: 4px">
-    <!-- Bootstrap Style -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-        crossorigin="anonymous"
-    />
-    <style>
-        .moveButton {
-            margin: 0 5px;
-            cursor: pointer;
-        }
-    </style>
-    <link rel="stylesheet" type="text/css" href="../css/global.css" />
-    <!-- Bootstrap SDK -->
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-        crossorigin="anonymous"
-    ></script>
-    <!-- Button trigger modal -->
-    <div id="portalBuilderMainButtons">
-        <button
-            id="portalBuilderCreatePageButton"
-            type="button"
-            class="btn btn-primary"
-            onclick="changePage('create')"
-        ></button>
-        <button
-            id="portalBuilderPageButton"
-            type="button"
-            class="btn btn-primary"
-            onclick="changePage('edit')"
-        ></button>
-        <button
-            id="portalBuilderOrderButton"
-            type="button"
-            class="btn btn-primary"
-            data-bs-toggle="modal"
-            data-bs-target="#portalBuilderOrderModal"
-        ></button>
-    </div>
-    <!-- Modals -->
-    <br />
-    <div id="portalBuilderPageContainer"></div>
-    <div id="portalBuilderMainModals">
-        <div
-            class="modal fade"
-            id="portalBuilderOrderModal"
-            tabindex="-1"
-            aria-labelledby="portalBuilderOrderModalHeader"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1
-                            class="modal-title fs-5"
-                            id="portalBuilderOrderModalHeader"
-                        ></h1>
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        ></button>
-                    </div>
-                    <div class="modal-body">
-                        <ol
-                            id="portalBuilderOrderModalList"
-                            class="list-group list-group-numbered"
-                        ></ol>
-                    </div>
-                    <div class="modal-footer">
-                        <button
-                            id="portalBuilderOrderModalClose"
-                            type="button"
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal"
-                        ></button>
-                        <button
-                            id="portalBuilderOrderModalSave"
-                            type="button"
-                            class="btn btn-primary"
-                            onclick="saveChanges('portalBuilderOrderModalList', 'orderexists')"
-                        ></button>
+    <div id="portalBuilderSite" style="width: 100%; padding: 4px">
+        <!-- Bootstrap Style -->
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+            crossorigin="anonymous"
+        />
+        <style>
+            .moveButton {
+                margin: 0 5px;
+                cursor: pointer;
+            }
+        </style>
+        <link rel="stylesheet" type="text/css" href="../css/global.css" />
+        <!-- Bootstrap SDK -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"
+        ></script>
+        <!-- Button trigger modal -->
+        <div id="portalBuilderMainButtons">
+            <button
+                id="portalBuilderCreatePageButton"
+                type="button"
+                class="btn btn-primary"
+                onclick="changePage('create')"
+            ></button>
+            <button
+                id="portalBuilderPageButton"
+                type="button"
+                class="btn btn-primary"
+                onclick="changePage('edit')"
+            ></button>
+            <button
+                id="portalBuilderOrderButton"
+                type="button"
+                class="btn btn-primary"
+                data-bs-toggle="modal"
+                data-bs-target="#portalBuilderOrderModal"
+            ></button>
+        </div>
+        <!-- Modals -->
+        <br />
+        <div id="portalBuilderPageContainer"></div>
+        <div id="portalBuilderMainModals">
+            <div
+                class="modal fade"
+                id="portalBuilderOrderModal"
+                tabindex="-1"
+                aria-labelledby="portalBuilderOrderModalHeader"
+                aria-hidden="true"
+            >
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1
+                                class="modal-title fs-5"
+                                id="portalBuilderOrderModalHeader"
+                            ></h1>
+                            <button
+                                type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            ></button>
+                        </div>
+                        <div class="modal-body">
+                            <ol
+                                id="portalBuilderOrderModalList"
+                                class="list-group list-group-numbered"
+                            ></ol>
+                        </div>
+                        <div class="modal-footer">
+                            <button
+                                id="portalBuilderOrderModalClose"
+                                type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal"
+                            ></button>
+                            <button
+                                id="portalBuilderOrderModalSave"
+                                type="button"
+                                class="btn btn-primary"
+                                onclick="saveChanges('portalBuilderOrderModalList', 'orderexists')"
+                            ></button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script type="module">
-        /**
-         * Helper function to remove elements from the DOM by ID
-         * @param elementId {String} - is the ID of the element to remove
-         **/
-        function removeElementIfExists(elementId) {
-            const REMOVEELEMENT = document.getElementById(elementId);
-            if(REMOVEELEMENT) {
-                REMOVEELEMENT.remove();
-            }
-        }
-
-        /**
-         * Create the interface for editing the general layout of the page
-         * @param mode {String} - is either set to create or edit based on the button the user clicks
-         * @param glDefinition {Object} - optional, contains the general section of the portal-page-layout.json, defaults to empty
-         * @param glObjects {Array} - optional, contains the objects section of the portal-page-layout.json, defaults to empty
-         * @param glFileURI {String} - optional, contains the folder URI of the existing file, defaults to empty
-         * @return {HTML object} - returns a div to be added to the page
-         **/
-        async function pageGeneralLayout(mode, glDefinition = {}, glObjects = [], glFileURI = '') {
-            let pglContainerID = 'portalBuilder-General-Layout-Container';
-            removeElementIfExists(pglContainerID);
-            let pglContainer = document.createElement('div');
-            pglContainer.id = pglContainerID;
-
-            // Create empty definition for  the glDefinition object
-            if (mode === 'create') {
-                glDefinition = {
-                    contact: '',
-                    name: '',
-                    numCols: 2,
-                    shorthand: '',
-                    visible: true,
-                    showNameOnPage: false,
-                };
-            }
-
-            // Create the general interface
-            // Page Name
-            let pglNameInputText = document.createElement('p');
-            pglNameInputText.innerText = `${window.portalBuilderLanguage?.enterPageName}:`;
-            pglNameInputText.className = 'fs-3';
-            let pglNameInput = document.createElement('input');
-            pglNameInput.type = 'text';
-            pglNameInput.className = 'form-control';
-            pglNameInput.value = glDefinition.name;
-            pglNameInput.id = 'pglNameInput';
-            pglNameInput.required = true;
-            // Page Shorthand
-            let pglShorthandInputText = document.createElement('p');
-            pglShorthandInputText.innerText = `${window.portalBuilderLanguage?.enterPageShorthand}:`;
-            pglShorthandInputText.className = 'fs-3';
-            let pglShorthandInput = document.createElement('input');
-            pglShorthandInput.type = 'text';
-            pglShorthandInput.className = 'form-control';
-            pglShorthandInput.value = glDefinition.shorthand;
-            pglShorthandInput.id = 'pglShorthandInput';
-            pglShorthandInput.required = true;
-            pglShorthandInput.onkeydown = 'return /[a-z]/i.test(event.key)';
-            // Page Visible
-            let pglVisibleCheckboxContainer = document.createElement('div');
-            let pglVisibleCheckbox = document.createElement('input');
-            pglVisibleCheckbox.type = 'checkbox';
-            pglVisibleCheckbox.checked = glDefinition?.visible;
-            pglVisibleCheckbox.id = 'pglVisibleCheckbox';
-            pglVisibleCheckbox.classList = 'form-check-input';
-            let pglVisibleCheckboxLabel = document.createElement('label');
-            pglVisibleCheckboxLabel.classList = 'from-check-label fs-3';
-            pglVisibleCheckboxLabel.for = 'pglVisibleCheckbox';
-            pglVisibleCheckboxLabel.innerText = `${window.portalBuilderLanguage?.enterPageVisible}:`;
-            pglVisibleCheckboxContainer.appendChild(pglVisibleCheckbox);
-            pglVisibleCheckboxContainer.appendChild(pglVisibleCheckboxLabel);
-            // Page Show Name
-            let pglShowNameCheckboxContainer = document.createElement('div');
-            let pglShowNameCheckbox = document.createElement('input');
-            pglShowNameCheckbox.type = 'checkbox';
-            pglShowNameCheckbox.checked = glDefinition?.showNameOnPage
-                ? true
-                : false;
-            pglShowNameCheckbox.id = 'pglVisibleCheckbox';
-            pglShowNameCheckbox.classList = 'form-check-input';
-            let pglShowNameCheckboxLabel = document.createElement('label');
-            pglShowNameCheckboxLabel.classList = 'from-check-label fs-3';
-            pglShowNameCheckboxLabel.for = 'pglVisibleCheckbox';
-            pglShowNameCheckboxLabel.innerText = `${window.portalBuilderLanguage?.enterPageShowName}:`;
-            pglShowNameCheckboxContainer.appendChild(pglShowNameCheckbox);
-            pglShowNameCheckboxContainer.appendChild(pglShowNameCheckboxLabel);
-            // Page Number of Columns
-            let pglNumColsInputText = document.createElement('p');
-            pglNumColsInputText.innerText = `${window.portalBuilderLanguage?.enterPageNumCols}:`;
-            pglNumColsInputText.className = 'fs-3';
-            let pglNumColsInput = document.createElement('input');
-            pglNumColsInput.type = 'number';
-            pglNumColsInput.className = 'form-control';
-            pglNumColsInput.value = glDefinition.numCols;
-            pglNumColsInput.id = 'pglNumColsInput';
-            pglNumColsInput.onkeydown = 'return /[0-9]/i.test(event.key)';
-            // Page Contact
-            let pglContactInputText = document.createElement('p');
-            pglContactInputText.innerText = `${window.portalBuilderLanguage?.enterPageContact}:`;
-            pglContactInputText.className = 'fs-3';
-            let pglContactInput = document.createElement('input');
-            pglContactInput.type = 'email';
-            pglContactInput.className = 'form-control';
-            pglContactInput.value = glDefinition.contact;
-            pglContactInput.id = 'pglContactInput';
-            // Page Save
-            let pglSavePageButton = document.createElement('button');
-            pglSavePageButton.setAttribute('type', 'button');
-            pglSavePageButton.setAttribute('class', 'btn btn-primary');
-            pglSavePageButton.innerText = `${window.portalBuilderLanguage?.savePage}`;
-            pglSavePageButton.id = 'pglSavePageButton';
-            pglSavePageButton.onclick = async function () {
-                // Gather the information
-                let newPageDefinition = {
-                    "general": {
-                        "name": document.getElementById('pglNameInput').value,
-                        "shorthand": document.getElementById('pglShorthandInput').value,
-                        "visible": document.getElementById('pglVisibleCheckbox').checked,
-                        "numCols": document.getElementById('pglNumColsInput').value,
-                        "contact": document.getElementById('pglContactInput').value
-                    },
-                    "objects": glObjects.length > 0 ? glObjects : []
-                }
-                // Validate the information
-                if (newPageDefinition.general.name.trim() === '') {
-                    document.getElementById('pglResponseText').innerText = `${window.portalBuilderLanguage?.invalidName}`;
-                    return null;
-                } else if (newPageDefinition.general.shorthand.trim() === '') {
-                    document.getElementById('pglResponseText').innerText = `${window.portalBuilderLanguage?.invalidShorthand}`;
-                    return null;
-                }
-                // Check that no page, i.e. folder with that name already exists
-                if(mode === 'create') {
-                    let pageExistingCheck = await window.parent.getFolderContent(
+        <script type="module">
+            /**
+             * Helper function that updates the main portal-layout.json page
+             * @param pageName {String} - the name of the page to be updated - only required for add
+             * @param pageFolderURI {String} - the URI of the folder of that new page
+             * @param pageMode {String} - Optional, defaults to add - can also be remove
+             **/
+            async function updatePortalLayoutJSON(pageName, pageFolderURI, pageMode='add') {
+                // Get the URI
+                let portalLayoutURI = await window.parent.getFolderContent(
+                    window.parent.VIYA,
+                    `/folders/folders/${window.parent.PORTAL}`,
+                    "?filter=eq(name,'portal-layout.json')"
+                );
+                if (portalLayoutURI.length === 1){
+                    // Get the file content
+                    let portalLayoutFileContent = await window.parent.getFileContent(
                         window.parent.VIYA,
-                        `/folders/folders/${window.parent.PORTAL}`,
-                        `?filter=eq(name,'${newPageDefinition.general.name}')`
+                        portalLayoutURI[0].uri
                     );
-                    if(pageExistingCheck.length > 0) {
-                        document.getElementById('pglResponseText').innerText = `${window.portalBuilderLanguage?.pageAlreadyExistsAlert}`;
-                        return null;
-                    } else {
-                        let newPageFolder = await window.parent.createFolder(
-                            window.parent.VIYA,
-                            newPageDefinition.general.name,
-                            `/folders/folders/${window.parent.PORTAL}`
-                        )
-                        let newPageFolderResult = await newPageFolder.json()
-                        const jsonstringContent = JSON.stringify(newPageDefinition);
-                        const blobContent = new Blob([jsonstringContent], {
-                            type: 'text/json',
-                        });
-                        let creationResp = await window.parent.createFile(
-                            window.parent.VIYA,
-                            `/folders/folders/${newPageFolderResult.id}`,
-                            blobContent,
-                            'portal-page-layout.json'
-                        );
-                        document.getElementById('pglResponseText').innerText = `${window.portalBuilderLanguage?.pageCreatedMessage}`;
+                    let portalLayoutJSON = await portalLayoutFileContent.json();
+                    if (pageMode === 'add') {
+                        // Append the new page to the order
+                        portalLayoutJSON['displayOrder'].push({
+                                                "name": pageName,
+                                                "uri": pageFolderURI
+                                            });
+                    } else if (pageMode === 'remove') {
+                        // Remove the page from the order
+                        const pageIndex = portalLayoutJSON['displayOrder'].findIndex(item => item.uri === pageFolderURI);
+                        portalLayoutJSON['displayOrder'].splice(pageIndex, 1);
                     }
-                } else {
-                    const jsonstringContent = JSON.stringify(newPageDefinition);
+                    
+                    const jsonstringContent = JSON.stringify(portalLayoutJSON);
                     const blobContent = new Blob([jsonstringContent], {
                         type: 'text/json',
                     });
                     let updateResp = await window.parent.updateFileContent(
                         window.parent.VIYA,
-                        glFileURI,
+                        portalLayoutURI[0].uri,
                         blobContent
                     );
-                    document.getElementById('pglResponseText').innerText = `${window.portalBuilderLanguage?.pageUpdatedMessage}`;
                 }
             }
-            // Result text
-            let pglResponseText = document.createElement('p');
-            pglResponseText.id = 'pglResponseText';
 
-            // Add Interface response
-            pglContainer.appendChild(pglNameInputText);
-            pglContainer.appendChild(pglNameInput);
-            pglContainer.appendChild(pglShorthandInputText);
-            pglContainer.appendChild(pglShorthandInput);
-            pglContainer.appendChild(pglVisibleCheckboxContainer);
-            pglContainer.appendChild(pglShowNameCheckboxContainer);
-            pglContainer.appendChild(pglNumColsInputText);
-            pglContainer.appendChild(pglNumColsInput);
-            pglContainer.appendChild(pglContactInputText);
-            pglContainer.appendChild(pglContactInput);
-            pglContainer.appendChild(pglSavePageButton);
-            pglContainer.appendChild(pglResponseText);
-
-            return pglContainer;
-        }
-
-        window.pageGeneralLayout = pageGeneralLayout;
-    </script>
-    <script type="module">
-        /**
-         * Create the interface for page editing or creation
-         * @param mode {String} - is either set to create or edit based on the button the user clicks
-         * @return directly updates the content of the div with the ID portalBuilderPageContainer
-         **/
-        async function changePage(mode) {
-            let portalPageContainer = document.getElementById(
-                'portalBuilderPageContainer'
-            );
-            portalPageContainer.innerHTML = '';
-
-            if (mode === 'edit') {
-                // Create dropdown to select the existing page that should be edited
-                // Get all existing pages
-                let existingPages = await window.parent.getFolderContent(
-                    window.parent.VIYA,
-                    `/folders/folders/${window.parent.PORTAL}`,
-                    '?filter=eq(contentType,folder)&sortBy=name&limit=10000'
-                );
-
-                // Create dropdown and add selection text
-                let editExistingPagesDropdownText = document.createElement('p');
-                editExistingPagesDropdownText.innerText = `${window.portalBuilderLanguage?.editSelectPage}:`;
-                editExistingPagesDropdownText.className = 'fs-3';
-                let editExistingPagesDropdown =
-                    document.createElement('select');
-                editExistingPagesDropdown.setAttribute('class', 'form-select');
-                // On change function to fill the next content
-                editExistingPagesDropdown.onchange = async function () {
-                    let currentPage = this.options[this.selectedIndex].value;
-                    let currentPageLayoutURIDefinition =
-                        await window.parent.getFolderContent(
-                            window.parent.VIYA,
-                            currentPage,
-                            '?filter=eq("name","portal-page-layout.json")'
-                        );
-                    let currentPageDefinitionJSON =
-                        await window.parent.getFileContent(
-                            window.parent.VIYA,
-                            currentPageLayoutURIDefinition[0]?.uri
-                        );
-                    let currentPageDefinition =
-                        await currentPageDefinitionJSON.json();
-
-                    let generalLayout = await pageGeneralLayout(
-                        mode,
-                        currentPageDefinition?.general,
-                        currentPageDefinition?.objects,
-                        currentPageLayoutURIDefinition[0]?.uri
-                    );
-                    portalPageContainer.append(generalLayout);
-                };
-
-                // Add the page options
-                let firstPageOption = document.createElement('option');
-                firstPageOption.value = '';
-                firstPageOption.innerText =
-                    window.portalBuilderLanguage?.editSelectPage;
-                editExistingPagesDropdown.append(firstPageOption);
-
-                // Add all the different pages to the dropdown
-                for (const page in existingPages) {
-                    let pageOption = document.createElement('option');
-                    pageOption.value = existingPages[page]?.uri;
-                    pageOption.innerText = existingPages[page]?.name;
-                    editExistingPagesDropdown.append(pageOption);
-                }
-
-                portalPageContainer.append(editExistingPagesDropdownText);
-                portalPageContainer.append(editExistingPagesDropdown);
-            } else {
-                let generalLayout = await pageGeneralLayout(mode);
-                portalPageContainer.append(generalLayout);
-            }
-        }
-
-        window.changePage = changePage;
-    </script>
-    <script type="module">
-        async function saveChanges(contentElement, createCase) {
-            let saveContent = document.getElementById(contentElement);
-            // If true updates the existing or if false creates a new order
-            let updateFile;
-            let contentJSON;
-            let fileName;
-            let modalID;
-            switch (createCase) {
-                case 'orderexists':
-                    let contentID = 0;
-                    contentJSON = { displayOrder: [] };
-                    while (contentID < saveContent.childElementCount) {
-                        const currentContent =
-                            saveContent.childNodes[contentID];
-                        if (contentID === 0) {
-                            updateFile =
-                                currentContent?.getAttribute('orderexists');
-                            fileName = 'portal-layout.json';
-                            modalID = 'portalBuilderOrderModal';
-                        }
-                        contentJSON.displayOrder.push({
-                            name: currentContent?.getAttribute('name'),
-                            uri: currentContent?.getAttribute('folderuri'),
-                        });
-                        contentID++;
+            window.updatePortalLayoutJSON = updatePortalLayoutJSON;
+        </script>
+        <script type="module">
+            /**
+             * Create the object type specific interfaces
+             * @param mode {String} - the mode of object editing, can be add or edit
+             * @param otObjectType {String} - the type of the object definition
+             * @param otObjectDefinition {Object} - the definition of the object
+             * @param otLayoutFileURI {String} - is the URI of the potral-page-layout.json
+             * @param otFolderURI {String} - is the URI of the portal page folder
+             **/
+            async function objectTypeLayout(mode, otObjectType, otObjectDefinition, otLayoutFileURI, otFolderURI) {
+                // Get and reset the object editing area
+                let otContainer = document.getElementById('objectTypeEditContainer');
+                otContainer.innerHTML = '';
+                // Go through the different object types
+                if(otObjectType === 'text') {
+                    let otTextAreaText = document.createElement('p');
+                    otTextAreaText.innerHTML = window.portalBuilderLanguage?.enterObjectTextContent;
+                    otTextAreaText.className = 'fs-3';
+                    let otTextArea = document.createElement('textarea');
+                    otTextArea.classList.add("form-control");
+                    otTextArea.id = 'otTextArea';
+                    otTextArea.rows = 10;
+                    otTextArea.value = otObjectDefinition?.content === undefined ? '' : otObjectDefinition.content;
+                    // Append to target container
+                    otContainer.appendChild(otTextAreaText);
+                    otContainer.appendChild(otTextArea);
+                } else if(otObjectType === 'linkList') {
+                    // Tab behavior
+                    let otTabBehaviorDropdownText = document.createElement('p');
+                    otTabBehaviorDropdownText.innerText = `${window.portalBuilderLanguage?.selectObjectWidthDropdownText}:`;
+                    otTabBehaviorDropdownText.className = 'fs-3';
+                    let otTabBehaviorDropdown = document.createElement('select');
+                    otTabBehaviorDropdown.id = 'otTabBehaviorDropdown';
+                    otTabBehaviorDropdown.setAttribute('class', 'form-select');
+                    // Add the tab behavior options
+                    let tabBehaviorDictionary = [
+                        {"value": "tab", "text": `${window.portalBuilderLanguage?.linkListTabBehavior[0]}`},
+                        {"value": "same", "text": `${window.portalBuilderLanguage?.linkListTabBehavior[1]}`}
+                    ]
+                    for (const tabBehaviorElement in tabBehaviorDictionary) {
+                        let tabBehaviorOption = document.createElement('option');
+                        tabBehaviorOption.value = tabBehaviorDictionary[tabBehaviorElement]?.value;
+                        tabBehaviorOption.innerText = tabBehaviorDictionary[tabBehaviorElement]?.text;
+                        otTabBehaviorDropdown.append(tabBehaviorOption);
                     }
-                    break;
-                default:
-                    console.log('Unkown Save Case.');
+                    otTabBehaviorDropdown.selectedIndex = otObjectDefinition.clickBehavior === 'same' ? 'same' : 'tab';
+                    // Add the links
+                    let otLinkContainer = document.createElement('div');
+                    otLinkContainer.id = 'otLinkContainer';
+                    let otLinkAddingText = document.createElement('p');
+                    otLinkAddingText.innerText = `${window.portalBuilderLanguage?.linkListText}`;
+                    otLinkAddingText.className = 'fs-3';
+                    let otLinkAddingButton = document.createElement('button');
+                    otLinkAddingButton.setAttribute('type', 'button');
+                    otLinkAddingButton.setAttribute('class', 'btn btn-primary');
+                    otLinkAddingButton.innerText = `${window.portalBuilderLanguage?.linkListAddLinkButton}`;
+                    otLinkAddingButton.onclick = async function () {
+                        let otLinkDisplayText = document.createElement('input');
+                        otLinkDisplayText.type = 'text';
+                        otLinkDisplayText.className = 'form-control';
+                        otLinkDisplayText.placeholder = `${window.portalBuilderLanguage?.linkListDisplayTextPlaceholder}`;
+                        let otLinkLink = document.createElement('input');
+                        otLinkLink.type = 'text';
+                        otLinkLink.className = 'form-control';
+                        otLinkLink.placeholder = `${window.portalBuilderLanguage?.linkListLinkPlaceholder}`;
+                        let otBreakLine = document.createElement('br');
+                        otLinkContainer.appendChild(otBreakLine);
+                        otLinkContainer.appendChild(otLinkDisplayText);
+                        otLinkContainer.appendChild(otLinkLink);
+                    }
+                    if(otObjectDefinition?.links?.length !== undefined) {
+                        for(const link in otObjectDefinition.links) {
+                            let otLinkDisplayText = document.createElement('input');
+                            otLinkDisplayText.type = 'text';
+                            otLinkDisplayText.className = 'form-control';
+                            otLinkDisplayText.value = otObjectDefinition.links[link].displayText;
+                            let otLinkLink = document.createElement('input');
+                            otLinkLink.type = 'text';
+                            otLinkLink.className = 'form-control';
+                            otLinkLink.value = otObjectDefinition.links[link].link;
+                            let otBreakLine = document.createElement('br');
+                            otLinkContainer.appendChild(otBreakLine);
+                            otLinkContainer.appendChild(otLinkDisplayText);
+                            otLinkContainer.appendChild(otLinkLink);
+                        }
+                    }
+                    // Append to target container
+                    otContainer.appendChild(otTabBehaviorDropdownText);
+                    otContainer.appendChild(otTabBehaviorDropdown);
+                    otContainer.appendChild(otLinkAddingText);
+                    otContainer.appendChild(otLinkAddingButton);
+                    otContainer.appendChild(otLinkContainer);
+                } else if (otObjectType === 'vaReport') {
+                    // reportHeight, reportUri, reportType (full, page, object), pageName, objectName
+                    // Report URI
+                    let otReportURI = document.createElement('input');
+                    otReportURI.type = 'text';
+                    otReportURI.className = 'form-control';
+                    otReportURI.id = 'otReportURI';
+                    otReportURI.value = otObjectDefinition?.reportURI === undefined ? '' : otObjectDefinition?.reportURI;
+                    otReportURI.placeholder = `${window.portalBuilderLanguage?.vaReportURIPlaceholder}`;
+                    // Specify a height for the report to be displayed
+                    let otReportHeight = document.createElement('input');
+                    otReportHeight.type = 'text';
+                    otReportHeight.className = 'form-control';
+                    otReportHeight.id = 'otReportHeight';
+                    otReportHeight.value = otObjectDefinition?.reportHeight === undefined ? '700px' : otObjectDefinition?.reportHeight;
+                    // Create a page or object level integration instead of a full report
+                    let otReportPart = document.createElement('input');
+                    otReportPart.type = 'text';
+                    otReportPart.className = 'form-control';
+                    otReportPart.id = 'otReportPart';
+                    // Get previous value for it
+                    if (otObjectDefinition?.pageName !== undefined) {
+                        otReportPart.value = otObjectDefinition?.pageName;
+                    } else if (otObjectDefinition?.objectName !== undefined) {
+                        otReportPart.value = otObjectDefinition?.objectName;
+                    }
+                    otReportPart.placeholder = `${window.portalBuilderLanguage?.vaReportPartPlaceholder}`;
+                    // Append to target container
+                    otContainer.appendChild(otReportURI);
+                    otContainer.appendChild(otReportHeight);
+                    otContainer.appendChild(otReportPart);
+                } else if (otObjectType === 'interactiveContent') {
+                    // Link
+                    let otEnterLink = document.createElement('input');
+                    otEnterLink.type = 'text';
+                    otEnterLink.className = 'form-control';
+                    otEnterLink.id = 'otEnterLink';
+                    otEnterLink.placeholder = `${window.portalBuilderLanguage?.linkListLinkPlaceholder}`;
+                    otEnterLink.value = otObjectDefinition?.link === undefined ? '' : otObjectDefinition.link;
+                    // Is Viya Content
+                    let objIsViyaCheckboxContainer = document.createElement('div');
+                    let objIsViyaCheckbox = document.createElement('input');
+                    objIsViyaCheckbox.type = 'checkbox';
+                    objIsViyaCheckbox.checked = otObjectDefinition?.isViyaContent === undefined ? false : true;
+                    objIsViyaCheckbox.id = 'objIsViyaCheckbox';
+                    objIsViyaCheckbox.classList = 'form-check-input';
+                    let objIsViyaCheckboxLabel = document.createElement('label');
+                    objIsViyaCheckboxLabel.classList = 'from-check-label fs-3';
+                    objIsViyaCheckboxLabel.for = 'objIsViyaCheckbox';
+                    objIsViyaCheckboxLabel.innerText = `${window.portalBuilderLanguage?.viyaCheckboxLabel}`;
+                    objIsViyaCheckboxContainer.appendChild(objIsViyaCheckbox);
+                    objIsViyaCheckboxContainer.appendChild(objIsViyaCheckboxLabel);
+                    // Is Exception - user can specify height and width
+                    let otEnterICHeight = document.createElement('input');
+                    otEnterICHeight.type = 'text';
+                    otEnterICHeight.className = 'form-control';
+                    otEnterICHeight.id = 'otEnterICHeight';
+                    otEnterICHeight.value = otObjectDefinition?.exception?.height === undefined ? '' : otObjectDefinition?.exception?.height;
+                    otEnterICHeight.placeholder = `${window.portalBuilderLanguage?.icHeightPlaceholder}`;
+                    let otEnterICWidth = document.createElement('input');
+                    otEnterICWidth.type = 'text';
+                    otEnterICWidth.className = 'form-control';
+                    otEnterICWidth.id = 'otEnterICWidth';
+                    otEnterICWidth.value = otObjectDefinition?.exception?.width === undefined ? '' : otObjectDefinition?.exception?.width;
+                    otEnterICWidth.placeholder = `${window.portalBuilderLanguage?.icWidthPlaceholder}`;
+                    // Append to target container
+                    otContainer.appendChild(otEnterLink);
+                    otContainer.appendChild(objIsViyaCheckboxContainer);
+                    otContainer.appendChild(otEnterICHeight);
+                    otContainer.appendChild(otEnterICWidth);
+                } else if (otObjectType === 'masScore') {
+                    document.getElementById('objectWidthDropdown').selectedIndex = 1;
+                    let otNoFurtherConfigurationText = document.createElement('p');
+                    otNoFurtherConfigurationText.innerText = `${window.portalBuilderLanguage?.noFurtherConfigurationText}`;
+                    otNoFurtherConfigurationText.className = 'fs-3';
+                    // Append to target container
+                    otContainer.appendChild(otNoFurtherConfigurationText);
+                } else if (otObjectType === 'clientAdministrator') {
+                    document.getElementById('objectWidthDropdown').selectedIndex = 1;
+                    let otNoFurtherConfigurationText = document.createElement('p');
+                    otNoFurtherConfigurationText.innerText = `${window.portalBuilderLanguage?.noFurtherConfigurationText}`;
+                    otNoFurtherConfigurationText.className = 'fs-3';
+                    // Append to target container
+                    otContainer.appendChild(otNoFurtherConfigurationText);
+                } else if (otObjectType === 'portalBuilder') {
+                    document.getElementById('objectWidthDropdown').selectedIndex = 1;
+                    let otNoFurtherConfigurationText = document.createElement('p');
+                    otNoFurtherConfigurationText.innerText = `${window.portalBuilderLanguage?.noFurtherConfigurationText}`;
+                    otNoFurtherConfigurationText.className = 'fs-3';
+                    // Append to target container
+                    otContainer.appendChild(otNoFurtherConfigurationText);
+                }
+
+                // Create buttons to save/delte
+                let otButtonBreakline = document.createElement('br');
+                let otSaveButton = document.createElement('button');
+                otSaveButton.innerText = `${mode === 'add' ? window.portalBuilderLanguage?.createObjectButton : window.portalBuilderLanguage?.saveObjectButton}`;
+                otSaveButton.id = 'otSaveButton';
+                otSaveButton.setAttribute('type', 'button');
+                otSaveButton.setAttribute('class', 'btn btn-primary');
+                otSaveButton.onclick = async function () {
+                    // Set the general attributes first
+                    otObjectDefinition.name = document.getElementById('objNameInput').value;
+                    otObjectDefinition.id = document.getElementById('objIDInput').value;
+                    otObjectDefinition.width = document.getElementById('objectWidthDropdown').value;
+                    let otObjectHeightTMP = document.getElementById('objHeightInput').value;
+                    if (otObjectHeightTMP !== '') {
+                        otObjectDefinition.height = otObjectHeightTMP;
+                    } else {
+                        delete otObjectDefinition.height
+                    }
+                    let otObjectBorderTMP = document.getElementById('objObjectBorderCheckbox').checked;
+                    if (otObjectBorderTMP === true) {
+                        otObjectDefinition.objectBorder = true;
+                    } else {
+                        delete otObjectDefinition.objectBorder;
+                    }
+                    otObjectDefinition.type = otObjectType;
+                    // Add the object specific attributes
+                    if(otObjectType === 'text') {
+                        otObjectDefinition.content = document.getElementById('otTextArea').value;
+                    } else if (otObjectType === 'linkList') {
+                        otObjectDefinition.clickBehavior = document.getElementById('otTabBehaviorDropdown').value;
+                        const container = document.getElementById("otLinkContainer");
+                        const inputs = container.querySelectorAll("input.form-control");
+                        const links = [];
+
+                        // Iterate over the inputs in steps of 2.
+                        for (let i = 0; i < inputs.length; i += 2) {
+                            links.push({
+                            displayText: inputs[i].value,
+                            link: inputs[i + 1] ? inputs[i + 1].value : ""
+                            });
+                        }
+                        otObjectDefinition.links;
+                    } else if(otObjectType === 'vaReport') {
+                        otObjectDefinition.reportURI = document.getElementById('otReportURI').value;
+                        otObjectDefinition.reportHeight = document.getElementById('otReportHeight').value;
+                        let reportPartTMP = document.getElementById('otReportPart').value;
+                        if (reportPartTMP.slice(0, 2) === 've') {
+                            otObjectDefinition.objectName = reportPartTMP;
+                            delete otObjectDefinition.pageName;
+                        } else if (reportPartTMP.slice(0, 2) === 'vi') {
+                            otObjectDefinition.pageName = reportPartTMP;
+                            delete otObjectDefinition.objectName;
+                        }
+                    } else if(otObjectType === 'interactiveContent') {
+                        otObjectDefinition.link = document.getElementById('otEnterLink').value;
+                        otObjectDefinition.isViyaContent = document.getElementById('objIsViyaCheckbox').checked;
+                        let otICHeightTMP = document.getElementById('otEnterICHeight').value;
+                        let otICWidthTMP = document.getElementById('otEnterICWidth').value;
+                        if (otICHeightTMP === '' && otICWidthTMP === '') {
+                            otObjectDefinition.exception = {"isException": 0, "width": 0, "height": 0}
+                        } else {
+                            otObjectDefinition.exception = {"isException": 1, "width": otICWidthTMP === '' ? 0 : otICWidthTMP, "height": otICHeightTMP === '' ? 0 : otICHeightTMP};
+                        }
+                    } else if (otObjectType === 'masScore') {
+                        otObjectDefinition.width = 0;
+                    } else if (otObjectType === 'clientAdministrator') {
+                        otObjectDefinition.width = 0;
+                    } else if (otObjectType === 'portalBuilder') {
+                        otObjectDefinition.width = 0;
+                    }
+                    const jsonstringContentObject = JSON.stringify(otObjectDefinition);
+                    const blobContentObject = new Blob([jsonstringContentObject], {
+                        type: 'text/json',
+                    }); 
+                    let objectFileName = `${otObjectDefinition.name.toLowerCase().replace(/\s+/g, '-')}.json`;
+                    let objectFileURI = '';
+                    if(mode === 'edit') {
+                        objectFileURI = document.getElementById('editExistingObjectDropdown').value;
+                        let otObjectUpdateResponse = await window.parent.updateFileContent(window.parent.VIYA, objectFileURI, blobContentObject);
+                    } else {
+                        // Create the new File
+                        let createdObjectFileResp = await window.parent.createFile(window.parent.VIYA, otFolderURI, blobContentObject, objectFileName);
+                        let createdObjectFile = await createdObjectFileResp.json();
+                        objectFileURI = createdObjectFile.id;
+                        // Add the new file to the object layout of the page
+                        let otPageLayoutResponse = await window.parent.getFileContent(window.parent.VIYA, otLayoutFileURI);
+                        let otPageLayout = await otPageLayoutResponse.json();
+                        otPageLayout.objects.push({
+                            "name": otObjectDefinition.name,
+                            "uri": `/files/files/${objectFileURI}`
+                        });
+                        const jsonstringPageLayout = JSON.stringify(otPageLayout);
+                        const blobPageLayout = new Blob([jsonstringPageLayout], {
+                            type: 'text/json',
+                        });
+                        let otObjectUpdateResponse = await window.parent.updateFileContent(window.parent.VIYA, otLayoutFileURI, blobPageLayout);
+                    }
+                }
+                let otDeleteButton = document.createElement('button');
+                otDeleteButton.innerText = `${window.portalBuilderLanguage?.deleteObjectButton}`;
+                otDeleteButton.id = 'otDeleteButton';
+                otDeleteButton.setAttribute('type', 'button');
+                otDeleteButton.setAttribute('class', 'btn btn-primary');
+                otDeleteButton.style.marginLeft = '4px';
+                otDeleteButton.onclick = async function () {
+                    let targetObjectURIToDelete = document.getElementById('editExistingObjectDropdown').value;
+                    let targetObjectFileDeleteResponse = await window.parent.deleteSASViyaContent(window.parent.VIYA, targetObjectURIToDelete);
+                    // Remove the object from the layout of the page
+                    let otPageLayoutResponse = await window.parent.getFileContent(window.parent.VIYA, otLayoutFileURI);
+                    let otPageLayout = await otPageLayoutResponse.json();
+                    const index = otPageLayout.objects.findIndex(item => item.uri === targetObjectURIToDelete);
+                    if (index !== -1) {
+                        otPageLayout.objects.splice(index, 1);
+                    }
+                    const jsonstringPageLayout = JSON.stringify(otPageLayout);
+                    const blobPageLayout = new Blob([jsonstringPageLayout], {
+                        type: 'text/json',
+                    });
+                    let otObjectUpdateResponse = await window.parent.updateFileContent(window.parent.VIYA, otLayoutFileURI, blobPageLayout);
+                }
+                // Append to target container
+                otContainer.appendChild(otButtonBreakline);
+                otContainer.appendChild(otSaveButton);
+                if(mode === 'edit') {
+                    otContainer.appendChild(otDeleteButton);
+                }
             }
 
-            const jsonstringContent = JSON.stringify(contentJSON);
-            const blobContent = new Blob([jsonstringContent], {
-                type: 'text/json',
-            });
+            window.objectTypeLayout = objectTypeLayout;
+        </script>
+        <script type="module">
+            /**
+             * Create the interface for editing objects on a page
+             * @param mode {String} - the mode of object editing, can be add or edit
+             * @param olDefinition {Object} - contains the general section of the potral-page-layout.json
+             * @param olObjects {Array} - contains the list of objects on the page
+             * @param olLayoutFileURI {String} - is the URI of the potral-page-layout.json
+             * @param olFolderURI {String} - is the URI of the portal page folder
+             * @param olObjectDefinition {Object} - Optional, contains the existing object definition
+             **/
+            async function pageObjectLayout(mode, olDefinition, olObjects, olLayoutFileURI, olFolderURI, olObjectDefinition = '') {
+                // Get the target container for the object definition
+                let olObjectEditContainer = document.getElementById('pglObjectEditContainer');
+                olObjectEditContainer.innerHTML = '';
+                if(mode === 'add') {
+                    olObjectDefinition = {
+                        "name": "",
+                        "id": "",
+                        "width": 'auto',
+                        "type": "text"
+                    }
+                }
 
-            if (updateFile === 'false') {
-                let creationResp = await window.parent.createFile(
-                    window.parent.VIYA,
-                    `/folders/folders/${window.parent.PORTAL}`,
-                    blobContent,
-                    fileName
-                );
-                let dismissModalElement = document.getElementById(modalID);
-                let dismissModal =
-                    bootstrap.Modal.getInstance(dismissModalElement);
-                dismissModal.hide();
-            } else {
-                let updateResp = await window.parent.updateFileContent(
-                    window.parent.VIYA,
-                    window.PORTALLAYOUTPAGEURI,
-                    blobContent
-                );
-                let dismissModalElement = document.getElementById(modalID);
-                let dismissModal =
-                    bootstrap.Modal.getInstance(dismissModalElement);
-                dismissModal.hide();
+                // Create the general interface
+                // Object Name
+                let objNameInputText = document.createElement('p');
+                objNameInputText.innerText = `${window.portalBuilderLanguage?.enterObjectName}:`;
+                objNameInputText.className = 'fs-3';
+                let objNameInput = document.createElement('input');
+                objNameInput.type = 'text';
+                objNameInput.className = 'form-control';
+                objNameInput.value = olObjectDefinition.name;
+                objNameInput.id = 'objNameInput';
+                objNameInput.required = true;
+                // Object ID
+                let objIDInputText = document.createElement('p');
+                objIDInputText.innerText = `${window.portalBuilderLanguage?.enterObjectID}:`;
+                objIDInputText.className = 'fs-3';
+                let objIDInput = document.createElement('input');
+                objIDInput.type = 'text';
+                objIDInput.className = 'form-control';
+                objIDInput.value = olObjectDefinition.id;
+                objIDInput.id = 'objIDInput';
+                objIDInput.required = true;
+                // Object Width
+                let objectWidthDropdownText = document.createElement('p');
+                objectWidthDropdownText.innerText = `${window.portalBuilderLanguage?.selectObjectWidthDropdownText}:`;
+                objectWidthDropdownText.className = 'fs-3';
+                let objectWidthDropdown = document.createElement('select');
+                objectWidthDropdown.id = 'objectWidthDropdown';
+                objectWidthDropdown.setAttribute('class', 'form-select');
+                // Add the width options
+                let widthOptionsDictionary = [
+                    {"value": "auto", "text": `${window.portalBuilderLanguage?.selectObjectWidth[0]}`},
+                    {"value": 0, "text": `${window.portalBuilderLanguage?.selectObjectWidth[1]}`},
+                    {"value": 1, "text": `${window.portalBuilderLanguage?.selectObjectWidth[2]}`},
+                    {"value": 2, "text": `${window.portalBuilderLanguage?.selectObjectWidth[3]}`},
+                    {"value": 3, "text": `${window.portalBuilderLanguage?.selectObjectWidth[4]}`},
+                    {"value": 4, "text": `${window.portalBuilderLanguage?.selectObjectWidth[5]}`},
+                    {"value": 5, "text": `${window.portalBuilderLanguage?.selectObjectWidth[6]}`},
+                ]
+                for (const objectElement in widthOptionsDictionary) {
+                    let objectOption = document.createElement('option');
+                    objectOption.value = widthOptionsDictionary[objectElement]?.value;
+                    objectOption.innerText = widthOptionsDictionary[objectElement]?.text;
+                    objectWidthDropdown.append(objectOption);
+                }
+                objectWidthDropdown.selectedIndex = olObjectDefinition.width === 'auto' ? 0 : olObjectDefinition.width + 1;
+                // Object Height
+                let objHeightInputText = document.createElement('p');
+                objHeightInputText.innerText = `${window.portalBuilderLanguage?.enterObjectHeight}:`;
+                objHeightInputText.className = 'fs-3';
+                let objHeightInput = document.createElement('input');
+                objHeightInput.type = 'text';
+                objHeightInput.className = 'form-control';
+                objHeightInput.value = olObjectDefinition?.height === undefined ? '' : olObjectDefinition?.height;
+                objHeightInput.id = 'objHeightInput';
+                objHeightInput.required = true;
+                // Object Border
+                let objObjectBorderCheckboxContainer = document.createElement('div');
+                let objObjectBorderCheckbox = document.createElement('input');
+                objObjectBorderCheckbox.type = 'checkbox';
+                objObjectBorderCheckbox.checked = olObjectDefinition?.objectBorder === undefined ? false : true;
+                objObjectBorderCheckbox.id = 'objObjectBorderCheckbox';
+                objObjectBorderCheckbox.classList = 'form-check-input';
+                let objObjectBorderCheckboxLabel = document.createElement('label');
+                objObjectBorderCheckboxLabel.classList = 'from-check-label fs-3';
+                objObjectBorderCheckboxLabel.for = 'objObjectBorderCheckbox';
+                objObjectBorderCheckboxLabel.innerText = `${window.portalBuilderLanguage?.objectBorderLabel}`;
+                objObjectBorderCheckboxContainer.appendChild(objObjectBorderCheckbox);
+                objObjectBorderCheckboxContainer.appendChild(objObjectBorderCheckboxLabel);
+                // Object Type Container
+                let objectTypeEditContainer = document.createElement('div');
+                objectTypeEditContainer.id = 'objectTypeEditContainer';
+                // Object Type Selector
+                let objectTypeDropdownText = document.createElement('p');
+                objectTypeDropdownText.innerText = `${window.portalBuilderLanguage?.selectObjectTypeDropdownText}`;
+                objectTypeDropdownText.className = 'fs-3';
+                let objectTypeDropdown = document.createElement('select');
+                objectTypeDropdown.id = 'objectTypeDropdown';
+                objectTypeDropdown.setAttribute('class', 'form-select');
+                objectTypeDropdown.onchange = async function() {
+                    objectTypeLayout(mode, this.options[this.selectedIndex].value, olObjectDefinition, olLayoutFileURI, olFolderURI);
+                }
+                // Add the type options
+                let objectTypes = ["text", "linkList", "vaReport", "interactiveContent", "masScore", "clientAdministrator", "portalBuilder"]
+                for (const objectType in objectTypes) {
+                    let objectTypeOption = document.createElement('option');
+                    objectTypeOption.value = objectTypes[objectType];
+                    objectTypeOption.innerText = objectTypes[objectType];
+                    objectTypeDropdown.append(objectTypeOption);
+                }
+                objectTypeDropdown.selectedIndex = objectTypes.indexOf(olObjectDefinition.type);
+                // Add breaklines
+                let olObjBR1 = document.createElement('br');
+                // Add Interface response
+                olObjectEditContainer.appendChild(olObjBR1);
+                olObjectEditContainer.appendChild(objNameInputText);
+                olObjectEditContainer.appendChild(objNameInput);
+                olObjectEditContainer.appendChild(objIDInputText);
+                olObjectEditContainer.appendChild(objIDInput);
+                olObjectEditContainer.appendChild(objectWidthDropdownText);
+                olObjectEditContainer.appendChild(objectWidthDropdown);
+                olObjectEditContainer.appendChild(objHeightInputText);
+                olObjectEditContainer.appendChild(objHeightInput);
+                olObjectEditContainer.appendChild(objObjectBorderCheckboxContainer);
+                olObjectEditContainer.appendChild(objectTypeDropdownText);
+                olObjectEditContainer.appendChild(objectTypeDropdown);
+                olObjectEditContainer.appendChild(objectTypeEditContainer);
+                // Initial with base object type
+                objectTypeLayout(mode, objectTypeDropdown.options[objectTypeDropdown.selectedIndex].value, olObjectDefinition, olLayoutFileURI, olFolderURI);
             }
-        }
 
-        function moveUp(element) {
-            let wrapper = element.parentElement;
-            let parentWrapper = wrapper.parentElement;
+            window.pageObjectLayout = pageObjectLayout;
+        </script>
+        <script type="module">
+            /**
+             * Helper function to remove elements from the DOM by ID
+             * @param elementId {String} - is the ID of the element to remove
+             **/
+            function removeElementIfExists(elementId) {
+                const REMOVEELEMENT = document.getElementById(elementId);
+                if(REMOVEELEMENT) {
+                    REMOVEELEMENT.remove();
+                }
+            }
+            window.removeElementIfExists = removeElementIfExists;
 
-            if (parentWrapper.previousElementSibling)
-                parentWrapper.parentNode.insertBefore(
-                    parentWrapper,
-                    parentWrapper.previousElementSibling
+            /**
+             * Create the interface for editing the general layout of the page
+             * @param mode {String} - is either set to create or edit based on the button the user clicks
+             * @param glDefinition {Object} - optional, contains the general section of the portal-page-layout.json, defaults to empty
+             * @param glObjects {Array} - optional, contains the objects section of the portal-page-layout.json, defaults to empty
+             * @param glFileURI {String} - optional, contains the file URI of the existing file, defaults to empty
+             * @param glFolderURI {String} - optional, contains the folder URI of folder of the use case, defaults to empty
+             * @return {HTML object} - returns a div to be added to the page
+             **/
+            async function pageGeneralLayout(mode, glDefinition = {}, glObjects = [], glFileURI = '', glFolderURI = '') {
+                let pglContainerID = 'portalBuilder-General-Layout-Container';
+                removeElementIfExists(pglContainerID);
+                let pglContainer = document.createElement('div');
+                pglContainer.id = pglContainerID;
+
+                // Create empty definition for  the glDefinition object
+                if (mode === 'create') {
+                    glDefinition = {
+                        contact: '',
+                        name: '',
+                        numCols: 2,
+                        shorthand: '',
+                        visible: true,
+                        showNameOnPage: false,
+                    };
+                }
+
+                // Create the general interface
+                // Page Name
+                let pglNameInputText = document.createElement('p');
+                pglNameInputText.innerText = `${window.portalBuilderLanguage?.enterPageName}:`;
+                pglNameInputText.className = 'fs-3';
+                let pglNameInput = document.createElement('input');
+                pglNameInput.type = 'text';
+                pglNameInput.className = 'form-control';
+                pglNameInput.value = glDefinition.name;
+                pglNameInput.id = 'pglNameInput';
+                pglNameInput.required = true;
+                // Page Shorthand
+                let pglShorthandInputText = document.createElement('p');
+                pglShorthandInputText.innerText = `${window.portalBuilderLanguage?.enterPageShorthand}:`;
+                pglShorthandInputText.className = 'fs-3';
+                let pglShorthandInput = document.createElement('input');
+                pglShorthandInput.type = 'text';
+                pglShorthandInput.className = 'form-control';
+                pglShorthandInput.value = glDefinition.shorthand;
+                pglShorthandInput.id = 'pglShorthandInput';
+                pglShorthandInput.required = true;
+                pglShorthandInput.onkeydown = 'return /[a-z]/i.test(event.key)';
+                // Page Visible
+                let pglVisibleCheckboxContainer = document.createElement('div');
+                let pglVisibleCheckbox = document.createElement('input');
+                pglVisibleCheckbox.type = 'checkbox';
+                pglVisibleCheckbox.checked = glDefinition?.visible;
+                pglVisibleCheckbox.id = 'pglVisibleCheckbox';
+                pglVisibleCheckbox.classList = 'form-check-input';
+                let pglVisibleCheckboxLabel = document.createElement('label');
+                pglVisibleCheckboxLabel.classList = 'from-check-label fs-3';
+                pglVisibleCheckboxLabel.for = 'pglVisibleCheckbox';
+                pglVisibleCheckboxLabel.innerText = `${window.portalBuilderLanguage?.enterPageVisible}:`;
+                pglVisibleCheckboxContainer.appendChild(pglVisibleCheckbox);
+                pglVisibleCheckboxContainer.appendChild(pglVisibleCheckboxLabel);
+                // Page Show Name
+                let pglShowNameCheckboxContainer = document.createElement('div');
+                let pglShowNameCheckbox = document.createElement('input');
+                pglShowNameCheckbox.type = 'checkbox';
+                pglShowNameCheckbox.checked = glDefinition?.showNameOnPage
+                    ? true
+                    : false;
+                pglShowNameCheckbox.id = 'pglVisibleCheckbox';
+                pglShowNameCheckbox.classList = 'form-check-input';
+                let pglShowNameCheckboxLabel = document.createElement('label');
+                pglShowNameCheckboxLabel.classList = 'from-check-label fs-3';
+                pglShowNameCheckboxLabel.for = 'pglVisibleCheckbox';
+                pglShowNameCheckboxLabel.innerText = `${window.portalBuilderLanguage?.enterPageShowName}:`;
+                pglShowNameCheckboxContainer.appendChild(pglShowNameCheckbox);
+                pglShowNameCheckboxContainer.appendChild(pglShowNameCheckboxLabel);
+                // Page Number of Columns
+                let pglNumColsInputText = document.createElement('p');
+                pglNumColsInputText.innerText = `${window.portalBuilderLanguage?.enterPageNumCols}:`;
+                pglNumColsInputText.className = 'fs-3';
+                let pglNumColsInput = document.createElement('input');
+                pglNumColsInput.type = 'number';
+                pglNumColsInput.className = 'form-control';
+                pglNumColsInput.value = glDefinition.numCols;
+                pglNumColsInput.id = 'pglNumColsInput';
+                pglNumColsInput.onkeydown = 'return /[0-9]/i.test(event.key)';
+                // Page Contact
+                let pglContactInputText = document.createElement('p');
+                pglContactInputText.innerText = `${window.portalBuilderLanguage?.enterPageContact}:`;
+                pglContactInputText.className = 'fs-3';
+                let pglContactInput = document.createElement('input');
+                pglContactInput.type = 'email';
+                pglContactInput.className = 'form-control';
+                pglContactInput.value = glDefinition.contact;
+                pglContactInput.id = 'pglContactInput';
+                // Page Save
+                let pglSavePageButton = document.createElement('button');
+                pglSavePageButton.setAttribute('type', 'button');
+                pglSavePageButton.setAttribute('class', 'btn btn-primary');
+                pglSavePageButton.innerText = `${window.portalBuilderLanguage?.savePage}`;
+                pglSavePageButton.id = 'pglSavePageButton';
+                pglSavePageButton.onclick = async function () {
+                    // Gather the information
+                    let newPageDefinition = {
+                        "general": {
+                            "name": document.getElementById('pglNameInput').value,
+                            "shorthand": document.getElementById('pglShorthandInput').value,
+                            "visible": document.getElementById('pglVisibleCheckbox').checked,
+                            "numCols": document.getElementById('pglNumColsInput').value,
+                            "contact": document.getElementById('pglContactInput').value
+                        },
+                        "objects": glObjects.length > 0 ? glObjects : []
+                    }
+                    // Validate the information
+                    if (newPageDefinition.general.name.trim() === '') {
+                        document.getElementById('pglResponseText').innerText = `${window.portalBuilderLanguage?.invalidName}`;
+                        return null;
+                    } else if (newPageDefinition.general.shorthand.trim() === '') {
+                        document.getElementById('pglResponseText').innerText = `${window.portalBuilderLanguage?.invalidShorthand}`;
+                        return null;
+                    }
+                    // Check that no page, i.e. folder with that name already exists
+                    if(mode === 'create') {
+                        let pageExistingCheck = await window.parent.getFolderContent(
+                            window.parent.VIYA,
+                            `/folders/folders/${window.parent.PORTAL}`,
+                            `?filter=eq(name,'${newPageDefinition.general.name}')`
+                        );
+                        if(pageExistingCheck.length > 0) {
+                            document.getElementById('pglResponseText').innerText = `${window.portalBuilderLanguage?.pageAlreadyExistsAlert}`;
+                            return null;
+                        } else {
+                            let newPageFolder = await window.parent.createFolder(
+                                window.parent.VIYA,
+                                newPageDefinition.general.name,
+                                `/folders/folders/${window.parent.PORTAL}`
+                            )
+                            let newPageFolderResult = await newPageFolder.json()
+                            const jsonstringContent = JSON.stringify(newPageDefinition);
+                            const blobContent = new Blob([jsonstringContent], {
+                                type: 'text/json',
+                            });
+                            let creationResp = await window.parent.createFile(
+                                window.parent.VIYA,
+                                `/folders/folders/${newPageFolderResult.id}`,
+                                blobContent,
+                                'portal-page-layout.json'
+                            );
+                            updatePortalLayoutJSON(newPageDefinition.general.name, `/folders/folders/${newPageFolderResult.id}`);
+                            document.getElementById('pglResponseText').innerText = `${window.portalBuilderLanguage?.pageCreatedMessage}`;
+                        }
+                    } else {
+                        const jsonstringContent = JSON.stringify(newPageDefinition);
+                        const blobContent = new Blob([jsonstringContent], {
+                            type: 'text/json',
+                        });
+                        let updateResp = await window.parent.updateFileContent(
+                            window.parent.VIYA,
+                            glFileURI,
+                            blobContent
+                        );
+                        document.getElementById('pglResponseText').innerText = `${window.portalBuilderLanguage?.pageUpdatedMessage}`;
+                    }
+                }
+                // Delete button
+                let pglDeletePageButton = document.createElement('button');
+                pglDeletePageButton.setAttribute('type', 'button');
+                pglDeletePageButton.setAttribute('class', 'btn btn-primary');
+                pglDeletePageButton.innerText = `${window.portalBuilderLanguage?.deletePage}`;
+                pglDeletePageButton.id = 'pglDeletePageButton';
+                pglDeletePageButton.style.marginLeft = '4px';
+                pglDeletePageButton.onclick = async function () {
+                    // If the page has objects delete them first
+                    if(glObjects.length > 0) {
+                        for (const obj of glObjects) {
+                            await window.parent.deleteSASViyaContent(window.parent.VIYA, obj.uri);
+                        }
+                    }
+                    await window.parent.deleteSASViyaContent(window.parent.VIYA, glFileURI);
+                    let deletionResponse = await window.parent.deleteSASViyaContent(window.parent.VIYA, glFolderURI);
+                    updatePortalLayoutJSON('', glFolderURI, 'remove');
+                    if (deletionResponse.responseText == 204) {
+                        const option = document.querySelector(`#editExistingPagesDropdown option[value="${glFolderURI}"]`);
+                        if (option) {
+                           option.remove();
+                        }
+                        removeElementIfExists(pglContainerID);
+                    }
+                }
+                // Result text
+                let pglResponseText = document.createElement('p');
+                pglResponseText.id = 'pglResponseText';
+                // Visual breaklines
+                let pglBR1 = document.createElement('br');
+                let pglBR2 = document.createElement('br');
+
+                // Add Interface response
+                pglContainer.appendChild(pglNameInputText);
+                pglContainer.appendChild(pglNameInput);
+                pglContainer.appendChild(pglShorthandInputText);
+                pglContainer.appendChild(pglShorthandInput);
+                pglContainer.appendChild(pglVisibleCheckboxContainer);
+                pglContainer.appendChild(pglShowNameCheckboxContainer);
+                pglContainer.appendChild(pglNumColsInputText);
+                pglContainer.appendChild(pglNumColsInput);
+                pglContainer.appendChild(pglContactInputText);
+                pglContainer.appendChild(pglContactInput);
+                pglContainer.appendChild(pglBR1);
+                pglContainer.appendChild(pglSavePageButton);
+                if(mode === 'edit') {
+                    pglContainer.appendChild(pglDeletePageButton);
+                }
+                pglContainer.appendChild(pglResponseText);
+                pglContainer.appendChild(pglBR2);
+
+                if(mode === 'edit') {
+                    // Create the layout container for the objects
+                    let pglObjectEditContainer = document.createElement('div');
+                    pglObjectEditContainer.id = 'pglObjectEditContainer';
+                    // Create base container
+                    let pglMainObjectEditContainer = document.createElement('div');
+                    pglMainObjectEditContainer.id = 'pglMainObjectEditContainer';
+                    // Add Interface for editing objects
+                    let pglAddNewObject = document.createElement('button')
+                    pglAddNewObject.id = 'pglAddNewObject';
+                    pglAddNewObject.setAttribute('type', 'button');
+                    pglAddNewObject.setAttribute('class', 'btn btn-primary');
+                    pglAddNewObject.innerText = `${window.portalBuilderLanguage?.addObjectButton}`;
+                    pglAddNewObject.onclick = async function () {
+                        pglObjectEditContainer.innerHTML = '';
+                        pglMainObjectEditContainer.innerHTML = '';
+                        pageObjectLayout('add', glDefinition, glObjects, glFileURI, glFolderURI);
+                    }
+                    let pglEditObject = document.createElement('button');
+                    pglEditObject.id = 'pglEditObject';
+                    pglEditObject.setAttribute('type', 'button');
+                    pglEditObject.setAttribute('class', 'btn btn-primary');
+                    pglEditObject.innerText = `${window.portalBuilderLanguage?.editObjectButton}`;
+                    pglEditObject.style['margin-left'] = '4px';
+                    pglEditObject.onclick = async function () {
+                        pglObjectEditContainer.innerHTML = '';
+                        pglMainObjectEditContainer.innerHTML = '';
+                        // Create dropdown and add selection text
+                        let editExistingObjectDropdownText = document.createElement('p');
+                        editExistingObjectDropdownText.innerText = `${window.portalBuilderLanguage?.editSelectObject}:`;
+                        editExistingObjectDropdownText.className = 'fs-3';
+                        let editExistingObjectDropdown =
+                            document.createElement('select');
+                        editExistingObjectDropdown.setAttribute('class', 'form-select');
+                        editExistingObjectDropdown.id = 'editExistingObjectDropdown';
+                        editExistingObjectDropdown.onchange = async function () {
+                            let currentObject = this.options[this.selectedIndex].value;
+                            let currentObjectDefinitionJSON =
+                                await window.parent.getFileContent(
+                                    window.parent.VIYA,
+                                    currentObject
+                                );
+                            let currentObjectDefinition = await currentObjectDefinitionJSON.json();
+                            pageObjectLayout('edit', glDefinition, glObjects, glFileURI, glFolderURI, currentObjectDefinition);
+                        };
+
+                        // Add the page options
+                        let firstObjectOption = document.createElement('option');
+                        firstObjectOption.value = '';
+                        firstObjectOption.innerText =
+                            window.portalBuilderLanguage?.editSelectObject;
+                            editExistingObjectDropdown.append(firstObjectOption);
+
+                        // Add all the different objects to the dropdown
+                        for (const objectElement in glObjects) {
+                            let objectOption = document.createElement('option');
+                            objectOption.value = glObjects[objectElement]?.uri;
+                            objectOption.innerText = glObjects[objectElement]?.name;
+                            editExistingObjectDropdown.append(objectOption);
+                        }
+                        pglMainObjectEditContainer.appendChild(editExistingObjectDropdownText);
+                        pglMainObjectEditContainer.appendChild(editExistingObjectDropdown);
+                    }
+                    pglContainer.appendChild(pglAddNewObject);
+                    pglContainer.appendChild(pglEditObject);
+                    pglContainer.appendChild(pglMainObjectEditContainer);
+                    pglContainer.appendChild(pglObjectEditContainer); 
+                }
+
+                return pglContainer;
+            }
+
+            window.pageGeneralLayout = pageGeneralLayout;
+        </script>
+        <script type="module">
+            /**
+             * Create the interface for page editing or creation
+             * @param mode {String} - is either set to create or edit based on the button the user clicks
+             * @return directly updates the content of the div with the ID portalBuilderPageContainer
+             **/
+            async function changePage(mode) {
+                let portalPageContainer = document.getElementById(
+                    'portalBuilderPageContainer'
                 );
-        }
+                portalPageContainer.innerHTML = '';
 
-        function moveDown(element) {
-            let wrapper = element.parentElement;
-            let parentWrapper = wrapper.parentElement;
+                if (mode === 'edit') {
+                    // Create dropdown to select the existing page that should be edited
+                    // Get all existing pages
+                    let existingPages = await window.parent.getFolderContent(
+                        window.parent.VIYA,
+                        `/folders/folders/${window.parent.PORTAL}`,
+                        '?filter=eq(contentType,folder)&sortBy=name&limit=10000'
+                    );
+                    // Create dropdown and add selection text
+                    let editExistingPagesDropdownText = document.createElement('p');
+                    editExistingPagesDropdownText.innerText = `${window.portalBuilderLanguage?.editSelectPage}:`;
+                    editExistingPagesDropdownText.className = 'fs-3';
+                    let editExistingPagesDropdown =
+                        document.createElement('select');
+                    editExistingPagesDropdown.setAttribute('class', 'form-select');
+                    editExistingPagesDropdown.id = 'editExistingPagesDropdown';
+                    // On change function to fill the next content
+                    editExistingPagesDropdown.onchange = async function () {
+                        let currentPage = this.options[this.selectedIndex].value;
+                        let currentPageLayoutURIDefinition =
+                            await window.parent.getFolderContent(
+                                window.parent.VIYA,
+                                currentPage,
+                                '?filter=eq("name","portal-page-layout.json")'
+                            );
+                        let currentPageDefinitionJSON =
+                            await window.parent.getFileContent(
+                                window.parent.VIYA,
+                                currentPageLayoutURIDefinition[0]?.uri
+                            );
+                        let currentPageDefinition =
+                            await currentPageDefinitionJSON.json();
 
-            if (parentWrapper.nextElementSibling)
-                parentWrapper.parentNode.insertBefore(
-                    parentWrapper.nextElementSibling,
-                    parentWrapper
-                );
-        }
+                        let generalLayout = await pageGeneralLayout(
+                            mode,
+                            currentPageDefinition?.general,
+                            currentPageDefinition?.objects,
+                            currentPageLayoutURIDefinition[0]?.uri,
+                            currentPage
+                        );
+                        portalPageContainer.append(generalLayout);
+                    };
 
-        window.saveChanges = saveChanges;
-        window.moveUp = moveUp;
-        window.moveDown = moveDown;
-    </script>
-    <script type="module">
-        const portalBuilderCreatePageButton = document.getElementById(
-            'portalBuilderCreatePageButton'
-        );
-        const portalBuilderPageButton = document.getElementById(
-            'portalBuilderPageButton'
-        );
-        const portalBuilderOrderButton = document.getElementById(
-            'portalBuilderOrderButton'
-        );
-        const portalBuilderOrderModalHeader = document.getElementById(
-            'portalBuilderOrderModalHeader'
-        );
-        const portalBuilderOrderModalClose = document.getElementById(
-            'portalBuilderOrderModalClose'
-        );
-        const portalBuilderOrderModalSave = document.getElementById(
-            'portalBuilderOrderModalSave'
-        );
-        const portalBuilderOrderModalList = document.getElementById(
-            'portalBuilderOrderModalList'
-        );
+                    // Add the page options
+                    let firstPageOption = document.createElement('option');
+                    firstPageOption.value = '';
+                    firstPageOption.innerText =
+                        window.portalBuilderLanguage?.editSelectPage;
+                    editExistingPagesDropdown.append(firstPageOption);
 
-        // Get the interface language
-        const languageContent = await window.parent.getInterfaceLanguage();
-        let portalBuilderLanguage = languageContent?.portalBuilder;
-        window.portalBuilderLanguage = portalBuilderLanguage;
+                    // Add all the different pages to the dropdown
+                    for (const page in existingPages) {
+                        let pageOption = document.createElement('option');
+                        pageOption.value = existingPages[page]?.uri;
+                        pageOption.innerText = existingPages[page]?.name;
+                        editExistingPagesDropdown.append(pageOption);
+                    }
 
-        portalBuilderCreatePageButton.innerText =
-            portalBuilderLanguage?.createNewPage;
+                    portalPageContainer.append(editExistingPagesDropdownText);
+                    portalPageContainer.append(editExistingPagesDropdown);
+                } else {
+                    let generalLayout = await pageGeneralLayout(mode);
+                    portalPageContainer.append(generalLayout);
+                }
+            }
 
-        portalBuilderPageButton.innerText =
-            portalBuilderLanguage?.editExistingPages;
+            window.changePage = changePage;
+        </script>
+        <script type="module">
+            async function saveChanges(contentElement, createCase) {
+                let saveContent = document.getElementById(contentElement);
+                // If true updates the existing or if false creates a new order
+                let updateFile;
+                let contentJSON;
+                let fileName;
+                let modalID;
+                switch (createCase) {
+                    case 'orderexists':
+                        let contentID = 0;
+                        contentJSON = { displayOrder: [] };
+                        while (contentID < saveContent.childElementCount) {
+                            const currentContent =
+                                saveContent.childNodes[contentID];
+                            if (contentID === 0) {
+                                updateFile =
+                                    currentContent?.getAttribute('orderexists');
+                                fileName = 'portal-layout.json';
+                                modalID = 'portalBuilderOrderModal';
+                            }
+                            contentJSON.displayOrder.push({
+                                name: currentContent?.getAttribute('name'),
+                                uri: currentContent?.getAttribute('folderuri'),
+                            });
+                            contentID++;
+                        }
+                        break;
+                    default:
+                        console.log('Unkown Save Case.');
+                }
 
-        // Check if there is already an order
-        let portalLayout = await window.parent.getFolderContent(
-            window.parent.VIYA,
-            `/folders/folders/${window.parent.PORTAL}`,
-            '?filter=eq(name,"portal-layout.json")'
-        );
-        let potentialPage;
-        let orderExists = false;
-        if (portalLayout?.length > 0) {
-            // An order already exists
-            orderExists = true;
-            // Cusomtize the interface
-            portalBuilderOrderButton.innerText =
-                portalBuilderLanguage?.editDefaultOrder;
-            portalBuilderOrderModalHeader.innerText =
-                portalBuilderLanguage?.editDefaultOrderHeader;
-            portalBuilderOrderModalClose.innerText =
-                portalBuilderLanguage?.close;
-            portalBuilderOrderModalSave.innerText = portalBuilderLanguage?.save;
-            // Get the current order
-            let portLayoutResponse = await window.parent.getFileContent(
-                window.parent.VIYA,
-                portalLayout[0]?.uri
+                const jsonstringContent = JSON.stringify(contentJSON);
+                const blobContent = new Blob([jsonstringContent], {
+                    type: 'text/json',
+                });
+
+                if (updateFile === 'false') {
+                    let creationResp = await window.parent.createFile(
+                        window.parent.VIYA,
+                        `/folders/folders/${window.parent.PORTAL}`,
+                        blobContent,
+                        fileName
+                    );
+                    let dismissModalElement = document.getElementById(modalID);
+                    let dismissModal =
+                        bootstrap.Modal.getInstance(dismissModalElement);
+                    dismissModal.hide();
+                } else {
+                    let updateResp = await window.parent.updateFileContent(
+                        window.parent.VIYA,
+                        window.PORTALLAYOUTPAGEURI,
+                        blobContent
+                    );
+                    let dismissModalElement = document.getElementById(modalID);
+                    let dismissModal =
+                        bootstrap.Modal.getInstance(dismissModalElement);
+                    dismissModal.hide();
+                }
+            }
+
+            function moveUp(element) {
+                let wrapper = element.parentElement;
+                let parentWrapper = wrapper.parentElement;
+
+                if (parentWrapper.previousElementSibling)
+                    parentWrapper.parentNode.insertBefore(
+                        parentWrapper,
+                        parentWrapper.previousElementSibling
+                    );
+            }
+
+            function moveDown(element) {
+                let wrapper = element.parentElement;
+                let parentWrapper = wrapper.parentElement;
+
+                if (parentWrapper.nextElementSibling)
+                    parentWrapper.parentNode.insertBefore(
+                        parentWrapper.nextElementSibling,
+                        parentWrapper
+                    );
+            }
+
+            window.saveChanges = saveChanges;
+            window.moveUp = moveUp;
+            window.moveDown = moveDown;
+        </script>
+        <script type="module">
+            const portalBuilderCreatePageButton = document.getElementById(
+                'portalBuilderCreatePageButton'
             );
-            window.PORTALLAYOUTPAGEURI = portalLayout[0]?.uri;
-            let portalPageJSON = await portLayoutResponse.json();
-            potentialPage = portalPageJSON?.displayOrder;
-        } else {
-            // Create a new Order
-            // Cusomtize the interface
-            portalBuilderOrderButton.innerText =
-                portalBuilderLanguage?.createDefaultOrder;
-            portalBuilderOrderModalHeader.innerText =
-                portalBuilderLanguage?.createDefaultOrderHeader;
-            portalBuilderOrderModalClose.innerText =
-                portalBuilderLanguage?.close;
-            portalBuilderOrderModalSave.innerText =
-                portalBuilderLanguage?.create;
-            // Get all available elements
-            potentialPage = await window.parent.getFolderContent(
+            const portalBuilderPageButton = document.getElementById(
+                'portalBuilderPageButton'
+            );
+            const portalBuilderOrderButton = document.getElementById(
+                'portalBuilderOrderButton'
+            );
+            const portalBuilderOrderModalHeader = document.getElementById(
+                'portalBuilderOrderModalHeader'
+            );
+            const portalBuilderOrderModalClose = document.getElementById(
+                'portalBuilderOrderModalClose'
+            );
+            const portalBuilderOrderModalSave = document.getElementById(
+                'portalBuilderOrderModalSave'
+            );
+            const portalBuilderOrderModalList = document.getElementById(
+                'portalBuilderOrderModalList'
+            );
+
+            // Get the interface language
+            const languageContent = await window.parent.getInterfaceLanguage();
+            let portalBuilderLanguage = languageContent?.portalBuilder;
+            window.portalBuilderLanguage = portalBuilderLanguage;
+
+            portalBuilderCreatePageButton.innerText =
+                portalBuilderLanguage?.createNewPage;
+
+            portalBuilderPageButton.innerText =
+                portalBuilderLanguage?.editExistingPages;
+
+            // Check if there is already an order
+            let portalLayout = await window.parent.getFolderContent(
                 window.parent.VIYA,
                 `/folders/folders/${window.parent.PORTAL}`,
-                '?filter=eq(contentType,folder)&sortBy=name&limit=1000'
+                '?filter=eq(name,"portal-layout.json")'
             );
-        }
+            let potentialPage;
+            let orderExists = false;
+            if (portalLayout?.length > 0) {
+                // An order already exists
+                orderExists = true;
+                // Cusomtize the interface
+                portalBuilderOrderButton.innerText =
+                    portalBuilderLanguage?.editDefaultOrder;
+                portalBuilderOrderModalHeader.innerText =
+                    portalBuilderLanguage?.editDefaultOrderHeader;
+                portalBuilderOrderModalClose.innerText =
+                    portalBuilderLanguage?.close;
+                portalBuilderOrderModalSave.innerText = portalBuilderLanguage?.save;
+                // Get the current order
+                let portLayoutResponse = await window.parent.getFileContent(
+                    window.parent.VIYA,
+                    portalLayout[0]?.uri
+                );
+                window.PORTALLAYOUTPAGEURI = portalLayout[0]?.uri;
+                let portalPageJSON = await portLayoutResponse.json();
+                potentialPage = portalPageJSON?.displayOrder;
+            } else {
+                // Create a new Order
+                // Cusomtize the interface
+                portalBuilderOrderButton.innerText =
+                    portalBuilderLanguage?.createDefaultOrder;
+                portalBuilderOrderModalHeader.innerText =
+                    portalBuilderLanguage?.createDefaultOrderHeader;
+                portalBuilderOrderModalClose.innerText =
+                    portalBuilderLanguage?.close;
+                portalBuilderOrderModalSave.innerText =
+                    portalBuilderLanguage?.create;
+                // Get all available elements
+                potentialPage = await window.parent.getFolderContent(
+                    window.parent.VIYA,
+                    `/folders/folders/${window.parent.PORTAL}`,
+                    '?filter=eq(contentType,folder)&sortBy=name&limit=1000'
+                );
+            }
 
-        for (let pageElement in potentialPage) {
-            let orderElement = document.createElement('li');
-            orderElement.setAttribute('class', 'list-group-item');
-            orderElement.setAttribute('orderExists', orderExists);
-            orderElement.setAttribute('name', potentialPage[pageElement]?.name);
-            orderElement.setAttribute(
-                'folderURI',
-                potentialPage[pageElement]?.uri
-            );
-            orderElement.innerHTML = `${potentialPage[pageElement]?.name} <span class="position-absolute end-0"><b onclick="moveUp(this)" class="moveButton">&uarr;</b><b onclick="moveDown(this)" class="moveButton">&darr;</b></span>`;
+            for (let pageElement in potentialPage) {
+                let orderElement = document.createElement('li');
+                orderElement.setAttribute('class', 'list-group-item');
+                orderElement.setAttribute('orderExists', orderExists);
+                orderElement.setAttribute('name', potentialPage[pageElement]?.name);
+                orderElement.setAttribute(
+                    'folderURI',
+                    potentialPage[pageElement]?.uri
+                );
+                orderElement.innerHTML = `${potentialPage[pageElement]?.name} <span class="position-absolute end-0"><b onclick="moveUp(this)" class="moveButton">&uarr;</b><b onclick="moveDown(this)" class="moveButton">&darr;</b></span>`;
 
-            portalBuilderOrderModalList.appendChild(orderElement);
-        }
-    </script>
-</div>
+                portalBuilderOrderModalList.appendChild(orderElement);
+            }
+        </script>
+    </div>

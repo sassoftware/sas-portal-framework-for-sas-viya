@@ -4,6 +4,12 @@
 The SAS Portal Framework for SAS® Viya® enables you to build your portal to share reports, texts, link list, jobs and more in a structured way.
 This project builds on top of the SAS® Viya® SDKs and the SAS® Viya® APIs.
 
+Find a video walking you through the setup and the general UI [here](https://youtu.be/ZifDM_n20p0).
+
+This is what the example portal that is included in this repository looks like:
+
+![Example Portal](./img/example-portal.png)
+
 ## Installation
 
 ### Prerequisites

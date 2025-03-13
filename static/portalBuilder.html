@@ -333,7 +333,7 @@
                     // Set the general attributes first
                     otObjectDefinition.name = document.getElementById('objNameInput').value;
                     otObjectDefinition.id = document.getElementById('objIDInput').value;
-                    otObjectDefinition.width = document.getElementById('objectWidthDropdown').value;
+                    otObjectDefinition.width = document.getElementById('objectWidthDropdown').value === 'auto' ? 'auto' : Number(document.getElementById('objectWidthDropdown').value);
                     let otObjectHeightTMP = document.getElementById('objHeightInput').value;
                     if (otObjectHeightTMP !== '') {
                         otObjectDefinition.height = otObjectHeightTMP;
@@ -519,7 +519,7 @@
                     objectOption.innerText = widthOptionsDictionary[objectElement]?.text;
                     objectWidthDropdown.append(objectOption);
                 }
-                objectWidthDropdown.selectedIndex = olObjectDefinition.width === 'auto' ? 0 : olObjectDefinition.width + 1;
+                objectWidthDropdown.selectedIndex = widthOptionsDictionary.findIndex(item => item.value == olObjectDefinition.width);
                 // Object Height
                 let objHeightInputText = document.createElement('p');
                 objHeightInputText.innerText = `${window.portalBuilderLanguage?.enterObjectHeight}:`;

@@ -96,13 +96,13 @@ As the next step you will have to follow the setup instructions detailed in the 
 - [SAS Content SDK documentation](https://developer.sas.com/sdk/content/docs/getting-started/#sas-viya-setup)
 
 ## Sample Content and Config.js
-If you want to use the sample content, then import the [Portal-Content-EM.json](./Portal-Content-EM.json) and [Content-EM.json](./Content-EM.json) using SAS Environment Manager or the viya-admin CLI. 
+If you want to use the sample content, then import the `Portal-Content-EM.json` and `Content-EM.json` using SAS Environment Manager or the viya-admin CLI. 
 The examples include also static links to SAS Jobs.
 This applies to `Use Case 1/interactiveContent-example.json` where you will need to replace the URL with your Viya host.
 If you replace the file, you will need to update the `portal-page-layout.json` accordingly with the new file URI.
 The `VA Test` page also requires an additional setup: run the `Load-HMEQ.sas` file in `Content/VA Reports`, which will load the hmeq table from sampsio to public.
 
-Go to [config.js](./config.js), search for **VIYA** and replace the value `window.location.origin` with your SAS Viya host if your webserver is not located under the same URL as the Viya host.
+Go to `config.js`, search for **VIYA** and replace the value `window.location.origin` with your SAS Viya host if your webserver is not located under the same URL as the Viya host.
 
 If you imported the sample content you can skip this step, if you created your own portal folder you have to search for **PORTAL** and replace the value `68384628-8305-4285-9f16-0cdc57d13dc5` if the URI of your portal folder (go to the folder in SAS Environment Manager, select it and copy just the URI ID— everything after `/folders/folders/`).
 

@@ -5,7 +5,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 
 const config: Config = {
   title: "sas-portal-framework-for-sas-viya Documentation",
-  favicon: "static/sas.png",
+  favicon: "https://raw.githubusercontent.com/sassoftware/sas-portal-framework-for-sas-viya/refs/heads/main/static/sas.png",
 
   // Set the production url of your site here
   url: "https://sassoftware.github.io",
@@ -54,7 +54,7 @@ const config: Config = {
       title: "SAS Portal Framework for SAS Viya Documentation",
       logo: {
         alt: "SAS",
-        src: "static/sas.png",
+        src: "https://raw.githubusercontent.com/sassoftware/sas-portal-framework-for-sas-viya/refs/heads/main/static/sas.png",
       },
       items: [
         {

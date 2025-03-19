@@ -10,6 +10,8 @@ This is what the example portal that is included in this repository looks like:
 
 ![Example Portal](./img/example-portal.png)
 
+For a better documentation expierence check out the [SAS Portal Framework for SAS Viya documentation page](https://sassoftware.github.io/sas-portal-framework-for-sas-viya/).
+
 ## Installation
 
 ### Prerequisites

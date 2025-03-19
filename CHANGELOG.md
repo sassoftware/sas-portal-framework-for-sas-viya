@@ -1,5 +1,9 @@
 # Changelog
 
+## SAS Portal Framework for SAS Viya v1.0.2
+
+- Add: Documentation page - [SAS Portal Framework Documentation](https://sassoftware.github.io/sas-portal-framework-for-sas-viya/)
+
 ## SAS Portal Framework for SAS Viya v1.0.1
 
 - BF: Report Width was created in the wrong data type from the Portal Builder

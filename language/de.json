@@ -67,7 +67,10 @@
     "moduleScore": "Score",
     "moduleDownloadButton": "Inhalt herunterladen",
     "scoreImportHeader": "Bitte eine Datei mit der gleichen Struktur wie die Modulinputs auswählen, ohne Header",
-    "scoreRandom": "Zufällige Zeile Scoren"
+    "scoreRandom": "Zufällige Zeile Scoren",
+    "moduleDelete": "MAS Modul löschen",
+    "successfullModuleDeletion": "Das MAS Modul wurde erfolgreich gelöscht.",
+    "failedModuleDeletion": "Das MAS Modul konnte nicht gelöscht werden. Bitte schau in der Entwicklerkonsole nach oder kontaktiere den SAS Administrator."
   },
   "computeContextSelectorText": "Wähle einen Compute Context",
   "clienAdministrator": {

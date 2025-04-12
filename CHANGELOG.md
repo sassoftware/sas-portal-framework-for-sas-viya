@@ -1,5 +1,9 @@
 # Changelog
 
+## SAS Portal Framework for SAS Viya v1.0.3
+
+- Add: The MAS Module Scorer object now provides the ability to delete MAS Modules
+
 ## SAS Portal Framework for SAS Viya v1.0.2
 
 - Add: Documentation page - [SAS Portal Framework Documentation](https://sassoftware.github.io/sas-portal-framework-for-sas-viya/)

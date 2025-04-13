@@ -74,8 +74,15 @@ async function submitSASCode(
     let RESPONSE = JOBRESPONSEJSON?.id;
 
     if (waitForJobComplition) {
+        // Job states that indicate completion
         let isJobComplete = ['completed', 'canceled', 'warning', 'error'];
-        JOBWAIT = await getSASJobState(VIYAHOST, sessionID, RESPONSE);
+        let currenJobStatus = 'running';
+        // Mechanism to wait 5 seconds before checking again
+        const delay = ms => new Promise(res => setTimeout(res, ms));
+        while (!isJobComplete.includes(currenJobStatus)) {
+            await delay(5000);
+            currenJobStatus = await getSASJobState(VIYAHOST, sessionID, RESPONSE);
+        }
     }
 
     return RESPONSE;

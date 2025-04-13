@@ -1,5 +1,5 @@
 /**
- * Create a SAS Session
+ * Create a SAS Session - if you use this function you should check if window.SASSESSION already exists, if so use that instead
  *
  * @param {String} VIYAHOST - The Host URL of the SAS Viya Host
  * @param {String} computeContextID - ID of the SAS Compute Context
@@ -15,7 +15,7 @@ async function createSASSession(
     VIYAHOST,
     computeContextID,
     sessionName,
-    sessionDescription = '',
+    sessionDescription = '',    
     sessionAttributes = {},
     sessionEnvironmentOptions = [],
     sessionEnvironmentAutoexecLines = []
@@ -79,19 +79,5 @@ async function createSASSession(
     }
 
     let SESSIONJSON = await SESSIONRESPONSE.json();
-
-    // Add an unload function to end the SAS session
-    window.onbeforeunload = () => {
-        fetch(`${VIYAHOST}/compute/sessions/${SESSIONJSON.id}`, {
-            // mode: 'no-cors',
-            method: 'delete',
-            headers: {
-                Accept: '*/*',
-                credentials: 'include',
-            },
-        });
-        return null;
-    };
-
     return SESSIONJSON?.id;
 }

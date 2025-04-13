@@ -119,6 +119,12 @@ async function generatePages(VIYAHOST, layout, paneContainer, interfaceText) {
                     interfaceText?.clienAdministrator
                 );
                 break;
+            case 'runCustomCode':
+                content = await addRunCustomCode(
+                    currentObjectDefinition,
+                    layout?.general?.shorthand
+                );
+                break;
             case 'endToEnd':
                 content = await addE2EObject(
                     currentObjectDefinition,
@@ -138,7 +144,8 @@ async function generatePages(VIYAHOST, layout, paneContainer, interfaceText) {
                     currentObjectDefinition,
                     layout?.general?.shorthand,
                     interfaceText?.promptBuilder
-                )
+                );
+                break;
             case 'contentGroupReport':
                 break;
             case 'contentGroupJob':

@@ -6,10 +6,13 @@
  * @returns {String} - returns the status code
  */
 async function terminateSASSession(VIYAHOST, sasSessionID) {
-    let SESSIONRESPONSE = await fetch(`${VIYAHOST}/compute/sessions/${SESSIONJSON.id}`, {
+    let SESSIONRESPONSE = await fetch(`${VIYAHOST}/compute/sessions/${sasSessionID}`, {
         // mode: 'no-cors',
         method: 'delete',
-        headers: {Accept: '*/*'},
+        headers: {
+            Accept: '*/*',
+            'X-CSRF-TOKEN': document?.csrfToken != undefined ? document.csrfToken : '',
+        },
             credentials: 'include',
     });
     if (!SESSIONRESPONSE.ok) {
@@ -20,11 +23,15 @@ async function terminateSASSession(VIYAHOST, sasSessionID) {
             let h = SESSIONRESPONSE.headers.get('x-csrf-header');
             let t = SESSIONRESPONSE.headers.get('x-csrf-token');
             document.csrfToken = t;
-            SESSIONRESPONSE = await fetch(`${VIYAHOST}/compute/sessions/${SESSIONJSON.id}`, {
+            SESSIONRESPONSE = await fetch(`${VIYAHOST}/compute/sessions/${sasSessionID}`, {
                 // mode: 'no-cors',
                 method: 'delete',
-                headers: {Accept: '*/*'},
-                    credentials: 'include',
+                headers: {
+                    Accept: '*/*',
+                    'X-CSRF-TOKEN': t,
+                },
+                credentials: 'include',
+                    
             });
         }
     }

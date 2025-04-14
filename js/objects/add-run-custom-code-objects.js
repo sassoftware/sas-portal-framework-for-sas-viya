@@ -37,6 +37,7 @@ async function addRunCustomCode(runCustomCodeObject, paneID) {
   if(eval(runCustomCodeObject?.unloadCode).length > 0) {
     window.addEventListener('beforeunload', function (event) {
       submitSASCode(window.VIYA, window.SASSESSION, eval(runCustomCodeObject?.unloadCode));
+      terminateSASSession(window.VIYA, window.SASSESSION);
     });
   }
 

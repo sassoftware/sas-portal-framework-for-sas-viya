@@ -180,7 +180,7 @@ cp -r ./node_modules/bootstrap/scss ./sdk-assets/bootstrap/scss
 Download the [Markdown Renderer](https://github.com/zerodevx/zero-md) using npm - used for Text Objects:
 
 ```bash
-npm install zero-md
+npm install zero-md@2
 cp -r ./node_modules/zero-md/dist ./sdk-assets/zero-md
 ```
 

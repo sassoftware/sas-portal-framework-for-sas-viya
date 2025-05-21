@@ -183,6 +183,7 @@ async function addMASScoreObject(masObject, paneID, masInterfaceText) {
 
     // Add the Refresh Button
     let moduleRefreshButton = document.createElement('button');
+    moduleRefreshButton.setAttribute('id', `${masObject?.id}-accordion-refreshDelete-button`);
     moduleRefreshButton.setAttribute('type', 'button');
     moduleRefreshButton.setAttribute('class', 'btn btn-primary');
     moduleRefreshButton.innerText = `${masInterfaceText?.moduleRefresh}`;
@@ -241,6 +242,28 @@ async function addMASScoreObject(masObject, paneID, masInterfaceText) {
         );
         masRightSide.appendChild(masAccordion);
     };
+
+    // Add the Delete Button
+    let masDeleteButton = document.createElement('button');
+    masDeleteButton.setAttribute('type', 'button');
+    masDeleteButton.setAttribute('id', `${masObject?.id}-accordion-stepDelete-button`);
+    masDeleteButton.setAttribute('class', 'btn btn-primary');
+    masDeleteButton.innerText = masInterfaceText?.moduleDelete;
+    masDeleteButton.onclick = async function () {
+        let currentModule = document.getElementById(
+            `${masObject?.id}-module-dropdown`
+        );
+        let currentModuleValue = currentModule.options[currentModule.selectedIndex].value;
+        let masModuleDeletionResponse = await deleteMASModule(VIYA, currentModuleValue);
+
+        if (masModuleDeletionResponse === 204) {
+            window.alert(masInterfaceText?.successfullModuleDeletion)
+            // Refresh the UI to remove the old content
+            document.getElementById(`${masObject?.id}-accordion-refreshDelete-button`).click();
+        } else {
+            window.alert(masInterfaceText?.failedModuleDeletion)
+        }
+    }
 
     // Add the default Submit Button
     let masSubmitButton = document.createElement('button');
@@ -377,6 +400,7 @@ async function addMASScoreObject(masObject, paneID, masInterfaceText) {
     masLeftSide.appendChild(moduleStepDropdown);
     masLeftSide.appendChild(masNewLine1);
     masLeftSide.appendChild(moduleRefreshButton);
+    masLeftSide.appendChild(masDeleteButton);
     masLeftSide.appendChild(masSubmitButton);
     masLeftSide.appendChild(masNewLine2);
     masLeftSide.appendChild(importScoreTableHeader);

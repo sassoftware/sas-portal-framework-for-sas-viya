@@ -125,31 +125,6 @@ async function generatePages(VIYAHOST, layout, paneContainer, interfaceText) {
                     layout?.general?.shorthand
                 );
                 break;
-            case 'endToEnd':
-                content = await addE2EObject(
-                    currentObjectDefinition,
-                    layout?.general?.shorthand,
-                    interfaceText?.endToEnd
-                );
-                break;
-            case 'chatWithData':
-                content = await addChatWithDataObject(
-                    currentObjectDefinition,
-                    layout?.general?.shorthand,
-                    interfaceText?.chatWithDataInterfaceText
-                );
-                break;
-            case 'promptBuilder':
-                content = await addPromptBuilderObject(
-                    currentObjectDefinition,
-                    layout?.general?.shorthand,
-                    interfaceText?.promptBuilder
-                );
-                break;
-            case 'contentGroupReport':
-                break;
-            case 'contentGroupJob':
-                break;
             default:
                 content = document.createElement('p');
                 content.innerText = interfaceText?.undefinedObjectText;

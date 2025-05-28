@@ -5,7 +5,7 @@
  * @param {String} modelID - The ID of the model for which content should be added
  * @param {Object} modelContent - The object of the model content that should be uploaded
  * @param {String} modelContentFileName - The name that the file should have in SAS Model Manager
- * @param {String} modelContentRole - Optional, defaults to Documentation - define the role of the file within the model
+ * @param {String} modelContentRole - Optional, defaults to documentation - define the role of the file within the model
  * @param {String} contentType - Optional, defaults to application/json - define the content type of the content to be uploaded
  * @returns {Promise/Object of Content and Status Code} - Returns a Promise that should resolve into content information and the status code
  */
@@ -14,21 +14,24 @@ async function createModelContent(
     modelID,
     modelContent,
     modelContentFileName,
-    modelContentRole = 'Documentation',
+    modelContentRole = 'documentation',
     contentType = 'application/json'
 ) {
     const formData = new FormData();
     if (contentType === "multipart/form-data" && modelContent instanceof Uint8Array) {
         contentType = "application/octet-stream";
+    } else if (contentType === 'text/x-python') {
+        formData.append("files", modelContent, modelContentFileName);
+        formData.append('role', modelContentRole);
     } else if (typeof modelContent === 'object') {
         let modelContentJSONString = JSON.stringify(modelContent, null, 2);
         let modelContentBlob = new Blob([modelContentJSONString], {type: contentType});
         formData.append("files", modelContentBlob, modelContentFileName);
         formData.append('role', modelContentRole);
-    }
+    } 
 
     let CREATEMODELCONTENTRESPONSE = await fetch(
-        `${VIYAHOST}/modelRepository/models/${modelID}/contents?onConflict=update`,
+        `${VIYAHOST}/modelRepository/models/${modelID}/contents?onConflict=update&role=${modelContentRole}`,
         {
             // mode: 'no-cors',
             method: 'post',
@@ -51,7 +54,7 @@ async function createModelContent(
             let t = CREATEMODELCONTENTRESPONSE.headers.get('x-csrf-token');
             document.csrfToken = t;
             CREATEMODELCONTENTRESPONSE = await fetch(
-                `${VIYAHOST}/modelRepository/models/${modelID}/contents?onConflict=update`,
+                `${VIYAHOST}/modelRepository/models/${modelID}/contents?onConflict=update&role=${modelContentRole}`,
                 {
                     method: 'post',
                     headers: {

@@ -1,5 +1,7 @@
 /**
- * A function that checks a string for being a valid variable name in DS2 - 
+ * A function that checks a string for being a valid variable name in DS2:
+ * - https://go.documentation.sas.com/doc/en/pgmsascdc/default/ds2pg/p0jpu8qhzm0om9n1gy85ydkzubpf.htm
+ * - https://go.documentation.sas.com/doc/en/pgmsascdc/default/ds2pg/p1rnsddd78roken1tlwnfk4poavl.htm
  * @param {String} name - Potential name of the variable
  * @returns {Boolean} - True if a valid name, False if an invalid name
  */

@@ -51,25 +51,10 @@ async function callSCRLLM(
             })
         }
     )
-
-    const SCRLLMRESPONSEJSON = await SCRLLMRESPONSE.json();
-    return SCRLLMRESPONSEJSON?.data;
-    /*
-   return {url: `${SCREndpoint}/${model}/${model}`, body:{
-    inputs: [
-        {
-            name: "systemPrompt",
-            value: systemPrompt
-        },
-        {
-            name: "userPrompt",
-            value: userPrompt
-        },
-        {
-            name: "options",
-            value: stringOptionsSCRLLM
-        }
-    ]
-}}
-*/
+    if(SCRLLMRESPONSE.status === 200) {
+        const SCRLLMRESPONSEJSON = await SCRLLMRESPONSE.json();
+        return SCRLLMRESPONSEJSON?.data;
+    } else {
+        return {error: `Request for ${model} failed with the HTTP code: ${SCRLLMRESPONSE.status}`}
+    }
 }

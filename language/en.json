@@ -97,5 +97,12 @@
     "oauthClientAuthenticatorText1": "For editing/creating the OAuth clients a special token must be generated, click on the following link:",
     "oauthClientAuthenticatorText2": ", assume the administrative group and copy the full URL value into the input field:",
     "oauthClientNoTokenError": "Please enter an authentication token as described above."
+  },
+  "scrScore": {
+    "endpoint": "Please enter the SCR endpoint (click outside of the field to trigger metadata fetching):",
+    "scoreButton": "Score",
+    "inputHeader": "SCR Inputs",
+    "outputHeader": "SCR Outputs",
+    "runStatus": "Scoring"
   }
 }

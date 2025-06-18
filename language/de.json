@@ -97,5 +97,12 @@
     "oauthClientAuthenticatorText1": "Für die Bearbeitung/Erstellung der OAuth Clients muss ein spezieller Token generiert werden, öffne hierzu den folgenden Link:",
     "oauthClientAuthenticatorText2": ",dann die administrative Gruppe annehmen und kopiere den Wert in der URL Leiste komplett in das Eingabefeld:",
     "oauthClientNoTokenError": "Bitte gebe einen Token an, wie oben beschrieben."
+  },
+  "scrScore": {
+    "endpoint": "Bitte gib den SCR Endpunkt hier an (rausklicken aus dem Feld startet das Metadaten sammeln):",
+    "scoreButton": "Score",
+    "inputHeader": "SCR Eingaben",
+    "outputHeader": "SCR Ergebnisse",
+    "runStatus": "Scoring"
   }
 }

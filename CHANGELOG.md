@@ -1,5 +1,11 @@
 # Changelog
 
+## SAS Portal Framework for SAS Viya v1.0.4
+
+- Add: The SCR Module Scorer object has been added
+- Add: New utility function getSCRMetadata, retrieves the inputs and outputs of a SCR endpoint
+- Add: New utility function scoreSCR, which enables you to score a SCR endpoint
+
 ## SAS Portal Framework for SAS Viya v1.0.3
 
 - Add: The MAS Module Scorer object now provides the ability to delete MAS Modules

@@ -125,6 +125,13 @@ async function generatePages(VIYAHOST, layout, paneContainer, interfaceText) {
                     layout?.general?.shorthand
                 );
                 break;
+            case 'scrScore':
+                content = await addSCRScoreObject(
+                    currentObjectDefinition,
+                    layout?.general?.shorthand,
+                    interfaceText?.scrScore
+                );
+                break;
             default:
                 content = document.createElement('p');
                 content.innerText = interfaceText?.undefinedObjectText;

@@ -1,0 +1,15 @@
+{
+    "general": {
+        "name": "Data Product",
+        "shorthand": "DP",
+        "visible": true,
+        "numCols": "2",
+        "contact": "David.Weik@sas.com"
+    },
+    "objects": [
+        {
+            "name": "Data Product Registry",
+            "uri": "/files/files/006a632f-d2fa-4bd0-ad09-d5692f523c95"
+        }
+    ]
+}

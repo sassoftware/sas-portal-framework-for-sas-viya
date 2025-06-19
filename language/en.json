@@ -106,6 +106,6 @@
     "runStatus": "Scoring"
   },
   "dataProductRegistry": {
-    
+    "registerProduct": "Register Data Product"
   }
 }

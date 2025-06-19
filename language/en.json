@@ -104,5 +104,8 @@
     "inputHeader": "SCR Inputs",
     "outputHeader": "SCR Outputs",
     "runStatus": "Scoring"
+  },
+  "dataProductRegistry": {
+    
   }
 }

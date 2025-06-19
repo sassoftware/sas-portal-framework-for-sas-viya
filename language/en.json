@@ -106,6 +106,13 @@
     "runStatus": "Scoring"
   },
   "dataProductRegistry": {
-    "registerProduct": "Register Data Product"
+    "registerProduct": "Register Data Product",
+    "validationRequired": "The field is required",
+    "validationPattern": "Match the fields pattern",
+    "productSelector": "Select Data Product to Edit:",
+    "productSelectorNew": "--- New Data Product ---",
+    "editProduct": "Editing",
+    "registerNewProduct": "Register New Data Product",
+    "registerUpdateProduct": "Update Data Product"
   }
 }

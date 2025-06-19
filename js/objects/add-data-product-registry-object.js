@@ -6,10 +6,22 @@
  * @param {Object} dataProductRegistryInterfaceText -  Contains all of the Data Product Registry relevant language interface
  * @returns a Data Product Registry Object
  */
-async function addDataProductRegistryObject(dataProductRegistryObject, paneID, dataProductRegistryInterfaceText) {
+async function addDataProductRegistryObject(
+    dataProductRegistryObject,
+    paneID,
+    dataProductRegistryInterfaceText
+) {
+    // Create the data product list
+    let dataProducts;
     // Create the Data Product Registry Container
     let dprContainer = document.createElement("div");
     dprContainer.id = `${paneID}-obj-${dataProductRegistryObject?.id}`;
+
+    // Create a heading for the editing
+    const dprTitle = document.createElement("h2");
+
+    // Variable to hold the name of the product currently being edited
+    let currentEditingProductName = null;
 
     // Retrieve the Data Product Schema
     let dataProductSchemaJSON = await getFileContent(
@@ -17,6 +29,38 @@ async function addDataProductRegistryObject(dataProductRegistryObject, paneID, d
         dataProductRegistryObject.dataProductSchemaURI
     );
     let dataProductSchema = await dataProductSchemaJSON.json();
+
+    // Retrieve the existing Data Products
+    let existingDataProducts = await getFolderContent(
+        window.VIYA,
+        `${dataProductRegistryObject?.dataProductFolderURI}`,
+        '?filter=eq(name,"data-products.json")'
+    );
+    // Check if there is already a file in place
+    let dateProductFileURI;
+    if (existingDataProducts?.length > 0) {
+        let existingDataProductsResponse = await getFileContent(
+            window.VIYA,
+            existingDataProducts[0]?.uri
+        );
+        dataProducts = await existingDataProductsResponse.json();
+        dateProductFileURI = existingDataProducts[0]?.uri;
+    } else {
+        dataProducts = [];
+        const jsonstringContentObject = JSON.stringify(dataProducts);
+        const blobContentObject = new Blob([jsonstringContentObject], {
+            type: "text/json",
+        });
+        // Create the new File
+        let createdDataProductsFileResp = await createFile(
+            window.VIYA,
+            dataProductRegistryObject?.dataProductFolderURI,
+            blobContentObject,
+            "data-products.json"
+        );
+        let createdDataProductstFile = await createdDataProductsFileResp.json();
+        dateProductFileURI = `/files/files/${createdDataProductstFile.id}`;
+    }
 
     // Create the form element
     const form = document.createElement("form");
@@ -165,6 +209,41 @@ async function addDataProductRegistryObject(dataProductRegistryObject, paneID, d
         return inputElement;
     }
 
+    // --- Product Selector Dropdown ---
+    const productSelectorGroup = document.createElement("div");
+    productSelectorGroup.className = "mb-4";
+
+    const productSelectorLabel = document.createElement("label");
+    productSelectorLabel.htmlFor = "productSelector";
+    productSelectorLabel.className = "form-label";
+    productSelectorLabel.textContent =
+        dataProductRegistryInterfaceText?.productSelector;
+    productSelectorGroup.appendChild(productSelectorLabel);
+
+    const productSelector = document.createElement("select");
+    productSelector.id = "productSelector";
+    productSelector.className = "form-select rounded-md";
+    productSelectorGroup.appendChild(productSelector);
+
+    // Add "New Product" option
+    const newOption = document.createElement("option");
+    newOption.value = "new";
+    newOption.textContent =
+        dataProductRegistryInterfaceText?.productSelectorNew;
+    productSelector.appendChild(newOption);
+
+    // Populate existing products
+    if (dataProducts && dataProducts.length > 0) {
+        dataProducts.forEach((product) => {
+            const option = document.createElement("option");
+            option.value = product.productName;
+            option.textContent = product.productName;
+            productSelector.appendChild(option);
+        });
+    }
+
+    form.appendChild(productSelectorGroup); // Add selector to the form
+
     // Iterate through the schema and build the form
     dataProductSchema.forEach((field) => {
         const formGroup = document.createElement("div");
@@ -220,10 +299,180 @@ async function addDataProductRegistryObject(dataProductRegistryObject, paneID, d
     const submitButton = document.createElement("button");
     submitButton.type = "submit";
     submitButton.className = "btn btn-primary";
-    submitButton.textContent = dataProductRegistryInterfaceText?.registerProduct;
+    submitButton.textContent =
+        dataProductRegistryInterfaceText?.registerProduct;
     form.appendChild(submitButton);
 
+    // Add event listeners for input changes to provide immediate feedback
+    form.addEventListener("input", function (event) {
+        // Check validity on input for immediate feedback
+        const target = event.target;
+        if (target.matches(".form-control, .form-select")) {
+            if (target.required && !target.value) {
+                target.setCustomValidity(
+                    dataProductRegistryInterfaceText?.validationRequired
+                );
+            } else if (
+                target.pattern &&
+                !new RegExp(target.pattern).test(target.value)
+            ) {
+                target.setCustomValidity(
+                    dataProductRegistryInterfaceText?.validationPattern
+                );
+            } else {
+                target.setCustomValidity(""); // Clear custom validation message
+            }
+        }
+    });
+
+    // Form Submission Handling
+    form.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        if (!form.checkValidity()) {
+            event.stopPropagation();
+            form.classList.add("was-validated");
+            return;
+        }
+
+        const formData = {};
+        dataProductSchema.forEach((field) => {
+            const input = form.elements[field.id];
+
+            if (!input) {
+                if (field.type === "radio") {
+                    const checkedRadio = document.querySelector(
+                        `input[name="${field.id}"]:checked`
+                    );
+                    if (checkedRadio) {
+                        formData[field.id] = checkedRadio.value;
+                    }
+                }
+                return;
+            }
+
+            if (field.type === "checkbox") {
+                formData[field.id] = input.checked;
+            } else if (field.type === "multiselect") {
+                // For multiselect, collect all selected options
+                const selectedOptions = Array.from(input.options)
+                    .filter((option) => option.selected)
+                    .map((option) => option.value);
+                formData[field.id] = selectedOptions;
+            } else {
+                formData[field.id] = input.value;
+            }
+        });
+
+        if (currentEditingProductName) {
+            formData.productName = currentEditingProductName; // Add the ID for updating
+            // Find the index of the product to update
+            const productIndex = dataProducts.findIndex(p => p.productName === currentEditingProductName);
+            dataProducts[productIndex] = { ...dataProducts[productIndex], ...formData };
+        } else {
+            dataProducts.push(formData);
+        }
+
+        const jsonstringContentObject = JSON.stringify(dataProducts);
+        const blobContentObject = new Blob([jsonstringContentObject], {
+            type: "text/json",
+        });
+        updateFileContent(window.VIYA, dateProductFileURI, blobContentObject);
+
+        // Reset form validation state after successful submission
+        form.classList.remove("was-validated");
+        productSelector.value = "new";
+        loadProductForEditing("new");
+    });
+
+    /**
+     * Loads product data into the form for editing, or clears the form for a new entry.
+     * @param {string} productName - The productName of the product to load, or 'new' to clear the form.
+     */
+    function loadProductForEditing(productName) {
+        currentEditingProductName = productName === "new" ? null : productName;
+        const productToLoad = dataProducts.find((p) => p.productName === productName);
+
+        // Update the H2 title based on selection
+        if (productToLoad) {
+            dprTitle.textContent = `${dataProductRegistryInterfaceText?.editProduct}: ${productToLoad.productName}`;
+        } else {
+            dprTitle.textContent =
+                dataProductRegistryInterfaceText?.registerProduct;
+        }
+
+        dataProductSchema.forEach((field) => {
+            const input = form.elements[field.id]; // Access by name
+
+            if (!input) {
+                // Special handling for radio buttons
+                if (field.type === "radio") {
+                    const radioInputs = document.querySelectorAll(
+                        `input[name="${field.id}"]`
+                    );
+                    radioInputs.forEach((radio) => {
+                        radio.checked = false; // Uncheck all first
+                        if (
+                            productToLoad &&
+                            productToLoad[field.id] === radio.value
+                        ) {
+                            radio.checked = true;
+                        } else if (
+                            !productToLoad &&
+                            field.defaultValue !== undefined &&
+                            field.defaultValue === radio.value
+                        ) {
+                            radio.checked = true; // Apply default if new product
+                        }
+                    });
+                }
+                return;
+            }
+
+            const value = productToLoad
+                ? productToLoad[field.id]
+                : field.defaultValue;
+
+            if (field.type === "checkbox") {
+                input.checked = value === true || value === "true"; // Handle boolean or string 'true'
+            } else if (field.type === "multiselect") {
+                // For multiselect, set selected options based on an array
+                Array.from(input.options).forEach((option) => {
+                    option.selected =
+                        Array.isArray(value) && value.includes(option.value);
+                });
+            } else if (
+                field.type === "date" &&
+                value === "today" &&
+                !productToLoad
+            ) {
+                input.valueAsDate = new Date();
+            } else if (value !== undefined) {
+                input.value = value;
+            } else {
+                input.value = ""; // Clear value if no product or no default
+            }
+        });
+
+        // Set the submit button text based on editing state
+        submitButton.textContent = currentEditingProductName
+            ? dataProductRegistryInterfaceText?.registerUpdateProduct
+            : dataProductRegistryInterfaceText?.registerNewProduct;
+        form.classList.remove("was-validated"); // Clear validation state on load
+    }
+
+    // Event listener for product selector change
+    productSelector.addEventListener("change", (event) => {
+        loadProductForEditing(event.target.value);
+    });
+
+    dprContainer.appendChild(dprTitle);
     dprContainer.appendChild(form);
+
+    // Initial load: Populate the form with default values for a new product
+    window.addEventListener("load", () => {
+        loadProductForEditing("new");
+    });
 
     return dprContainer;
 }

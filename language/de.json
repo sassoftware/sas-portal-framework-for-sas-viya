@@ -114,5 +114,8 @@
     "editProduct": "Bearbeiten",
     "registerNewProduct": "Neues Daten Produkt registrieren",
     "registerUpdateProduct": "Daten Produkt aktualisieren"
+  },
+  "dataProductMarketplace": {
+    
   }
 }

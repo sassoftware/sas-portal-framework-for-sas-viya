@@ -114,5 +114,8 @@
     "editProduct": "Editing",
     "registerNewProduct": "Register New Data Product",
     "registerUpdateProduct": "Update Data Product"
+  },
+  "dataProductMarketplace": {
+    
   }
 }

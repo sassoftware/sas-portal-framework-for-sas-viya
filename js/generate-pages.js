@@ -139,6 +139,13 @@ async function generatePages(VIYAHOST, layout, paneContainer, interfaceText) {
                     interfaceText?.dataProductRegistry
                 );
                 break;
+            case 'dataProductMarketplace':
+                content = await addDataProductMarketplaceObject(
+                    currentObjectDefinition,
+                    layout?.general?.shorthand,
+                    interfaceText?.dataProductMarketplace
+                );
+                break;
             default:
                 content = document.createElement('p');
                 content.innerText = interfaceText?.undefinedObjectText;

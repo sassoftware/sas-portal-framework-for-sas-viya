@@ -1,5 +1,11 @@
 # Changelog
 
+## SAS Portal Framework for SAS Viya v1.1.0
+
+- Add: Data Product Registry object
+- Add: documentation for the Run Custom Code object
+- Add: docuemntation for the Data Product Registry object
+
 ## SAS Portal Framework for SAS Viya v1.0.4
 
 - Add: The SCR Module Scorer object has been added

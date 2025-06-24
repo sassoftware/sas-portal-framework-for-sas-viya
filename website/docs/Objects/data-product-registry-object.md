@@ -28,7 +28,7 @@ In order to create a Data Product Registry object you have to set the objects ty
 
 ## Data Product Schema
 
-There is no one correct definition of what you need or should know about a data product, thus this framework provides you a flexible method of adding a data product schema. Below you will find a big example json detailing all of the different options within this schema. The first two elements (*productName* and *accessURL**) are required as they provide essential technical elements for the framework.
+There is no one correct definition of what you need or should know about a data product, thus this framework provides you a flexible method of adding a data product schema. Below you will find a big example json detailing all of the different options within this schema. The first two elements (*productName* and *accessUrl*) are required as they provide essential technical elements for the framework.
 
 ```json
 [

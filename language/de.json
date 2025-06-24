@@ -106,16 +106,32 @@
     "runStatus": "Scoring"
   },
   "dataProductRegistry": {
-    "registerProduct": "Daten Produkt registrieren",
+    "registerProduct": "Datenprodukt registrieren",
     "validationRequired": "Das Feld ist ein Pflichtfeld",
     "validationPattern": "Das Feldmuster wurde nicht erfüllt",
-    "productSelector": "Wähle ein Data Produkt zum bearbeiten:",
-    "productSelectorNew": "--- Neues Data Produkt ---",
+    "productSelector": "Wähle ein Datenprodukt zum bearbeiten:",
+    "productSelectorNew": "--- Neues Datenprodukt ---",
     "editProduct": "Bearbeiten",
-    "registerNewProduct": "Neues Daten Produkt registrieren",
-    "registerUpdateProduct": "Daten Produkt aktualisieren"
+    "registerNewProduct": "Neues Datenprodukt registrieren",
+    "registerUpdateProduct": "Datenprodukt aktualisieren"
   },
   "dataProductMarketplace": {
-    
+    "searchBarPlaceholder": "Durchsuche Datenprodukte nach Name, Beschreibung,...",
+    "searchText": "Suchen",
+    "searchResultHeader": "Suche Ergebnisse",
+    "cartHeader": "Warenkorb",
+    "emptyCartMessage": "Der Warenkorb ist leer",
+    "noResultMessage": "Es konnten keine Datenprodukte mit der verwendenten Suchanfrage gefunden werden",
+    "noResultHeader": "Keine Datenprodukte gefunden",
+    "noResultDescription": "Versuche eine andere Suchanfrage",
+    "noResultBody": "Keines der Datenprodukte trifft auf die Suchanfrage zu",
+    "chexboxNo": "Nein",
+    "chexboxYes": "Ja",
+    "confirmationHeaderHeading": "Checkout Erfolgreich",
+    "confirmationModalBodyMessage": "Bitte kopiere die Liste und schicke sie an die E-Mail-Adresse unten auf der Seite um Zugriff auf die Datenprodukte zu erhalten",
+    "modalFooterButton": "Schließen",
+    "alreadyInCart": "Breits im Warenkorb",
+    "addToCart": "Zum Warenkorb hinzufügen",
+    "checkoutButton": "Einkauf abschließen"
   }
 }

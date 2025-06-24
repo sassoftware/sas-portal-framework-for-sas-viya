@@ -116,6 +116,22 @@
     "registerUpdateProduct": "Update Data Product"
   },
   "dataProductMarketplace": {
-    
+    "searchBarPlaceholder": "Search data products by name, description, tags...",
+    "searchText": "Search",
+    "searchResultHeader": "Search Results",
+    "cartHeader": "Shopping Cart",
+    "emptyCartMessage": "The shopping cart is empty",
+    "noResultMessage": "No data products found matching the search criteria",
+    "noResultHeader": "No results found",
+    "noResultDescription": "Try a different search query",
+    "noResultBody": "No products matched your search",
+    "chexboxNo": "No",
+    "chexboxYes": "Yes",
+    "confirmationHeaderHeading": "Checkout Successful",
+    "confirmationModalBodyMessage": "Please copy the list and send it to the E-Mail listed at the bottom of the page to gain access",
+    "modalFooterButton": "Close",
+    "alreadyInCart": "Already in Cart",
+    "addToCart": "Add to Cart",
+    "checkoutButton": "Checkout Cart"
   }
 }

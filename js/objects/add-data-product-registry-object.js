@@ -385,6 +385,37 @@ async function addDataProductRegistryObject(
         loadProductForEditing("new");
     });
 
+    // Add a submit button
+    const deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.className = "btn btn-primary";
+    deleteButton.textContent =
+        dataProductRegistryInterfaceText?.deleteProduct;
+    deleteButton.onclick = async function () {
+        //
+        if(currentEditingProductName) {
+            // Find the index of the product to update
+            const productIndex = dataProducts.findIndex(p => p.productName === currentEditingProductName);
+            dataProducts.splice(productIndex, 1);
+
+            const jsonstringContentObject = JSON.stringify(dataProducts);
+            const blobContentObject = new Blob([jsonstringContentObject], {
+                type: "text/json",
+            });
+            updateFileContent(window.VIYA, dateProductFileURI, blobContentObject);
+            // Remove the element from the form
+            for (let i = 0; i < productSelector.options.length; i++) {
+                if (productSelector.options[i].value === currentEditingProductName) {
+                    productSelector.remove(i);
+                }
+            }
+            // Reset form validation state after successful submission
+            form.classList.remove("was-validated");
+            productSelector.value = "new";
+            loadProductForEditing("new");
+        }
+    }
+
     /**
      * Loads product data into the form for editing, or clears the form for a new entry.
      * @param {string} productName - The productName of the product to load, or 'new' to clear the form.
@@ -468,6 +499,9 @@ async function addDataProductRegistryObject(
 
     dprContainer.appendChild(dprTitle);
     dprContainer.appendChild(form);
+    dprContainer.appendChild(document.createElement('br'));
+    dprContainer.appendChild(document.createElement('br'));
+    dprContainer.appendChild(deleteButton);
 
     // Initial load: Populate the form with default values for a new product
     window.addEventListener("load", () => {

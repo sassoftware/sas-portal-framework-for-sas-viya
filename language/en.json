@@ -113,7 +113,8 @@
     "productSelectorNew": "--- New Data Product ---",
     "editProduct": "Editing",
     "registerNewProduct": "Register New Data Product",
-    "registerUpdateProduct": "Update Data Product"
+    "registerUpdateProduct": "Update Data Product",
+    "deleteProduct": "Delete Data Product"
   },
   "dataProductMarketplace": {
     "searchBarPlaceholder": "Search data products by name, description, tags...",

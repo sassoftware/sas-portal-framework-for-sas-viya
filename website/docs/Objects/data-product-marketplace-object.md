@@ -34,7 +34,7 @@ To turn the *data-product-users.json* into a table use the following code:
 
 ```sas
 * Adjust this path as necessary for your environment;
-filename dtOwnrs filesrvc folderPath='/Public/Portal/DPR' filename='data-product-users.json.json';
+filename dtOwnrs filesrvc folderPath='/Public/Portal/DPR' filename='data-product-users.json';
 libname dtOwnrs json;
 
 data work.data_products;

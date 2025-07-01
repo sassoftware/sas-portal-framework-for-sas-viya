@@ -610,12 +610,13 @@ async function addDataProductMarketplaceObject(
             dateProductUsersFileURI = `/files/files/${createdDataProductsUserFile.id}`;
         }
         const jsonstringUsersContentObject = JSON.stringify(
-            cartItems.map((product) => {
+            dataProductUsers.concat(cartItems.map((product) => {
                 return {
+                    purchaseDate: getFormattedDatetime(),
                     productName: product.productName,
                     userName: window.userName,
                 };
-            })
+            }))
         );
         const blobContentUsersObject = new Blob([jsonstringUsersContentObject], {
             type: "text/json",

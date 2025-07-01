@@ -326,7 +326,7 @@ async function addDataProductRegistryObject(
     });
 
     // Form Submission Handling
-    form.addEventListener("submit", function (event) {
+    form.addEventListener("submit", async function (event) {
         event.preventDefault(); // Prevent default form submission
 
         if (!form.checkValidity()) {
@@ -370,6 +370,28 @@ async function addDataProductRegistryObject(
             const productIndex = dataProducts.findIndex(p => p.productName === currentEditingProductName);
             dataProducts[productIndex] = { ...dataProducts[productIndex], ...formData };
         } else {
+            // Check if the user wants to create a new folder
+            if(dataProductRegistryObject?.dataProductNewFolderParentURI) {
+                let newDataProductFolderResponse = await createFolder(window.VIYA, formData.productName, dataProductRegistryObject?.dataProductNewFolderParentURI);
+                let newDataProductFolder = await newDataProductFolderResponse.json()
+                console.log(newDataProductFolder);
+                // Check if the user wants to copy template content to the folder
+                if(dataProductRegistryObject?.dataProductCopyContent?.length > 0) {
+                    // Iterate the over all content that needs to be copied
+                    for (let i = 0; i < dataProductRegistryObject.dataProductCopyContent.length; i++) {
+                        // Check what type of content it is - currently supports reports and files
+                        if(dataProductRegistryObject.dataProductCopyContent[i].startsWith('/reports/reports/')) {
+                            console.log(dataProductRegistryObject.dataProductCopyContent[i].replace('/reports/reports/', ''));
+                            await copyReport(window.VIYA, dataProductRegistryObject.dataProductCopyContent[i].replace('/reports/reports/', ''), `/folders/folders/${newDataProductFolder.id}`);
+                        } else if(dataProductRegistryObject.dataProductCopyContent[i].startsWith('/files/files/')) {
+                            await copyFile(window.VIYA, dataProductRegistryObject.dataProductCopyContent[i], `/folders/folders/${newDataProductFolder.id}`);
+                        } else {
+                            console.log(`The content object ${dataProductRegistryObject.dataProductCopyContent[i]} could not be copied as it is not supported. Only reports and files are supported`);
+                        }
+                    }
+                }
+            }
+            // Add the data product to the list of data products
             dataProducts.push(formData);
         }
 

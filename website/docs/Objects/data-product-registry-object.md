@@ -20,11 +20,15 @@ In order to create a Data Product Registry object you have to set the objects ty
     "objectBorder": false,
     "type": "dataProductRegistry",
     "dataProductSchemaURI": "/files/files/UUID",
-    "dataProductFolderURI": "/folders/folders/UUID"
+    "dataProductFolderURI": "/folders/folders/UUID",
+    "dataProductNewFolderParentURI": "/folders/folders/UUID",
+    "dataProductCopyContent": ["/files/files/UUID", "/reports/reports/UUID"]
 }
 ```
 - **dataProductSchemaURI**, here you have to provide the URI of the uploaded Data Product Schema (see below).
 - **dataProductFolderURI**, specify the URI of the folder where the data product list is to be stored. In this folder a file will be created called *data-products.json*, this file contains all of the registered data products. You can turn this into a SAS table using the code provided at the bottom of this page.
+- **dataProductNewFolderParentURI**, optional - specify if you want to have a folder in SAS Content to be created for you with the same name as the data product - please note that this requires the user to have write access for that folder.
+- **dataProductCopyContent**, optional - for this to work you also need to set a dataProductNewFolderParentURI. If you specify it can specify content inside of SAS Content that you want to be copied into the folder that was created for the data product - currently only file and report content is supported.
 
 ## Data Product Schema
 

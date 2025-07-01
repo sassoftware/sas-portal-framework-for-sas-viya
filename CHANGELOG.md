@@ -8,6 +8,8 @@
 - Add: docuemntation for the Data Product Registry object
 - Add: docuemntation for the Data Product Marketplace object
 - Add: get-formatted-datetime utility function
+- Add: copy-file utility function
+- Add: copy-report utility function
 - Change: Provided updates to the global.css file to support special cases from the Data Product Marketplace object
 
 ## SAS Portal Framework for SAS Viya v1.0.4

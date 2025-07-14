@@ -146,6 +146,13 @@ async function generatePages(VIYAHOST, layout, paneContainer, interfaceText) {
                     interfaceText?.dataProductMarketplace
                 );
                 break;
+            case 'promptBuilder':
+                content = await addPromptBuilderObject(
+                    currentObjectDefinition,
+                    layout?.general?.shorthand,
+                    interfaceText?.promptBuilder
+                );
+                break;
             default:
                 content = document.createElement('p');
                 content.innerText = interfaceText?.undefinedObjectText;

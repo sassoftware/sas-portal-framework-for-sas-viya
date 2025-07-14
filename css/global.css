@@ -1,6 +1,6 @@
 /* #region tokens */
 :root,
-[data-sas-theme='light'] {
+[data-sas-theme="light"] {
     --color-zero-state-modifier-fill-5: hsl(219, 12%, 79%);
     --color-zero-state-modifier-fill-4: hsl(219, 12%, 72%);
     --color-zero-state-modifier-fill-3: hsl(212, 94%, 68%);
@@ -704,13 +704,13 @@
     --font-size-base-text-s: 14px;
     --font-size-base-text-m: 16px;
     --font-size-base-text-l: 18px;
-    --font-family-secondary: 'Anova', -apple-system, BlinkMacSystemFont,
-        'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
-        'Segoe UI Emoji', 'Segoe UI Symbol';
-    --font-family-primary: 'AnovaUI', -apple-system, BlinkMacSystemFont,
-        'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
-        'Segoe UI Emoji', 'Segoe UI Symbol';
-    --font-family-monospace: Consolas, Menlo, 'Lucida Console', Courier, Monaco,
+    --font-family-secondary: "Anova", -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-family-primary: "AnovaUI", -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-family-monospace: Consolas, Menlo, "Lucida Console", Courier, Monaco,
         monospace;
     --color-syntax-text-09: #65802a;
     --color-syntax-text-08: #3c8275;
@@ -728,7 +728,7 @@
     --color-action-background-focus-inverse: hsl(0, 100%, 100%);
     --color-action-background-focus: hsl(205, 97%, 35%);
 }
-:root[data-sas-theme='dark'] {
+:root[data-sas-theme="dark"] {
     --color-zero-state-modifier-fill-5: hsl(219, 12%, 64%);
     --color-zero-state-modifier-fill-4: hsl(219, 12%, 72%);
     --color-zero-state-modifier-fill-3: hsl(212, 94%, 57%);
@@ -1432,13 +1432,13 @@
     --font-size-base-text-s: 14px;
     --font-size-base-text-m: 16px;
     --font-size-base-text-l: 18px;
-    --font-family-secondary: 'Anova', -apple-system, BlinkMacSystemFont,
-        'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
-        'Segoe UI Emoji', 'Segoe UI Symbol';
-    --font-family-primary: 'AnovaUI', -apple-system, BlinkMacSystemFont,
-        'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
-        'Segoe UI Emoji', 'Segoe UI Symbol';
-    --font-family-monospace: Consolas, Menlo, 'Lucida Console', Courier, Monaco,
+    --font-family-secondary: "Anova", -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-family-primary: "AnovaUI", -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji",
+        "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-family-monospace: Consolas, Menlo, "Lucida Console", Courier, Monaco,
         monospace;
     --color-syntax-text-09: #97c03f;
     --color-syntax-text-08: #54b6a4;
@@ -1458,7 +1458,7 @@
 }
 
 :root,
-[data-bs-theme='light'] {
+[data-bs-theme="light"] {
     /* --bs-blue: #0d6efd;
   --bs-indigo: #6610f2;
   --bs-purple: #6f42c1;
@@ -1669,17 +1669,17 @@ hr {
 
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-    font-family: 'sas-icons';
+    font-family: "sas-icons";
     background: none;
     filter: none !important;
     block-size: auto;
     inline-size: auto;
 }
 .carousel-control-prev-icon:before {
-    content: '\f1e3';
+    content: "\f1e3";
 }
 .carousel-control-next-icon:before {
-    content: '\f1e2';
+    content: "\f1e2";
 }
 
 .carousel > button {
@@ -1767,11 +1767,11 @@ hr {
     color: var(--color-action-text-control-placeholder);
 }
 
-.form-check-input[type='checkbox'] {
+.form-check-input[type="checkbox"] {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-family: 'sas-icons';
+    font-family: "sas-icons";
     border-radius: var(--size-border-radius-xxs);
     padding: var(--space-base-xs);
 }
@@ -1784,7 +1784,7 @@ hr {
 }
 
 .form-check-input:checked::before {
-    content: '\f15e';
+    content: "\f15e";
 }
 
 .form-check-input + .from-check-label {
@@ -1796,8 +1796,8 @@ hr {
     color: var(--color-action-text-standard-normal);
 }
 .accordion-button::after {
-    font-family: 'sas-icons';
-    content: '\f1e1';
+    font-family: "sas-icons";
+    content: "\f1e1";
     inline-size: auto;
     block-size: auto;
     background: none;
@@ -2025,4 +2025,42 @@ body {
 
 .info-icon:hover + .info-content {
     display: block;
+}
+
+/* Section: Data Product Marketplace */
+.search-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.btn-add-to-cart,
+.btn-purchase,
+.btn-remove-from-cart {
+    border-radius: 5px;
+}
+.btn-add-to-cart {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+.btn-add-to-cart:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+.btn-purchase {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+.btn-purchase:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.detail-item {
+    margin-bottom: 10px;
+    word-break: break-word; /* Ensure long URLs or text break */
+}
+.detail-item strong {
+    display: inline-block;
+    min-width: 120px; /* Align labels */
 }

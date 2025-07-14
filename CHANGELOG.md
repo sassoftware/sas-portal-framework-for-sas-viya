@@ -1,5 +1,18 @@
 # Changelog
 
+## SAS Portal Framework for SAS Viya v1.1.0
+
+- Add: Data Product Registry object
+- Add: Data Product Marketplace object
+- Add: documentation for the Run Custom Code object
+- Add: docuemntation for the Data Product Registry object
+- Add: docuemntation for the Data Product Marketplace object
+- Add: get-formatted-datetime utility function
+- Add: copy-file utility function
+- Add: copy-report utility function
+- Add: Prompt Builder object
+- Change: Provided updates to the global.css file to support special cases from the Data Product Marketplace object
+
 ## SAS Portal Framework for SAS Viya v1.0.4
 
 - Add: The SCR Module Scorer object has been added

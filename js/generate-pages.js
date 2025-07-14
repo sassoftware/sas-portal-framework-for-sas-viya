@@ -132,6 +132,27 @@ async function generatePages(VIYAHOST, layout, paneContainer, interfaceText) {
                     interfaceText?.scrScore
                 );
                 break;
+            case 'dataProductRegistry':
+                content = await addDataProductRegistryObject(
+                    currentObjectDefinition,
+                    layout?.general?.shorthand,
+                    interfaceText?.dataProductRegistry
+                );
+                break;
+            case 'dataProductMarketplace':
+                content = await addDataProductMarketplaceObject(
+                    currentObjectDefinition,
+                    layout?.general?.shorthand,
+                    interfaceText?.dataProductMarketplace
+                );
+                break;
+            case 'promptBuilder':
+                content = await addPromptBuilderObject(
+                    currentObjectDefinition,
+                    layout?.general?.shorthand,
+                    interfaceText?.promptBuilder
+                );
+                break;
             default:
                 content = document.createElement('p');
                 content.innerText = interfaceText?.undefinedObjectText;

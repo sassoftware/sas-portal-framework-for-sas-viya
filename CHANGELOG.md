@@ -10,6 +10,7 @@
 - Add: get-formatted-datetime utility function
 - Add: copy-file utility function
 - Add: copy-report utility function
+- Add: Prompt Builder object
 - Change: Provided updates to the global.css file to support special cases from the Data Product Marketplace object
 
 ## SAS Portal Framework for SAS Viya v1.0.4

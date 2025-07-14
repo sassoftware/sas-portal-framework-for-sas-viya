@@ -22,7 +22,7 @@ In order to create a Run Custom Code object you have to set the objects type to 
 ```
 
 - **computeContext**, specify the name of the compute context that you want to use for this specific run custom code object. Please ensure the correct spelling and capitalization.
-- **code**, here you can specifc your code. Make sure that you escape double quotes with a \ and to make use of url parameters us the following within your code ${seachParams.urlParameter}.
+- **code**, here you can specifc your code. Make sure that you escape double quotes with a \ and to make use of url parameters us the following within your code **"${searchParams.urlParameter}"**.
 - **action**, this enables you trigger something additionally after the code has run to completion. There currently is two actions available:
         1. **refreshData**, enables you to target a VA report object on the page and reload the data of the element.
         2. **reloadReport**, enabley you to target a VA report object on the apge and reload the whole element.

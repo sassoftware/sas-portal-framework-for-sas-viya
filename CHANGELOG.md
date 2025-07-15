@@ -1,5 +1,9 @@
 # Changelog
 
+## SAS Portal Framework for SAS Viya v1.2.0
+
+- Add: all currently supported objects to the Portal Builder object
+
 ## SAS Portal Framework for SAS Viya v1.1.0
 
 - Add: Data Product Registry object

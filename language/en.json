@@ -51,7 +51,22 @@
     "saveObjectButton": "Save object",
     "createObjectButton": "Create object",
     "deleteObjectButton": "Delete object",
-    "noFurtherConfigurationText": "There are no further configuration options for this object type"
+    "noFurtherConfigurationText": "There are no further configuration options for this object type",
+    "runCustomCodeComputeContextPlaceholder": "Please enter the exact compute context name, e.g. SAS Studio compute context",
+    "runCustomCodeCodeExplainer": "Check this link for more information on how to enter code here",
+    "runCustomCodeCodePlaceholder": "[`%let user='${searchParams.user}';`,\"proc print data=sashelp.class; run; quit;\"]",
+    "customCodeActionBehavior": ["Refresh report data", "Refresh report"],
+    "runCustomCodeActionExplainer": "The choosen action will be applied to a specified report object",
+    "runCustomCodeActionElementPlaceholder": "ID of the report object, e.g. pageShorthand-obj-objectID",
+    "runCustomCodeUnloadCodePlaceholder": "The syntax is similiar to the previous way code was entered",
+    "dateProductSchemaURIExplainer": "Find the documentation on how to create a data product schema here",
+    "dataProductSchemaURI": "URI of the data product schema /files/files/UUID",
+    "dataProductFolderURI": "URI of the data product folder for which the user of this page require write access /folders/folders/UUID",
+    "copyContentExplainer": "Add URIs of content that should be copied over - /reports/reports and /files/files are supported",
+    "copyContentAddingButton": "Add additional URIs",
+    "copyContentURIPlaceholder": "/reports/reports/UUID or /files/files/UUID",
+    "dataProductOwnerFolderURI": "Enter the folder where the product purchases are stored",
+    "dataProductHeaderAttributesPlaceholder": "Enter the attributes you want in the data like this: ['dataType', 'sensitivityLevel']"
   },
   "masScore": {
     "moduleSelect": "Please select a MAS Module",

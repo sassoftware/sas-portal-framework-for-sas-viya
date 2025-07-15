@@ -306,6 +306,163 @@
                     otNoFurtherConfigurationText.className = 'fs-3';
                     // Append to target container
                     otContainer.appendChild(otNoFurtherConfigurationText);
+                } else if (otObjectType === 'scrScore') {
+                    document.getElementById('objectWidthDropdown').selectedIndex = 1;
+                    let otNoFurtherConfigurationText = document.createElement('p');
+                    otNoFurtherConfigurationText.innerText = `${window.portalBuilderLanguage?.noFurtherConfigurationText}`;
+                    otNoFurtherConfigurationText.className = 'fs-3';
+                    // Append to target container
+                    otContainer.appendChild(otNoFurtherConfigurationText);
+                } else if (otObjectType === 'runCustomCode') {
+                    // computeContext, code, action (refreshData, reloadReport), actionElement, unloadCode
+                    // Compute Context
+                    let otComputeContext = document.createElement('input');
+                    otComputeContext.type = 'text';
+                    otComputeContext.className = 'form-control';
+                    otComputeContext.id = 'otComputeContext';
+                    otComputeContext.value = otObjectDefinition?.computeContext === undefined ? '' : otObjectDefinition?.computeContext;
+                    otComputeContext.placeholder = `${window.portalBuilderLanguage?.runCustomCodeComputeContextPlaceholder}`;
+                    // Code
+                    let otCodeExplainer = document.createElement('a');
+                    otCodeExplainer.href = 'https://sassoftware.github.io/sas-portal-framework-for-sas-viya/Objects/run-custom-code-object';
+                    otCodeExplainer.target = '_blank';
+                    otCodeExplainer.rel = 'noopener noreferrer';
+                    otCodeExplainer.innerText = `${window.portalBuilderLanguage?.runCustomCodeCodeExplainer}`;
+                    let otCode = document.createElement('input');
+                    otCode.type = 'text';
+                    otCode.className = 'form-control';
+                    otCode.id = 'otCode';
+                    otCode.value = otObjectDefinition?.code === undefined ? '' : otObjectDefinition?.code;
+                    otCode.placeholder = `${window.portalBuilderLanguage?.runCustomCodeCodePlaceholder}`;
+                    // Action
+                    let otActionBehaviorExplainer = document.createElement('p');
+                    otActionBehaviorExplainer.innerText = `${window.portalBuilderLanguage?.runCustomCodeActionExplainer}`;
+                    let otActionBehaviorDropdown = document.createElement('select');
+                    otActionBehaviorDropdown.id = 'otActionBehaviorDropdown';
+                    otActionBehaviorDropdown.setAttribute('class', 'form-select');
+                    let actionBehaviorDictionary = [
+                        {"value": "refreshData", "text": `${window.portalBuilderLanguage?.customCodeActionBehavior[0]}`},
+                        {"value": "reloadReport", "text": `${window.portalBuilderLanguage?.customCodeActionBehavior[1]}`}
+                    ]
+                    for (const actionBehaviorElement in actionBehaviorDictionary) {
+                        let actionBehaviorOption = document.createElement('option');
+                        actionBehaviorOption.value = actionBehaviorDictionary[actionBehaviorElement]?.value;
+                        actionBehaviorOption.innerText = actionBehaviorDictionary[actionBehaviorElement]?.text;
+                        otActionBehaviorDropdown.append(actionBehaviorOption);
+                    }
+                    otActionBehaviorDropdown.selectedIndex = otObjectDefinition.action === 'refreshData' ? 'refreshData' : 'reloadReport';
+                    // Action Element
+                    let otActionElement = document.createElement('input');
+                    otActionElement.type = 'text';
+                    otActionElement.className = 'form-control';
+                    otActionElement.id = 'otActionElement';
+                    otActionElement.value = otObjectDefinition?.actionElement === undefined ? '' : otObjectDefinition?.actionElement;
+                    otActionElement.placeholder = `${window.portalBuilderLanguage?.runCustomCodeActionElementPlaceholder}`;
+                    // Unload Code
+                    let otUnloadCodeElement = document.createElement('input');
+                    otUnloadCodeElement.type = 'text';
+                    otUnloadCodeElement.className = 'form-control';
+                    otUnloadCodeElement.id = 'otUnloadCodeElement';
+                    otUnloadCodeElement.value = otObjectDefinition?.unloadCode === undefined ? '' : otObjectDefinition?.unloadCode;
+                    otUnloadCodeElement.placeholder = `${window.portalBuilderLanguage?.runCustomCodeUnloadCodePlaceholder}`;
+                    // Append to target container
+                    otContainer.appendChild(otComputeContext);
+                    otContainer.appendChild(otCodeExplainer);
+                    otContainer.appendChild(otCode);
+                    otContainer.appendChild(otActionBehaviorExplainer);
+                    otContainer.appendChild(otActionBehaviorDropdown);
+                    otContainer.appendChild(otActionElement);
+                    otContainer.appendChild(otUnloadCodeElement);
+                } else if (otObjectType === 'dataProductRegistry') {
+                    // dataProductSchemaURI, dataProductFolderURI, dataProductNewFolderParentURI, dataProductCopyContent
+                    // Data Product Schema URI
+                    let otDateProductSchemaURIExplainer = document.createElement('a');
+                    otDateProductSchemaURIExplainer.href = 'https://sassoftware.github.io/sas-portal-framework-for-sas-viya/Objects/data-product-registry-object#data-product-schema';
+                    otDateProductSchemaURIExplainer.target = '_blank';
+                    otDateProductSchemaURIExplainer.rel = 'noopener noreferrer';
+                    otDateProductSchemaURIExplainer.innerText = `${window.portalBuilderLanguage?.dateProductSchemaURIExplainer}`;
+                    let otDateProductSchemaURI = document.createElement('input');
+                    otDateProductSchemaURI.type = 'text';
+                    otDateProductSchemaURI.className = 'form-control';
+                    otDateProductSchemaURI.id = 'otDateProductSchemaURI';
+                    otDateProductSchemaURI.value = otObjectDefinition?.dataProductSchemaURI === undefined ? '' : otObjectDefinition?.dataProductSchemaURI;
+                    otDateProductSchemaURI.placeholder = `${window.portalBuilderLanguage?.dataProductSchemaURI}`;
+                    // Data Product Folder URI
+                    let otDateProductFolderURI = document.createElement('input');
+                    otDateProductFolderURI.type = 'text';
+                    otDateProductFolderURI.className = 'form-control';
+                    otDateProductFolderURI.id = 'otDateProductFolderURI';
+                    otDateProductFolderURI.value = otObjectDefinition?.dataProductFolderURI === undefined ? '' : otObjectDefinition?.dataProductFolderURI;
+                    otDateProductFolderURI.placeholder = `${window.portalBuilderLanguage?.dataProductFolderURI}`;
+                    // Data Product New Folder Parent URI
+                    let otDataProductNewFolderParentURI = document.createElement('input');
+                    otDataProductNewFolderParentURI.type = 'text';
+                    otDataProductNewFolderParentURI.className = 'form-control';
+                    otDataProductNewFolderParentURI.id = 'otDataProductNewFolderParentURI';
+                    otDataProductNewFolderParentURI.value = otObjectDefinition?.dataProductFolderURI === undefined ? '' : otObjectDefinition?.dataProductFolderURI;
+                    otDataProductNewFolderParentURI.placeholder = `${window.portalBuilderLanguage?.dataProductFolderURI}`;
+                    // Data Product Copy Content
+                    let otCopyContentContainer = document.createElement('div');
+                    otCopyContentContainer.id = 'otCopyContentContainer';
+                    let otCopyContentExplainer = document.createElement('p');
+                    otCopyContentExplainer.innerText = `${window.portalBuilderLanguage?.copyContentExplainer}`;
+                    let otCopyContentAddingButton = document.createElement('button');
+                    otCopyContentAddingButton.setAttribute('type', 'button');
+                    otCopyContentAddingButton.setAttribute('class', 'btn btn-primary');
+                    otCopyContentAddingButton.innerText = `${window.portalBuilderLanguage?.copyContentAddingButton}`;
+                    otLinkAddingButton.onclick = async function () {
+                        let otCopyContentURI= document.createElement('input');
+                        otCopyContentURI.type = 'text';
+                        otCopyContentURI.className = 'form-control';
+                        otCopyContentURI.placeholder = `${window.portalBuilderLanguage?.copyContentURIPlaceholder}`;
+                        let otBreakLine = document.createElement('br');
+                        otCopyContentContainer.appendChild(otBreakLine);
+                        otCopyContentContainer.appendChild(otCopyContentURI);
+                    }
+                    if(otObjectDefinition?.dataProductCopyContent?.length !== undefined) {
+                        for(const dataProductCopyContent in otObjectDefinition.dataProductCopyContent) {
+                            let otURIInput = document.createElement('input');
+                            otURIInput.type = 'text';
+                            otURIInput.className = 'form-control';
+                            otURIInput.value = otObjectDefinition.dataProductCopyContent[dataProductCopyContent];
+                            let otBreakLine = document.createElement('br');
+                            otCopyContentContainer.appendChild(otBreakLine);
+                            otCopyContentContainer.appendChild(otURIInput);
+                        }
+                    }
+                    // Append to target container
+                    otContainer.appendChild(otDateProductSchemaURIExplainer);
+                    otContainer.appendChild(otDateProductSchemaURI);
+                    otContainer.appendChild(otDateProductFolderURI);
+                    otContainer.appendChild(otDataProductNewFolderParentURI);
+                    otContainer.appendChild(otCopyContentContainer);
+                } else if (otObjectType === 'dataProductMarketplace') {
+                    // dataProductSchemaURI, dataProductFolderURI, dataProductHeaderAttributes
+                    // Data Product Schema URI
+                    let otDateProductSchemaURI = document.createElement('input');
+                    otDateProductSchemaURI.type = 'text';
+                    otDateProductSchemaURI.className = 'form-control';
+                    otDateProductSchemaURI.id = 'otDateProductSchemaURI';
+                    otDateProductSchemaURI.value = otObjectDefinition?.dataProductSchemaURI === undefined ? '' : otObjectDefinition?.dataProductSchemaURI;
+                    otDateProductSchemaURI.placeholder = `${window.portalBuilderLanguage?.dataProductSchemaURI}`;
+                    // Data Product Folder URI
+                    let otDataProductOwnerFolderURI = document.createElement('input');
+                    otDataProductOwnerFolderURI.type = 'text';
+                    otDataProductOwnerFolderURI.className = 'form-control';
+                    otDataProductOwnerFolderURI.id = 'otDataProductOwnerFolderURI';
+                    otDataProductOwnerFolderURI.value = otObjectDefinition?.dataProductFolderURI === undefined ? '' : otObjectDefinition?.dataProductFolderURI;
+                    otDataProductOwnerFolderURI.placeholder = `${window.portalBuilderLanguage?.dataProductOwnerFolderURI}`;
+                    // Data Product Header Attributes
+                    let otDataProductHeaderAttributes = document.createElement('input');
+                    otDataProductHeaderAttributes.type = 'text';
+                    otDataProductHeaderAttributes.className = 'form-control';
+                    otDataProductHeaderAttributes.id = 'otDataProductHeaderAttributes';
+                    otDataProductHeaderAttributes.value = otObjectDefinition?.dataProductHeaderAttributes === undefined ? '' : otObjectDefinition?.dataProductHeaderAttributes;
+                    otDataProductHeaderAttributes.placeholder = `${window.portalBuilderLanguage?.dataProductHeaderAttributes}`;
+                    // Append to target container
+                    otContainer.appendChild(otDateProductSchemaURI);
+                    otContainer.appendChild(otDataProductOwnerFolderURI);
+                    otContainer.appendChild(otDataProductHeaderAttributes);
                 } else if (otObjectType === 'clientAdministrator') {
                     document.getElementById('objectWidthDropdown').selectedIndex = 1;
                     let otNoFurtherConfigurationText = document.createElement('p');
@@ -387,7 +544,15 @@
                         }
                     } else if (otObjectType === 'masScore') {
                         otObjectDefinition.width = 0;
+                    } else if (otObjectType === 'scrScore') {
+                        otObjectDefinition.width = 0;
                     } else if (otObjectType === 'clientAdministrator') {
+                        otObjectDefinition.width = 0;
+                    } else if (otObjectType === 'runCustomCode') {
+                        otObjectDefinition.width = 0;
+                    } else if (otObjectType === 'dataProductRegistry') {
+                        otObjectDefinition.width = 0;
+                    } else if (otObjectType === 'dataProductMarketplace') {
                         otObjectDefinition.width = 0;
                     } else if (otObjectType === 'portalBuilder') {
                         otObjectDefinition.width = 0;
@@ -557,7 +722,7 @@
                     objectTypeLayout(mode, this.options[this.selectedIndex].value, olObjectDefinition, olLayoutFileURI, olFolderURI);
                 }
                 // Add the type options
-                let objectTypes = ["text", "linkList", "vaReport", "interactiveContent", "masScore", "clientAdministrator", "portalBuilder"]
+                let objectTypes = ["text", "linkList", "vaReport", "interactiveContent", "masScore", "scrScore", "runCustomCode", "dataProductRegistry", "dataProductMarketplace", "clientAdministrator", "portalBuilder"]
                 for (const objectType in objectTypes) {
                     let objectTypeOption = document.createElement('option');
                     objectTypeOption.value = objectTypes[objectType];

@@ -51,7 +51,22 @@
     "saveObjectButton": "Objekt speichern",
     "createObjectButton": "Objekt hinzufügen",
     "deleteObjectButton": "Objekt löschen",
-    "noFurtherConfigurationText": "Es gibt keine weiteren Konfigurationsoptionen für diesen Objekttyp"
+    "noFurtherConfigurationText": "Es gibt keine weiteren Konfigurationsoptionen für diesen Objekttyp",
+    "runCustomCodeComputeContextPlaceholder": "Bitte den exakten Compute Context Namen eingeben, z.B. SAS Studio compute context",
+    "runCustomCodeCodeExplainer": "Unter diesem Link finden Sie mehr Information wie man hier Code einfügt",
+    "runCustomCodeCodePlaceholder": "[`%let user='${searchParams.user}';`,\"proc print data=sashelp.class; run; quit;\"]",
+    "customCodeActionBehavior": ["Daten eines Berichts aktualisieren", "Bericht aktualisieren"],
+    "runCustomCodeActionExplainer": "Die ausgewählte Aktion kann auf einen Berichts-Element angewendet werden",
+    "runCustomCodeActionElementPlaceholder": "Die ID des Berichtsobjektes, z.B. pageShorthand-obj-objectID",
+    "runCustomCodeUnloadCodePlaceholder": "Die Syntax ist analog zu der vorherigen Code Eingabe",
+    "dateProductSchemaURIExplainer": "Hier finden Sie die Dokumentation für den Data Product Schema",
+    "dataProductSchemaURI": "URI des Data Product Schemas /files/files/UUID",
+    "dataProductFolderURI": "URI des Data Product Ordners in den die Nutzer dieser Seite schreiben können müssen /folders/folders/UUID",
+    "copyContentExplainer": "Hinzufügen von URI die in den zu erstellenden Ordner kopiert werden soll - /reports/reports und /files/files wird understützt",
+    "copyContentAddingButton": "Weitere URIs hinzufügen",
+    "copyContentURIPlaceholder": "/reports/reports/UUID oder /files/files/UUID",
+    "dataProductOwnerFolderURI": "Angabe des Ornders in der die Liste der gekauften Produkte gespeichert werden soll",
+    "dataProductHeaderAttributesPlaceholder": "Geben Sie wie folgt die Attribute an die sie im Header sehen wollen: ['dataType', 'sensitivityLevel']"
   },
   "masScore": {
     "moduleSelect": "Wähle ein MAS Modul",

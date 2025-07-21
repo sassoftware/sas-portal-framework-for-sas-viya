@@ -42,7 +42,7 @@ async function addSCRScoreObject(scrObject, paneID, scrInterfaceText) {
         const values = Array.from(submitForm.elements).map((x) => {
             return {
                 name: x.id,
-                value: isNaN(parseFloat(x.value))
+                value: isNaN(Number(x.value))
                     ? x.value
                     : parseFloat(x.value),
             };

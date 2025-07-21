@@ -1,5 +1,9 @@
 # Changelog
 
+## SAS Portal Framework for SAS Viya v1.2.1
+
+- Fix: The SCR Module Scorer object had a bug where it would parse a string beginning with a number as a number and remove the text
+
 ## SAS Portal Framework for SAS Viya v1.2.0
 
 - Add: all currently supported objects to the Portal Builder object

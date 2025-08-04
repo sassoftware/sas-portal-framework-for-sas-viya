@@ -940,7 +940,7 @@ async function addPromptBuilderObject(promptBuilderObject, paneID, promptBuilder
                 }
                 scoreCodeInput += promptInputs[i].name;
                 if (promptInputs[i].name !== 'API_KEY') {
-                    scoreCodeUserPrompt += `${promptInputs[i].name}: {${promptInputs[i].name}}`
+                    scoreCodeUserPrompt += `${promptInputs[i].name}: {str(${promptInputs[i].name}).strip()}`
                 }
             }
             // Create the options string for the score code
@@ -991,9 +991,10 @@ async function addPromptBuilderObject(promptBuilderObject, paneID, promptBuilder
             for(let i = 0; i < modelVariables.length; i++) {
                 deleteModelVariable(window.VIYA, promptExperimentRunModel, modelVariables[i].id);
             }
+            let validatedModelName = validateAndCorrectPackageName(promptExperimentRunModelName);
             let manifestPromptInputResponseObject = await createModelContent(VIYA, promptExperimentRunModel, promptInputs, 'inputVar.json', 'inputVariables');
             let manifestPromptOutputResponseObject = await createModelContent(VIYA, promptExperimentRunModel, outputVars, 'outputVar.json', 'outputVariables');
-            let manifestPromptScoreCodeResponseObject = await createModelContent(VIYA, promptExperimentRunModel, mainfestPromptScoreCodeBlob, `${promptExperimentRunModelName}.py`, 'score', 'text/x-python');
+            let manifestPromptScoreCodeResponseObject = await createModelContent(VIYA, promptExperimentRunModel, mainfestPromptScoreCodeBlob, `${validatedModelName.correctedName}.py`, 'score', 'text/x-python');
         } else {
             promptExperimentResultTargetContainer.innerText = `${promptBuilderInterfaceText?.promptBuilderCreateModelNoBestPrompt}`
         }

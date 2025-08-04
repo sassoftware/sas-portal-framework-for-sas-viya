@@ -1,5 +1,11 @@
 # Changelog
 
+## SAS Portal Framework for SAS Viya v1.2.2
+
+- Fix: Prompt Builder now prevents the creation of scoring files with invalid Python package names
+- Add: validate-python-package-name utility function
+- Change: For variables in a manifested prompt auto trimming was added to remove leading and trailing blanks
+
 ## SAS Portal Framework for SAS Viya v1.2.1
 
 - Fix: The SCR Module Scorer object had a bug where it would parse a string beginning with a number as a number and remove the text

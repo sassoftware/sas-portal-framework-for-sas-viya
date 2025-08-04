@@ -53,7 +53,7 @@ async function addPromptBuilderObject(promptBuilderObject, paneID, promptBuilder
     promptBuilderProjectSelectorItem.innerHTML = `${promptBuilderInterfaceText?.projectSelect}`;
     promptBuilderProjectSelectorDropdown.append(promptBuilderProjectSelectorItem);
     // Get all projects in the specified repostiory
-    let existingProjects = await getModelProjects(VIYA, `and(ne(id,'${promptBuilderObject?.llmProjectID}'),eq(repositoryId,'${promptBuilderObject?.modelRepositoryID}'))`);
+    let existingProjects = await getModelProjects(VIYA, `contains(tags,'Prompt-Engineering')`);
     // Add the projects to the dropdown
     for (const existingProject in existingProjects) {
         let projectMod = document.createElement('option');

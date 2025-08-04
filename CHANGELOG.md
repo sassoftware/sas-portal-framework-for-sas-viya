@@ -1,5 +1,10 @@
 # Changelog
 
+## SAS Portal Framework for SAS Viya v1.3.0
+
+- Add: RAG Builder object
+- Change: The Prompt Builder object now filters for projects with the Prompt-Engineering tag
+
 ## SAS Portal Framework for SAS Viya v1.2.2
 
 - Fix: Prompt Builder now prevents the creation of scoring files with invalid Python package names

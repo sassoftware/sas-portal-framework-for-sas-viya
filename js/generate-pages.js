@@ -153,6 +153,13 @@ async function generatePages(VIYAHOST, layout, paneContainer, interfaceText) {
                     interfaceText?.promptBuilder
                 );
                 break;
+            case 'ragBuilder':
+                content = await addRAGBuilderObject(
+                    currentObjectDefinition,
+                    layout?.general?.shorthand,
+                    interfaceText?.ragBuilder
+                );
+                break;
             default:
                 content = document.createElement('p');
                 content.innerText = interfaceText?.undefinedObjectText;

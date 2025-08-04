@@ -206,5 +206,8 @@
     "promptBuilderFewestTokensPrompt": "This model had the fewest output tokens in this experiment run",
     "promptBuilderBestPrompt": "This response was selected as the best in this experiment run",
     "promptBuilderOpenInMMButton": "Open in SAS Model Manager"
+  },
+  "ragBuilder": {
+    
   }
 }

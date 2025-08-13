@@ -402,6 +402,8 @@ async function addPromptBuilderObject(promptBuilderObject, paneID, promptBuilder
     let promptBuilderModelSelectorContainer = document.createElement('div');
     promptBuilderModelSelectorContainer.setAttribute('id', `${promptBuilderObject?.id}-model-selector-container`);
     let promptBuilderAvailableLLMs = await getModelProjectModels(VIYA, promptBuilderObject?.llmProjectID);
+    let promptBuilderDeprecatedLLMs = await getModelProjectModels(VIYA, promptBuilderObject?.llmProjectID, "eq(tags,'deprecated')");
+    promptBuilderAvailableLLMs = promptBuilderAvailableLLMs.filter(obj1 => !promptBuilderDeprecatedLLMs.some(obj2 => obj1.id === obj2.id))
     for(const promptBuilderAvailableLLM in promptBuilderAvailableLLMs) {
         let promptBuilderAvailableLLMContents = await getModelContents(VIYA, promptBuilderAvailableLLMs[promptBuilderAvailableLLM]?.id);
         for(const promptBuilderAvailableLLMContent in promptBuilderAvailableLLMContents) {

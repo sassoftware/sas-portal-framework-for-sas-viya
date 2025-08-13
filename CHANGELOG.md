@@ -4,6 +4,7 @@
 
 - Add: RAG Builder object
 - Change: The Prompt Builder object now filters for projects with the Prompt-Engineering tag
+- Change: The Prompt Builder object now supports deprecation of LLMs
 
 ## SAS Portal Framework for SAS Viya v1.2.2
 

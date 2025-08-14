@@ -7,10 +7,10 @@
  */
 function validateAndCorrectPackageName(inputString) {
   // Convert to lowercase and replace invalid characters with hyphens
-  let correctedName = inputString.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+  let correctedName = inputString.toLowerCase().replace(/[^a-z0-9-]/g, '');
 
   // Remove leading/trailing and consecutive hyphens
-  correctedName = correctedName.replace(/^-+|-+$/g, '').replace(/-{2,}/g, '-');
+  correctedName = correctedName.replace(/^-+|-+$/g, '').replace(/-{2,}/g, '');
 
   // Determine if the original input was already valid
   const isValid = inputString === correctedName;
@@ -19,7 +19,7 @@ function validateAndCorrectPackageName(inputString) {
   if (correctedName === '') {
     return {
       isValid: false,
-      correctedName: 'invalid-package-name'
+      correctedName: 'invalidpackagename'
     };
   }
 

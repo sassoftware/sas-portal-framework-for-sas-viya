@@ -208,6 +208,43 @@
     "promptBuilderOpenInMMButton": "Öffnen in SAS Model Manager"
   },
   "ragBuilder": {
-    
+    "ragBuilderHeading": "RAG Builder",
+    "ragBuilderDescription": "Der RAG Builder ermöglicht der Erstellung von Retrieval Augmented Generation Setups. Man wird Schritt für Schritt durch den Prozess geführt. <br> Das erstellte Modell erhält ein Blob-Storage in das die Dateien hochgeladen werden können die vom Modell verarbeitet werden können - hier ist die Liste an unterstützten Dateiformaten:<ul><li>PDF (.pdf)</li><li>Word (.doc, docx)</li><li>PowerPoint (.ppt, .pptx)</li><li>Excel (.xls, xlsx, .csv)</li><li>Text (.txt, .md, .epub)</li><li>JSON (.json)</li><li>XML (.xml)</li></ul>",
+    "ragBuilderProjectHeader": "Wähle oder Erstelle ein Projekt für das RAG Setup",
+    "projectSelect": "Wähle ein Projekt",
+    "ragSelect": "Wähle ein bestehendes RAG Setup",
+    "ragBuilderCreateProject": {
+      "modalTitle": "Erstelle ein neues Projekt",
+      "nameLabel": "Gebe einen Projekt Namen ein",
+      "descriptionLabel": "Gebe einen Projekt Beschreibung ein",
+      "closeButtonText": "Schließen",
+      "saveButtonText": "Speichern"
+    },
+    "ragBuilderCreateRAGSetup": {
+      "modalTitle": "Erstelle ein neues RAG Setup - Das RAG Setup wird das aktuell ausgewählte Projekt gespeichert",
+      "nameLabel": "Gebe einen RAG Setup Namen ein",
+      "descriptionLabel": "Gebe eine RAG Setup Beschreibung ein",
+      "closeButtonText": "Schließen",
+      "saveButtonText": "Speichern"
+    },
+    "ragBuilderOpenInMMButton": "Öffnen in SAS Model Manager",
+    "ragBuilderChunkingStrategyHeader": "Wählen Sie die Chunking-Strategie für Ihr Projekt",
+    "ragBuilderChunkingStrategyDescription": "Chunking-Strategien sind entscheidend für RAG-Systeme, da sie festlegen, wie Ihre Rohdaten in überschaubare Teile für den Abruf zerlegt werden. Ziel ist es, Chunks zu erstellen, die klein genug sind, um präzise zu sein, aber groß genug, um ausreichend Kontext zu liefern.",
+    "fixedSizeWithOverlapName": "Chunking mit fester Größe und Überlappung",
+    "fixedSizeWithOverlapDescription": "Dies ist die einfachste Methode, bei der Text in Chunks einer vordefinierten Zeichen- oder Token-Anzahl aufgeteilt wird (z. B. 500 Zeichen). Eine Überlappung wird oft zwischen aufeinanderfolgenden Chunks verwendet (z. B. 10 % oder 50 Zeichen), um sicherzustellen, dass an den Grenzen kein Kontext verloren geht, was die Kontinuität fördert, wenn relevante Informationen sich über zwei Chunks erstrecken. <br> <ul><li><b>Vorteile:</b> Vorhersehbare Chunk-Größen</li><li><b>Nachteile:</b> Kann Sätze oder Absätze mittendrin abschneiden, wodurch bei unvorsichtiger Handhabung ohne Überlappung die semantische Kohärenz verloren gehen kann</li><li><b>Anwendungsfall:</b> Guter Ausgangspunkt für viele Anwendungen, insbesondere bei allgemeinem Text</li></ul>",
+    "sentenceBasedName": "Satzbasiertes Chunking",
+    "sentenceBasedDescription": "Der Text wird in einzelne Sätze aufgeteilt. Diese Sätze können dann entweder als einzelne Chunks behandelt oder zu Absätzen oder kleinen, semantisch verwandten Blöcken gruppiert werden. <br> <ul><li><b>Vorteile:</b> Bewahrt die Satzintegrität, was das semantische Verständnis für Embedding-Modelle verbessern kann</li><li><b>Nachteile:</b> Kann zu sehr vielen sehr kleinen Chunks führen, was zu einem großen Index oder unzureichendem Kontext für komplexe Anfragen führen kann</li><li><b>Anwendungsfall:</b> Wenn ein präziser Abruf auf Satzebene wichtig ist oder als vorbereitender Schritt vor dem Gruppieren von Sätzen</li></ul>",
+    "paragraphBasedName": "Absatzbasiertes Chunking",
+    "paragraphBasedDescription": "Der Text wird basierend auf natürlichen Absatztrennungen in Chunks aufgeteilt. <br> <ul><li><b>Vorteile:</b> Bewahrt auf natürliche Weise den semantischen Kontext innerhalb jedes Chunks, da Absätze normalerweise eine einzige Idee behandeln</li><li><b>Nachteile:</b> Absätze können stark in der Länge variieren, was zu sehr großen oder sehr kleinen Chunks führen kann, was die Embedding-Qualität oder die Abrufeffizienz beeinträchtigen könnte</li><li><b>Anwendungsfall:</b> Dokumente mit gut strukturierten Absätzen (z. B. Artikel, Berichte)</li></ul>",
+    "recursiveName": "Rekursives Chunking nach Separatoren",
+    "recursiveDescription": "Dies ist eine ausgefeiltere Methode, die versucht, semantische Grenzen zu erhalten. Sie funktioniert, indem sie versucht, Text mithilfe einer hierarchischen Liste von Separatoren aufzuteilen (z. B. ['\n\n', '\n', '. ', ' ', '']). Wenn ein Chunk mit dem ersten Separator zu groß ist, wird der nächste versucht, und so weiter, bis die Chunks eine gewünschte Größe erreichen. <br> <ul><li><b>Vorteile:</b> Sehr effektiv bei der Aufrechterhaltung der semantischen Kohärenz, da es das Aufteilen an logischen Punkten wie Dokumentabschnitten, Absätzen und dann Sätzen priorisiert</li><li><b>Nachteile:</b> Komplexer und kann zu seltsamen Chunks führen, wenn das Dokument nicht der Struktur folgt</li><li><b>Anwendungsfall:</b> Ideal für die meisten komplexen Dokumente, insbesondere solche mit klaren hierarchischen Strukturen</li></ul>",
+    "documentStructureAwareName": "Dokumentstruktur-orientiertes Chunking",
+    "documentStructureAwareDescription": "Diese Strategie nutzt die inhärente Struktur von Dokumenten (z. B. Überschriften, Abschnitte, Tabellen, Listen), um Chunks zu definieren. Zum Beispiel könnte ein Chunk ein Abschnitt unter einer bestimmten Überschrift, eine Zeile in einer Tabelle oder ein Element in einer Liste sein. <br> <ul><li><b>Vorteile:</b> Bewahrt maximalen semantischen Kontext, der mit der ursprünglichen Absicht des Dokuments zusammenhängt. Sehr leistungsfähig für strukturierte Daten</li><li><b>Nachteile:</b> Erfordert, dass die Dokumente eine Struktur haben</li><li><b>Anwendungsfall:</b> Hochstrukturierte Dokumente wie technische Handbücher, Gesetzestexte, wissenschaftliche Arbeiten oder Webseiten</li></ul>",
+    "ragBuilderChunkingStrategyNoCustomization": "Für diese Chunking-Strategie gibt es keine zusätzlichen Konfigurationsoptionen",
+    "chunkSizeText": "Geben Sie die Größe des Chunks in Wörtern an",
+    "chunkSizeOverlapText": "Geben Sie die Größe der Überlappung zwischen Chunks an",
+    "chunkSeparatorText": "Geben Sie die Seperators ein. Stellen Sie dabei sicher das jeder Seperator in einfachen Anführungszeichen ist und durch Kommata getrennt sind",
+    "ragBuilderVectorDBHeader": "Wählen Sie eine Vector Datenbank für Ihr Projekt",
+    "ragBuilderVectorDBDescription": "Eine Vektor Datenbank (Vektor-DB) ist eine Art von Datenbank, die Daten als hochdimensionale Vektoren speichert. Diese Vektoren sind numerische Darstellungen von Daten. Sie werden von Embedding-Modellen erstellt und erfassen die semantische Bedeutung und die wichtigsten Merkmale der ursprünglichen Daten."
   }
 }

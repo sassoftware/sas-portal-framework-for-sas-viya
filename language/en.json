@@ -207,7 +207,44 @@
     "promptBuilderBestPrompt": "This response was selected as the best in this experiment run",
     "promptBuilderOpenInMMButton": "Open in SAS Model Manager"
   },
-  "ragBuilder": {
-    
+    "ragBuilder": {
+    "ragBuilderHeading": "RAG Builder",
+    "ragBuilderDescription": "The RAG Builder enables the creation of Retrieval Augmented Generation setups. You are guided through the setup step by step. <br> The created model will have a mounted blob storage which is where you can upload your files to, for ingestion - here is the list of supported file formats:<ul><li>PDF (.pdf)</li><li>Word (.doc, docx)</li><li>PowerPoint (.ppt, .pptx)</li><li>Excel (.xls, xlsx, .csv)</li><li>Text (.txt, .md, .epub)</li><li>JSON (.json)</li><li>XML (.xml)</li></ul>",
+    "ragBuilderProjectHeader": "Select or create a project for the RAG Setup",
+    "projectSelect": "Select a project",
+    "ragSelect": "Select an existing RAG Setup",
+    "ragBuilderCreateProject": {
+      "modalTitle": "Create a new Project",
+      "nameLabel": "Enter the Project Name",
+      "descriptionLabel": "Enter the Project Description",
+      "closeButtonText": "Close",
+      "saveButtonText": "Save"
+    },
+    "ragBuilderCreateRAGSetup": {
+      "modalTitle": "Create a new RAG Setup - The new RAG Setup will be saved into the currently selected project",
+      "nameLabel": "Enter the RAG Setup Name",
+      "descriptionLabel": "Enter the RAG Setup Description",
+      "closeButtonText": "Close",
+      "saveButtonText": "Save"
+    },
+    "ragBuilderOpenInMMButton": "Open in SAS Model Manager",
+    "ragBuilderChunkingStrategyHeader": "Select the Chunking Strategy for your project",
+    "ragBuilderChunkingStrategyDescription": "Chunking strategies are crucial for RAG systems, as they determine how your raw data is broken down into manageable pieces for retrieval. The goal is to create chunks that are small enough to be precise but large enough to provide sufficient context.",
+    "fixedSizeWithOverlapName": "Fixed-Size Chunking with Overlap",
+    "fixedSizeWithOverlapDescription": "This is the simplest method where text is split into chunks of a predefined character or token count (e.g., 500 characters). An overlap is often used between consecutive chunks (e.g., 10% or 50 characters) to ensure that no context is lost at the boundaries, helping with continuity if relevant information spans two chunks. <br> <ul><li><b>Pros:</b> predictable chunk sizes</li><li><b>Cons:</b> Can cut sentences or paragraphs mid-way, potentially losing semantic coherence if not carefully handled with overlap</li><li><b>Use Case:</b> Good starting point for many applications, especially with general text</li></ul>",
+    "sentenceBasedName": "Sentence-Based Chunking",
+    "sentenceBasedDescription": "The text is split into individual sentences. These sentences can then either be treated as individual chunks or grouped into paragraphs or small, semantically related blocks <br> <ul><li><b>Pros:</b> Preserves sentence integrity, which can improve semantic understanding for embedding models</li><li><b>Cons:</b> Can result in many very small chunks, leading to a large index or insufficient context for complex queries</li><li><b>Use Case:</b> When precise sentence-level retrieval is important, or as a preliminary step before grouping sentences</li></ul>",
+    "paragraphBasedName": "Paragraph-Based Chunking",
+    "paragraphBasedDescription": "The text is divided into chunks based on natural paragraph breaks <br> <ul><li><b>Pros:</b> aturally preserves semantic context within each chunk, as paragraphs usually cover a single idea</li><li><b>Cons:</b> Paragraphs can vary greatly in length, leading to very large or very small chunks, which might affect embedding quality or retrieval efficiency</li><li><b>Use Case:</b> Documents with well-structured paragraphs (e.g., articles, reports)</li></ul>",
+    "recursiveName": "Recursive Chunking by Separators",
+    "recursiveDescription": "This is a more sophisticated method that attempts to preserve semantic boundaries. It works by trying to split text using a hierarchical list of separators (e.g., ['\n\n', '\n', '. ', ' ', '']). If a chunk is too large using the first separator, it tries the next one, and so on, until the chunks meet a desired size <br> <ul><li><b>Pros:</b> Highly effective at maintaining semantic coherence, as it prioritizes breaking at logical points like document sections, paragraphs, then sentences</li><li><b>Cons:</b> More complex and can lead weird chunks if the document doesn't follow the structure</li><li><b>Use Case:</b> Ideal for most complex documents, especially those with clear hierarchical structures</li></ul>",
+    "documentStructureAwareName": "Document Structure-Aware Chunking",
+    "documentStructureAwareDescription": "This strategy leverages the inherent structure of documents (e.g., headings, sections, tables, lists) to define chunks. For example, a chunk might be a section under a specific heading, a row in a table, or an item in a list <br> <ul><li><b>Pros:Preserves maximum semantic context related to the document's original intent. Very powerful for structured data</b> </li><li><b>Cons:</b> Requires the documents to have a structure</li><li><b>Use Case:</b> Highly structured documents like technical manuals, legal texts, research papers, or web pages</li></ul>",
+    "ragBuilderChunkingStrategyNoCustomization": "For this chunking strategy there are no additional configuration options.",
+    "chunkSizeText": "Specify the chunk size in words",
+    "chunkSizeOverlapText": "Specify the size of the overlap of chunks",
+    "chunkSeparatorText": "Specify the list of separators. Make sure they are in single quotes and separated by commas",
+    "ragBuilderVectorDBHeader": "Select a Vector DB for your project",
+    "ragBuilderVectorDBDescription": "A vector database (vector DB) is a type of database that stores data as high-dimensional vectors, which are numerical representations of data. These vectors, often called embeddings, are created by embedding models and capture the semantic meaning and key features of the original data."
   }
 }

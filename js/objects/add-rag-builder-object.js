@@ -366,26 +366,126 @@ async function addRAGBuilderObject(ragBuilderObject, paneID, ragBuilderInterface
     ragBuilderVectorDBHeader.innerText = ragBuilderInterfaceText?.ragBuilderVectorDBHeader;
     let ragBuilderVectorDBDescription = document.createElement('p');
     ragBuilderVectorDBDescription.innerHTML = ragBuilderInterfaceText?.ragBuilderVectorDBDescription;
+    let ragBuilderVectorDBContainer = document.createElement('div');
     let ragBuilderVectorDBSelectorDropdown = document.createElement('select');
     ragBuilderVectorDBSelectorDropdown.setAttribute('class', 'form-select');
     ragBuilderVectorDBSelectorDropdown.setAttribute('id', `${ragBuilderObject?.id}-vectorDB-dropdown`);
+    ragBuilderVectorDBSelectorDropdown.onchange = async function () {
+        ragBuilderVectorDBContainer.innerHTML = '';
+        let ragBuilderVectorDBDescriptor = document.createElement('p');
+        const selectedVectorDB = this.options[this.selectedIndex].value;
+        // Implement VectorDB specific notes
+        if (selectedVectorDB === 'Chroma') {
+            ragBuilderVectorDBDescriptor.innerHTML = ragBuilderInterfaceText?.chromaDescriptor;
+            let ragBuilderVectorDBCollectionInputLabel = document.createElement('span');
+            ragBuilderVectorDBCollectionInputLabel.innerText = `${ragBuilderInterfaceText?.ragBuilderVectorDBCollectionInputLabel}:`;
+            let ragBuilderVectorDBCollectionInput = document.createElement('input');
+            ragBuilderVectorDBCollectionInput.type = 'text';
+            ragBuilderVectorDBCollectionInput.placholder = "my_collection";
+            ragBuilderVectorDBCollectionInput.setAttribute('id', `${ragBuilderObject?.id}-collection-name`);
+            ragBuilderVectorDBContainer.appendChild(ragBuilderVectorDBDescriptor);
+            ragBuilderVectorDBContainer.appendChild(ragBuilderVectorDBCollectionInputLabel);
+            ragBuilderVectorDBContainer.appendChild(ragBuilderVectorDBCollectionInput);
+        } else if (selectedVectorDB === 'SingleStore') {
+            ragBuilderVectorDBDescriptor.innerHTML = ragBuilderInterfaceText?.singleStoreDescriptor;
+            let ragBuilderVectorDBDatabaseInputLabel = document.createElement('span');
+            ragBuilderVectorDBDatabaseInputLabel.innerText = `${ragBuilderInterfaceText?.ragBuilderVectorDBDatabaseInputLabel}:`;
+            let ragBuilderVectorDBDatabaseInput = document.createElement('input');
+            ragBuilderVectorDBDatabaseInput.type = 'text';
+            ragBuilderVectorDBDatabaseInput.placholder = "database_name";
+            ragBuilderVectorDBDatabaseInput.setAttribute('id', `${ragBuilderObject?.id}-database-name`);
+            let ragBuilderVectorDBTableInputLabel = document.createElement('span');
+            ragBuilderVectorDBTableInputLabel.innerText = `${ragBuilderInterfaceText?.ragBuilderVectorDBTableInputLabel}:`;
+            let ragBuilderVectorDBTableInput = document.createElement('input');
+            ragBuilderVectorDBTableInput.type = 'text';
+            ragBuilderVectorDBTableInput.placholder = "table_name";
+            ragBuilderVectorDBTableInput.setAttribute('id', `${ragBuilderObject?.id}-table-name`);
+            ragBuilderVectorDBContainer.appendChild(ragBuilderVectorDBDescriptor);
+            ragBuilderVectorDBContainer.appendChild(ragBuilderVectorDBDatabaseInputLabel);
+            ragBuilderVectorDBContainer.appendChild(ragBuilderVectorDBDatabaseInput);
+            ragBuilderVectorDBContainer.appendChild(ragBuilderVectorDBTableInputLabel);
+            ragBuilderVectorDBContainer.appendChild(ragBuilderVectorDBTableInput);
+        } else if (selectedVectorDB === 'pgVector') {
+            ragBuilderVectorDBDescriptor.innerHTML = ragBuilderInterfaceText?.pgVectorDescriptor;
+            let ragBuilderVectorDBDatabaseInputLabel = document.createElement('span');
+            ragBuilderVectorDBDatabaseInputLabel.innerText = `${ragBuilderInterfaceText?.ragBuilderVectorDBDatabaseInputLabel}:`;
+            let ragBuilderVectorDBDatabaseInput = document.createElement('input');
+            ragBuilderVectorDBDatabaseInput.type = 'text';
+            ragBuilderVectorDBDatabaseInput.placholder = "database_name";
+            ragBuilderVectorDBDatabaseInput.setAttribute('id', `${ragBuilderObject?.id}-database-name`);
+            let ragBuilderVectorDBTableInputLabel = document.createElement('span');
+            ragBuilderVectorDBTableInputLabel.innerText = `${ragBuilderInterfaceText?.ragBuilderVectorDBTableInputLabel}:`;
+            let ragBuilderVectorDBTableInput = document.createElement('input');
+            ragBuilderVectorDBTableInput.type = 'text';
+            ragBuilderVectorDBTableInput.placholder = "table_name";
+            ragBuilderVectorDBTableInput.setAttribute('id', `${ragBuilderObject?.id}-table-name`);
+            ragBuilderVectorDBContainer.appendChild(ragBuilderVectorDBDescriptor);
+            ragBuilderVectorDBContainer.appendChild(ragBuilderVectorDBDatabaseInputLabel);
+            ragBuilderVectorDBContainer.appendChild(ragBuilderVectorDBDatabaseInput);
+            ragBuilderVectorDBContainer.appendChild(ragBuilderVectorDBTableInputLabel);
+            ragBuilderVectorDBContainer.appendChild(ragBuilderVectorDBTableInput);
+        }
+    }
     let ragBuilderVectorDBSelectorItem = document.createElement('option');
     ragBuilderVectorDBSelectorItem.value = `${ragBuilderInterfaceText?.ragBuilderVectorDBHeader}`;
     ragBuilderVectorDBSelectorItem.innerHTML = `${ragBuilderInterfaceText?.ragBuilderVectorDBHeader}`;
     ragBuilderVectorDBSelectorDropdown.append(ragBuilderVectorDBSelectorItem);
     // Add the projects to the dropdown
     for (const vectorDB in ragBuilderObject?.vectorDBList) {
-        if (ragBuilderObject?.vectorDBList[vectorDB] in SUPPORTEDVECTORDBS) {
+        if (SUPPORTEDVECTORDBS.includes(ragBuilderObject?.vectorDBList[vectorDB])) {
             let vectorDBOption = document.createElement('option');
             vectorDBOption.value = ragBuilderObject?.vectorDBList[vectorDB];
             vectorDBOption.innerHTML = ragBuilderObject?.vectorDBList[vectorDB];
             ragBuilderVectorDBSelectorDropdown.append(vectorDBOption);
         } else {
-            console.log(`The configured Vector DB: ${vectorDBList[vectorDB]} is not supported, please open an issue.`)
+            console.log(`The configured Vector DB: ${ragBuilderObject?.vectorDBList[vectorDB]} is not supported, please open an issue.`);
         }
     }
 
     // Add a selector for the embedding model
+    let ragBuilderEmbeddingModelHeader = document.createElement('h2');
+    ragBuilderEmbeddingModelHeader.innerText = ragBuilderInterfaceText?.ragBuilderEmbeddingModelHeader;
+    let ragBuilderEmbeddingModelDescription = document.createElement('p');
+    ragBuilderEmbeddingModelDescription.innerText = ragBuilderInterfaceText?.ragBuilderEmbeddingModelDescription;
+    // Retrieve the Embedding Models
+    let ragBuilderAvailableEmbeddingModels = await getModelProjectModels(VIYA, ragBuilderObject?.embeddingProjectID);
+    let promptBuilderDeprecatedLLMs = await getModelProjectModels(VIYA, ragBuilderObject?.embeddingProjectID, "eq(tags,'deprecated')");
+    ragBuilderAvailableEmbeddingModels = ragBuilderAvailableEmbeddingModels.filter(obj1 => !promptBuilderDeprecatedLLMs.some(obj2 => obj1.id === obj2.id))
+    for(const ragBuilderAvailableEmbeddingModel in ragBuilderAvailableEmbeddingModels) {
+        let ragBuilderAvailableEmbeddingContents = await getModelContents(VIYA, ragBuilderAvailableEmbeddingModels[ragBuilderAvailableEmbeddingModel]?.id);
+        for(const ragBuilderAvailableEmbeddingContent in ragBuilderAvailableEmbeddingContents) {
+            if(ragBuilderAvailableEmbeddingContents[ragBuilderAvailableEmbeddingContent]?.name == 'options.json') {
+                ragBuilderAvailableEmbeddingModels[ragBuilderAvailableEmbeddingModel].fileURI = ragBuilderAvailableEmbeddingContents[ragBuilderAvailableEmbeddingContent]?.fileURI
+                let promptBuilderCurrentOptions = await getFileContent(VIYA, ragBuilderAvailableEmbeddingModels[ragBuilderAvailableEmbeddingModel].fileURI);
+                let ragBuilderCurrentOptionsContent = await promptBuilderCurrentOptions.json();
+                ragBuilderAvailableEmbeddingModels[ragBuilderAvailableEmbeddingModel].options = ragBuilderCurrentOptionsContent;
+            }
+        }
+    }
+    let ragBuilderEmbeddingModelSelectorDropdown = document.createElement('select');
+    ragBuilderEmbeddingModelSelectorDropdown.setAttribute('class', 'form-select');
+    ragBuilderEmbeddingModelSelectorDropdown.setAttribute('id', `${ragBuilderObject?.id}-embedding-model-dropdown`);
+    let ragBuilderEmbeddingModelSelectorItem = document.createElement('option');
+    ragBuilderEmbeddingModelSelectorItem.value = `${ragBuilderInterfaceText?.ragBuilderEmbeddingModelHeader}`;
+    ragBuilderEmbeddingModelSelectorItem.innerHTML = `${ragBuilderInterfaceText?.ragBuilderEmbeddingModelHeader}`;
+    ragBuilderEmbeddingModelSelectorDropdown.append(ragBuilderEmbeddingModelSelectorItem);
+    // Add the Embedding Models to the dropdown
+    for (const embeddingModel in ragBuilderAvailableEmbeddingModels) {
+        let embeddingModelOption = document.createElement('option');
+        embeddingModelOption.value = ragBuilderAvailableEmbeddingModels[embeddingModel].id;
+        embeddingModelOption.innerHTML = ragBuilderAvailableEmbeddingModels[embeddingModel].name;
+        ragBuilderEmbeddingModelSelectorDropdown.append(embeddingModelOption);
+    }
+
+    // Save RAG Setup
+    let ragSetupSaveButton = document.createElement('div');
+    ragSetupSaveButton.id = `${paneID}-obj-${ragBuilderObject?.id}-rag-setup-save-button`;
+    ragSetupSaveButton.innerText = `${ragBuilderInterfaceText?.ragSetupSaveButton}`;
+    ragSetupSaveButton.setAttribute('type', 'button');
+    ragSetupSaveButton.setAttribute('class', 'btn btn-primary');
+    ragSetupSaveButton.onclick = async function () {
+        console.log('SAVED');
+    }
 
     ragBuilderContainer.appendChild(ragBuilderHeader);
     ragBuilderContainer.appendChild(ragBuilderDescription);
@@ -411,6 +511,13 @@ async function addRAGBuilderObject(ragBuilderObject, paneID, ragBuilderInterface
     ragBuilderContainer.appendChild(ragBuilderVectorDBDescription);
     ragBuilderContainer.appendChild(ragBuilderVectorDBSelectorDropdown);
     ragBuilderContainer.appendChild(document.createElement('br'));
+    ragBuilderContainer.appendChild(ragBuilderVectorDBContainer);
+    ragBuilderContainer.appendChild(document.createElement('br'));
+    ragBuilderContainer.appendChild(ragBuilderEmbeddingModelHeader);
+    ragBuilderContainer.appendChild(ragBuilderEmbeddingModelDescription);
+    ragBuilderContainer.appendChild(ragBuilderEmbeddingModelSelectorDropdown);
+    ragBuilderContainer.appendChild(document.createElement('br'));
+    ragBuilderContainer.appendChild(ragSetupSaveButton);
   
     return ragBuilderContainer;
 }

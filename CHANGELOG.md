@@ -6,6 +6,7 @@
 - Change: The Prompt Builder object now filters for projects with the Prompt-Engineering tag
 - Change: The Prompt Builder object now supports deprecation of LLMs
 - Fix: Instead of using hyphens, invalid characters are removed fully for *validate-python-package-name.js*
+- Add: Deep-Linking support for Tabs
 
 ## SAS Portal Framework for SAS Viya v1.2.2
 

@@ -153,6 +153,69 @@
 
             // Generate Portal
             authWithViya(VIYA, SASLOGIN, PORTAL, SASPORTAL);
+
+            // Function to activate a tab based on its ID
+            function activateTab(tabId) {
+                const tabButton = document.getElementById(tabId);
+                if (tabButton) {
+                    const bsTab = new bootstrap.Tab(tabButton);
+                    bsTab.show();
+                    history.pushState(null, '', '#' + tabId);
+                } else {
+                    console.warn(`Tab button with ID '${tabId}' not found.`);
+                }
+            }
+
+            // This function encapsulates all initialization logic for tabs and deeplinks
+            function initializeTabsAndDeeplinks() {
+                let attempts = 0;
+                const maxAttempts = 20;
+                const intervalTime = 1000;
+
+                const checkTabsInterval = setInterval(() => {
+                    const tabButtons = document.querySelectorAll('.nav-tabs .nav-link');
+
+                    if (tabButtons.length > 0 && document.readyState === 'complete') {
+                        console.log(document.readyState);
+                        clearInterval(checkTabsInterval);
+                        const initialHash = window.location.hash.substring(1);
+                        if (initialHash) {
+                            activateTab(initialHash);
+                        } else {
+                            const activeTabButton = document.querySelector('.nav-tabs .nav-link.active');
+                            if (activeTabButton) {
+                                history.replaceState(null, '', '#' + activeTabButton.id);
+                            } else {
+                                const firstTabButton = document.querySelector('.nav-tabs .nav-link');
+                                if (firstTabButton) {
+                                    activateTab(firstTabButton.id);
+                                }
+                            }
+                        }
+
+                        tabButtons.forEach(button => {
+                            button.addEventListener('shown.bs.tab', function (event) {
+                                const newTabId = event.target.id;
+                                history.pushState(null, '', '#' + newTabId);
+                            });
+                        });
+                    } else {
+                        attempts++;
+                        if (attempts >= maxAttempts) {
+                            clearInterval(checkTabsInterval);
+                            console.error('Max attempts reached: Tab elements not found after', maxAttempts * intervalTime / 1000, 'seconds.');
+                        } else {
+                            console.log(`Attempt ${attempts}: Waiting for tab elements...`);
+                        }
+                    }
+                }, intervalTime);
+            }
+
+            if(document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeTabsAndDeeplinks);
+            } else {
+                initializeTabsAndDeeplinks();
+            }
         </script>
     </body>
 </html>

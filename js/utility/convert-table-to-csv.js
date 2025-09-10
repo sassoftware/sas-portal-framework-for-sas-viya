@@ -1,4 +1,7 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * Take a valid HTML table and return it as a valid csv string
  *
  * @param {HTMLElement} htmlTableElement - The root table element which is to be converted

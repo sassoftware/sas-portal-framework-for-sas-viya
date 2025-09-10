@@ -1,6 +1,9 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * Returns a string with the formatted current datetime for easy integration with SAS
- * return {String} - Datetime string in the format DDMMMYY:HH:MM:SS, e.g: '01JUL25:09:52:29'
+ * @return {String} - Datetime string in the format DDMMMYY:HH:MM:SS, e.g: '01JUL25:09:52:29'
  */
 function getFormattedDatetime() {
     const now = new Date();

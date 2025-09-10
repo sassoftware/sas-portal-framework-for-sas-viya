@@ -1,4 +1,6 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
  * A function that checks a string for being a valid variable name in DS2:
  * - https://go.documentation.sas.com/doc/en/pgmsascdc/default/ds2pg/p0jpu8qhzm0om9n1gy85ydkzubpf.htm
  * - https://go.documentation.sas.com/doc/en/pgmsascdc/default/ds2pg/p1rnsddd78roken1tlwnfk4poavl.htm

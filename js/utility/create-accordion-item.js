@@ -1,4 +1,7 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * Add elements to an accordion element
  *
  * @param {HTMLElement} accordionContainer - HTMLElement that is setup for a Bootstrap accordion

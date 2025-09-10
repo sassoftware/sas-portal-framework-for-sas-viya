@@ -1,4 +1,7 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * Terminate a SAS Session - it is suggested to use the window.onbeforeunload event to terminate the SAS Session
  *
  * @param {String} VIYAHOST - The Host URL of the SAS Viya Host

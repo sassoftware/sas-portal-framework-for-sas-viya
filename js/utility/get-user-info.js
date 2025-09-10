@@ -1,4 +1,7 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * Returns the User Information of the currently signed in User
  * Please note this API is undocumented and thus might change without warning
  *

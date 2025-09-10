@@ -1,6 +1,9 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * Creates a SAS Visual Analytics report
- * https://devportal-prod.unx.sas.com/rest-apis/reportOperations-v1
+ *
  * @param {String} VIYAHOST - The Host URL of the SAS Viya Host
  * @param {String} resultReportName - The name for the report
  * @param {String} libraryName - Name of the library the table is stored in

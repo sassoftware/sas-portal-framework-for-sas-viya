@@ -1,5 +1,9 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * Returns the In- and Outputs of a SCR endpoint
+ * 
  * @param {String} endpoint - The SCR endpoint
  * @returns {Array} - The first entry is the inputs and the second the outputs
  */

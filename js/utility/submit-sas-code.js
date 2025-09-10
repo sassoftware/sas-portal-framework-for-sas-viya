@@ -1,23 +1,16 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * Create a SAS Session
  *
- * @param {String} VIYAHOST - The Host URL of the SAS Viya Host
- * @param {String} computeContextID - ID of the SAS Compute Context
- * @param {String} sessionName - Name of the Session
- * @param {String} sessionDescription - Optional, Description for the Session
- * @param {Object} sessionAttributes - Optional, specify context attributes as an Object with the attribute name as the key and the value as the value
- * @param {Array of Strings} sessionEnvironmentOptions - Optional, specify an array of SAS System options
- * @param {Array of Strings} sessionEnvironmentAutoexecLines - Optional, specify lines of SAS code to be run as a autoexec
- *
- * @returns {Promise/String/Object} - returns the SAS Session ID
- */
-/**
  * @param {String} VIYAHOST - The Host URL of the SAS Viya Host
  * @param {String} sessionID - A SAS Compute Session ID
  * @param {Array of Strings} code - An Array of Strings containing SAS Code
  * @param {Object} attributes - Optional, attributes to change the behavior of the job request, default is to reset the Log Lines
  * @param {Boolean} waitForJobComplition - Optional, wait for a job to
  *
+ * @returns {Promise/String/Object} - returns the SAS Session ID
  */
 async function submitSASCode(
     VIYAHOST,

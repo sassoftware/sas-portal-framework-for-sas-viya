@@ -1,4 +1,8 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
+ * Function that enables the publication of the champion model that was the result of a MLPA pipeline
  *
  * @param {String} VIYAHOST - The Host URL of the SAS Viya Host
  * @param {*} mlpaProjectID - The ID of the MLPA Project of which the Champion should be published or registered

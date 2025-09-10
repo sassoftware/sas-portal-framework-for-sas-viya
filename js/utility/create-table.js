@@ -1,5 +1,9 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * Add a Table to an element
+ * 
  * @param {HTMLElement} tableContainer - Element that will contain the table
  * @param {String} baseTableID - ID of baseline element that will contain the table
  * @param {Array} tableHeaders - Array of Strings that make up the headers for the table

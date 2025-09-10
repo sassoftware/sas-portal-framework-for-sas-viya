@@ -1,4 +1,7 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * Create a MAS Scoring Object
  *
  * @param {Object} masObject - Contains the definition of the MAS Score Object

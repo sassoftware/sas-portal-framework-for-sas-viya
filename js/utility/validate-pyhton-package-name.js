@@ -1,4 +1,7 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * A function that checks a string for being a valid Python package name:
  * - https://peps.python.org/pep-0508/
  * - https://peps.python.org/pep-0008/

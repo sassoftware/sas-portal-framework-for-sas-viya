@@ -1,4 +1,7 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * Authenticate with Viya enables you to Authenticate with SAS Viya using the SAS Logon Manager
  *
  * @param {String} VIYAHOST - The Host URL of the SAS Viya Host

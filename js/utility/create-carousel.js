@@ -1,4 +1,7 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * Add a Table to an element
  * @param {HTMLElement} carouselContainer - Element that will contain the table
  * @param {String} baseCarouselID - ID of baseline element that will contain the table

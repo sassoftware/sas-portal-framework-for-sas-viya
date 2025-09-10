@@ -1,4 +1,7 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * Returns the Output of a LLM running in SCR adhearing to the defined API structure
  *
  * @param {String} SCREndpoint - The fully qualified SCR endpoint under which all the LLMs are being hosted

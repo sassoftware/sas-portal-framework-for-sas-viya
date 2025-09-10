@@ -1,4 +1,7 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * Download content as a file to the local systen
  *
  * @param {String} fileName - Name of the file, including file extension (should match the file type)

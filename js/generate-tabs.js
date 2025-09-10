@@ -1,4 +1,7 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * Generate a Tab for each Page in the Portal
  * @param {Object} layout - General attribute content of the portal-page-layout.json for each page
  * @param {HTMLUListElement} portalNavBar - A HTML UL List Element that will contain the Portal Tab Bar

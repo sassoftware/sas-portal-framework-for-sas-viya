@@ -1,4 +1,7 @@
 /**
+ * Copyright © 2024, SAS Institute Inc., Cary, NC, USA.  All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ * 
  * Creates a new SAS Model Manager Model Content
  *
  * @param {String} VIYAHOST - The Host URL of the SAS Viya Host
@@ -22,6 +25,9 @@ async function createModelContent(
         contentType = "application/octet-stream";
     } else if (contentType === 'text/x-python') {
         formData.append("files", modelContent, modelContentFileName);
+        formData.append('role', modelContentRole);
+    } else if (contentType === 'text/plain' || contentType === 'text/markdown') {
+        formData.append('files', modelContent, modelContentFileName);
         formData.append('role', modelContentRole);
     } else if (typeof modelContent === 'object') {
         let modelContentJSONString = JSON.stringify(modelContent, null, 2);

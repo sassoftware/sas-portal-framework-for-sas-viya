@@ -9,9 +9,14 @@
 async function getInterfaceLanguage() {
   // Load a json based on the browser language
   const userLang = navigator.language || navigator.userLanguage;
-  const textLanguageJSON = await fetch(
+  let textLanguageJSON = await fetch(
     `./language/${userLang.substr(0, 2)}.json`
   );
+  if (!textLanguageJSON.ok) {
+    // ...fetch the default English file instead.
+    console.log(`The UI is not available in your language: ${userLang.substr(0, 2)} - defaulting to English`);
+    textLanguageJSON = await fetch('./language/en.json');
+  }
   const textLanguageContent = await textLanguageJSON.json();
 
   return textLanguageContent;

@@ -258,5 +258,11 @@
     "ragBuilderChangeDefaultsAlert": "Bitte stellen Sie sicher das für die Chunking Strategy, die Vektor-DB und das Embedding Modell überall valide Werte eingegeben wurden.",
     "ragSetupSaveSucessResponse": "Das RAG Setup wurde erfolgreich gespeichert. Hier ist ein Link: ",
     "ragSetupSaveFailureResponse": "Das Rag Setup konnte nicht gespeichert werden. Bitte versichere dich, dass du Schreibrechte im SAS Model Manager hast."
+  },
+  "sasContentVAReport": {
+    "reportNotSelectedText": "Kein Bericht ausgewählt"
+  },
+  "sasContentJob": {
+    "noJobSelectedText": "Kein Job ausgewählt"
   }
 }

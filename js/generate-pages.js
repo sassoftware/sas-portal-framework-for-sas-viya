@@ -163,6 +163,20 @@ async function generatePages(VIYAHOST, layout, paneContainer, interfaceText) {
                     interfaceText?.ragBuilder
                 );
                 break;
+            case 'sasContentVAReport':
+                content = await addSASContentVAReportObject(
+                    currentObjectDefinition,
+                    layout?.general?.shorthand, 
+                    interfaceText?.sasContentVAReport
+                );
+                break;
+            case 'sasContentJob':
+                content = await addSASContentJobObject(
+                    currentObjectDefinition,
+                    layout?.general?.shorthand, 
+                    interfaceText?.sasContentJob
+                );
+                break;
             default:
                 content = document.createElement('p');
                 content.innerText = interfaceText?.undefinedObjectText;

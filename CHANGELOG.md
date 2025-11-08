@@ -1,5 +1,12 @@
 # Changelog
 
+## SAS Portal Framework for SAS Viya v1.4.0
+
+Deprication Warning: The Portal Builder Object will be deprecated in an upcoming release. With the avaialbility of JSON file editing in SAS Studio (since the 2025.06 release) that is the new preferred version and since updating the Portal Builder object is very complex, this object will be deprecated. Note with the next version a warning text will also appear at the top of the object - no new features will be added.
+
+- Add: SAS Content VA Report Object
+- Add: SAS Content Job Object
+
 ## SAS Portal Framework for SAS Viya v1.3.0
 
 - Add: RAG Builder object

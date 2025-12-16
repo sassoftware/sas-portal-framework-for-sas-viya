@@ -531,6 +531,7 @@ async function addPromptBuilderObject(promptBuilderObject, paneID, promptBuilder
         promptExperimentTracker.push({'systemPrompt': systemPrompt, 'userPrompt': userPrompt});
 
         const allPromises = [];
+
         for (const modelObj of promptBuilderSelectedModels) {
             const modelName = modelObj.currentlySelectedModel.name;
             const options = modelObj.currentlySelectedModel.options ?? {};
@@ -542,7 +543,8 @@ async function addPromptBuilderObject(promptBuilderObject, paneID, promptBuilder
                     modelName,
                     systemPrompt,
                     userPrompt,
-                    options
+                    options,
+                    promptBuilderObject.deploymentType ?? 'k8s'
                 ).then((data) => ({ modelName, data, options }))
             );
         }

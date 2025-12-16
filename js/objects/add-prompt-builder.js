@@ -976,12 +976,24 @@ async function addPromptBuilderObject(promptBuilderObject, paneID, promptBuilder
                   "length": 256
                 }
             ];
-            let scoreCode = `def scoreModel(${scoreCodeInput}):
+            // Handle the different LLM Container deployment types
+            let deploymentTypeHandling = promptBuilderObject.deploymentType ?? 'k8s';
+            let llmEndpoint = '';
+            if (deploymentTypeHandling === 'k8s') {
+                llmEndpoint = '{llm}/{llm}';
+            } else if (deploymentTypeHandling === 'aca') {
+                llmEndpoint = '{llm}';
+            }
+            let scoreCode = `import os
+
+def scoreModel(${scoreCodeInput}):
     "Output: llmBody, llmURL"
     # The llm and the target endpoint
     llm = "${bestPromptItem.model}"
-    endpoint = "${promptBuilderObject?.SCREndpoint}"
-    llmURL = f"{endpoint}/{llm}/{llm}"
+    # Retrieves the endpoint where the LLM containers are hosted - e.g. https://example.com/llm
+    # If an environment variable called LLMCONTAINERPATH is set, it will use that instead of the one stored in the prompt builder object
+    endpoint = os.getenv("LLMCONTAINERPATH", "${promptBuilderObject?.SCREndpoint}")
+    llmURL = f"{endpoint}/${llmEndpoint}"
     # These are the options that were set for the best prompt
     options = f"{{${scoreCodeOptions}}}"
     # This is the system prompt that was selected as the best one by the prompt engineer

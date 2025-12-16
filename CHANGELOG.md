@@ -1,5 +1,12 @@
 # Changelog
 
+## SAS Portal Framework for SAS Viya v1.5.0
+
+For more information on the Prompt Builder object please take a look at [SAS Agentic AI Accelerator project](https://github.com/sassoftware/sas-agentic-ai-accelerator).
+
+- Change: The Prompt Builder object now supports the new deploymentType parameter, which enables the differently structured endpoints
+- Change: The Prompt Builder object now manifests prompts so that they can pull the LLM Container Path from an environment variable
+
 ## SAS Portal Framework for SAS Viya v1.4.0
 
 Deprication Warning: The Portal Builder Object will be deprecated in an upcoming release. With the avaialbility of JSON file editing in SAS Studio (since the 2025.06 release) that is the new preferred version and since updating the Portal Builder object is very complex, this object will be deprecated. Note with the next version a warning text will also appear at the top of the object - no new features will be added.

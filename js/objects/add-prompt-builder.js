@@ -984,7 +984,7 @@ async function addPromptBuilderObject(promptBuilderObject, paneID, promptBuilder
             if (deploymentTypeHandling === 'k8s') {
                 llmEndpoint = '{endpoint}/{llm}/{llm}';
             } else if (deploymentTypeHandling === 'aca') {
-                llmEndpoint = 'https://{llm}.{endpoint}/{llm}';
+                llmEndpoint = 'https://{llm.replace("_", "-")}.{endpoint}/{llm}';
             }
             let scoreCode = `import os
 

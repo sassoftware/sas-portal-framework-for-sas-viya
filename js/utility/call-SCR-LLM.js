@@ -34,7 +34,7 @@ async function callSCRLLM(
     if (deploymentType === 'k8s') {
         llmEndpoint = `${SCREndpoint}/${model}/${model}`;
     } else if (deploymentType === 'aca') {
-        llmEndpoint = `https://${llm}.${endpoint}/${llm}`;
+        llmEndpoint = `https://${model}.${endpoint}/${model}`;
     }
 
     const SCRLLMRESPONSE = await fetch(

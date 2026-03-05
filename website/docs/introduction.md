@@ -6,7 +6,7 @@ sidebar_position: 3
 
 On this page we will walk through how the portal works. What are pages and what are objects - and a bunch more.
 
-The structure in SAS Content - the exmaple will follow the provided example SAS Portal setup:
+The structure in SAS Content - the example will follow the provided example SAS Portal setup:
 
 ```
 SAS Content

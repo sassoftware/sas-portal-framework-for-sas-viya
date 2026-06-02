@@ -22,121 +22,80 @@ See the [SAS documentation](https://go.documentation.sas.com/doc/en/bicdc/9.4/va
 
 Changes to the SAS Portal are documented in the [CHANGELOG.md](./CHANGELOG.md).
 
-You will also need a webserver, where you will place the files of this portal. 
-If you run the webserver under the same top level URL as the SAS Viya host, you will not have to change `config.js`.
-If you don't, please see information in the Sample Content & `config.js` section.
+You will need [Node.js](https://nodejs.org/) (v18 or later) installed for building the project.
 
 ### Getting Started
 
-#### CDN Setup
-The default setup provided in this project is done by pulling the dependencies via CDNs. 
-To see what is used see the links below, if you prefer to use your own hosted versions please take a look at the local setup section.
+#### Building the Portal
 
-```html
-<!-- Bootstrap Style -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-
-<!-- Import SAS SDKs and Third-Party Utilities -->
-<script src="https://cdn.developer.sas.com/packages/sas-auth-browser/latest/dist/index.min.js"></script>
-<script src="https://cdn.developer.sas.com/packages/content-components/latest/dist/umd/content-sdk-components.js"></script>
-<script src="https://cdn.developer.sas.com/packages/va-report-components/latest/dist/umd/va-report-components.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-<script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@2/dist/zero-md.min.js"></script>
-```
-
-And if you are making use of the Portal Builder object then you will also need to update */static/portalBuilder.html*:
-
-```html
-<!-- Bootstrap Style -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-
-<!-- Bootstrap SDK -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-```
-
-#### Local Setup
-This setup guide will showcase how to use only local resource and not pull any dependencies dynamically from the web. 
-To download the different SDKs & Third-Party libraries [npm](https://www.npmjs.com/) will be used.
-For setup help for npm please refer to [this guide](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
-
-Download the [SAS Auth Browser](https://github.com/sassoftware/sas-viya-sdk-js/tree/main/sdk/sas-auth-browser) using npm:
+1. Clone the repository and install dependencies:
 
 ```bash
-npm install @sassoftware/sas-auth-browser
-cp -r ./node_modules/@sassoftware/sas-auth-browser ./sdk-assets/auth
+git clone https://github.com/sassoftware/sas-portal-framework-for-sas-viya.git
+cd sas-portal-framework-for-sas-viya
+npm install
 ```
 
-Download the [SAS Content SDK](https://github.com/sassoftware/sas-viya-sdk-js/tree/main/sdk/content-components) using npm:
+2. Configure the portal by editing `src/config.ts`:
+   - Set `viyaHost` to your SAS Viya host URL (only needed if the portal is not hosted under the same URL as the Viya host)
+   - Set `portalFolderUri` to the UUID of your portal content folder
+   - Set `portalName` to the name displayed in the portal navbar
+
+3. Build the portal:
 
 ```bash
-npm install @sassoftware/content-components
-cp -r ./node_modules/@sassoftware/content-components ./sdk-assets/content
+npm run build
 ```
 
-Download the [SAS Visual Analytics SDK](https://github.com/sassoftware/sas-viya-sdk-js/tree/main/sdk/va-report-components) using npm:
+This will type-check, bundle, and create a `sas-portal.zip` file ready for deployment.
+
+#### Deploying the Portal
+
+Unzip `sas-portal.zip` onto your web server. The zip contains all static files needed to run the portal, including the bundled application, CSS, and static assets.
+
+The SAS SDKs (sas-auth-browser, content-components, va-report-components), Bootstrap, and zero-md are loaded via CDN at runtime from within the `index.html`.
+
+#### Development
+
+For local development with hot-reload:
 
 ```bash
-npm install @sassoftware/va-report-components
-cp -r ./node_modules/@sassoftware/va-report-components ./sdk-assets/va-report-components
+npm run dev
 ```
 
-Download [Bootstrap](https://getbootstrap.com/docs/5.3/getting-started/download/) using npm:
-
-```bash
-npm install bootstrap@5.3.0-alpha1
-cp -r ./node_modules/bootstrap/dist/css ./sdk-assets/bootstrap/css
-cp -r ./node_modules/bootstrap/dist/js ./sdk-assets/bootstrap/js
-cp -r ./node_modules/bootstrap/scss ./sdk-assets/bootstrap/scss
-```
-
-Download the [Markdown Renderer](https://github.com/zerodevx/zero-md) using npm - used for Text Objects:
-
-```bash
-npm install zero-md@2
-cp -r ./node_modules/zero-md/dist ./sdk-assets/zero-md
-```
-
-If you have followed all of the download and copying steps detailed above, change the following in the `index.html` page under the comment `Import SAS SDKs` and `Third-Party Utilities`:
-
-```html
-<script src="./sdk-assets/auth/dist/index.js"></script>
-<script src="./sdk-assets/content/dist/umd/content-sdk-components.js"></script>
-<script src="./sdk-assets/va-report-components/dist/umd/va-report-components.js"></script>
-<script src="./sdk-assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script type="module" src="./sdk-assets/zero-md/zero-md.min.js"></script>
-```
-
-And in the `head` element under the comment Bootstrap Style replace the `link` element with the following:
-
-```html
-<link href="./sdk-assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-```
-
-And in `static/portalBuilder.html`, also replace the link element in the `head` element as above. 
-Under `Bootstrap SDK`, replace the script element with:
-
-```html
-<script src="./sdk-assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-```
+Update the proxy targets in `vite.config.ts` to point to your SAS Viya host for API calls during development.
 
 ## Running
 
-### Sample Content and Config.js
+### Sample Content
 If you want to use the sample content, then import the [Portal-Content-EM.json](./Portal-Content-EM.json) and [Content-EM.json](./Content-EM.json) using SAS Environment Manager or the viya-admin CLI. 
 The examples include also static links to SAS Jobs.
 This applies to `Use Case 1/interactiveContent-example.json` where you will need to replace the URL with your Viya host.
 If you replace the file, you will need to update the `portal-page-layout.json` accordingly with the new file URI.
 The `VA Test` page also requires an additional setup: run the `Load-HMEQ.sas` file in `Content/VA Reports`, which will load the hmeq table from sampsio to public.
 
-Go to [config.js](./config.js), search for **VIYA** and replace the value `window.location.origin` with your SAS Viya host if your webserver is not located under the same URL as the Viya host.
+### Configuration
 
-If you imported the sample content you can skip this step, if you created your own portal folder you have to search for **PORTAL** and replace the value `68384628-8305-4285-9f16-0cdc57d13dc5` if the URI of your portal folder (go to the folder in SAS Environment Manager, select it and copy just the URI ID— everything after `/folders/folders/`).
+Edit `src/config.ts` to configure the portal:
+
+```typescript
+export const config: AppConfig = {
+  // SAS Viya host URL - change if your web server is not under the same URL as Viya
+  viyaHost: window.location.origin,
+  // UUID of the portal content folder in SAS Viya
+  portalFolderUri: '68384628-8305-4285-9f16-0cdc57d13dc5',
+  // Name displayed in the portal navbar
+  portalName: 'SAS Portal',
+};
+```
+
+If you imported the sample content you can skip changing the `portalFolderUri`. If you created your own portal folder, replace the value with the URI of your folder (go to the folder in SAS Environment Manager, select it and copy just the URI ID — everything after `/folders/folders/`).
 
 ### Multi-Language Support
 
 The baseline interface comes with native multi language support. 
 The displayed language is determined by the users browsers language. 
-Then a file from the languages folder is loaded. The portal comes with English and German support, if you want to add an additional language just copy the _language/en.json_ file, rename it to the desired lowercase [ISO-639-1 language code](https://en.wikipedia.org/wiki/ISO_639-1) and the translate the values of the attributes.
+Then a file from the languages folder is loaded. The portal comes with English and German support, if you want to add an additional language just copy the `public/language/en.json` file, rename it to the desired lowercase [ISO-639-1 language code](https://en.wikipedia.org/wiki/ISO_639-1) and then translate the values of the attributes.
 
 ## Contributing
 Maintainers are accepting patches and contributions to this project.

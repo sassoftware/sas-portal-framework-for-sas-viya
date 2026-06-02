@@ -12,7 +12,6 @@ The structure in SAS Content - the example will follow the provided example SAS 
 SAS Content
   - Public
     - Portal <- The entry point for the SAS Portal
-      - Build Portal <- Folder = Page
       - MAS Tester <- Folder = Page
       - Use Case 1 <- Folder = Page
       - VA Test <- Folder = Page
@@ -50,7 +49,7 @@ And then we see three json files in there which correspond to an object on the p
 
 ## Deep Dive on the portal-page-layout.json
 
-In this section we will walkthrough the **portal-page-layout.json** and explain of its different attributes. Please note that while you can create these files by hand, the Portal Builder object can also build them for you.
+In this section we will walkthrough the **portal-page-layout.json** and explain of its different attributes. You can create and edit these JSON files directly in SAS Studio.
 
 Here is the general structure of the **portal-page-layout.json** - based on the VA Test example page:
 ```json

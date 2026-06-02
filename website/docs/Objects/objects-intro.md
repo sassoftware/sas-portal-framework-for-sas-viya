@@ -8,7 +8,7 @@ Objects are the heart and sould of the SAS Portal. Each object type enables diff
 
 This page explains the attributes that are shared by all object types, so that each object type page can focus only on the additional attributes.
 
-While you can write this objects by hand, you can also use the Portal Builder object, which enables you to build this objects in a visual way directly from within the portal.
+You can create and edit these object JSON files directly in SAS Studio.
 
 ## Shared Attributes
 

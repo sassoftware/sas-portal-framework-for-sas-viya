@@ -22,11 +22,17 @@ See the [SAS documentation](https://go.documentation.sas.com/doc/en/bicdc/9.4/va
 
 Changes to the SAS Portal are documented in the [CHANGELOG.md](./CHANGELOG.md).
 
-You will need [Node.js](https://nodejs.org/) (v18 or later) installed for building the project.
+You will need [Node.js](https://nodejs.org/) (v18 or later) to build the portal from source. This is **not** required if you deploy a prebuilt release (see below).
 
 ### Getting Started
 
-#### Building the Portal
+#### Download a Prebuilt Release (no build required)
+
+Each tagged version publishes a ready-to-deploy `sas-portal.zip` on the [Releases page](https://github.com/sassoftware/sas-portal-framework-for-sas-viya/releases). Download the latest `sas-portal.zip` and unzip it onto your web server (see [Deploying the Portal](#deploying-the-portal)) — no Node.js or build step required.
+
+> **Note:** the prebuilt bundle is built with the default `src/config.ts`, meaning `viyaHost` is `window.location.origin` (the portal must be served under the same top-level URL as your SAS Viya host) and `portalFolderUri` points at the sample content folder. If your web server runs on a different URL than Viya, or you use your own portal folder, [build from source](#building-from-source) instead so your configuration is baked into the bundle.
+
+#### Building from Source
 
 1. Clone the repository and install dependencies:
 

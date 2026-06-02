@@ -12,9 +12,16 @@ A walkthrough of the main steps of the setups are also detailed in this YouTube 
 
 You can have multiple SAS Portals for one SAS Viya environment, in order to do that you will just have to build the portal with different configurations and deploy them into different folders on your webserver, each with their own base folder in SAS Content.
 
+## Getting the Portal Bundle
+
+There are two ways to obtain the deployable `sas-portal.zip`:
+
+1. **Download a prebuilt release (no build required).** Each tagged version publishes a ready-to-deploy `sas-portal.zip` on the [Releases page](https://github.com/sassoftware/sas-portal-framework-for-sas-viya/releases). Download the latest one and continue at the [Webserver](#webserver) step. This is the quickest option, but the bundle is built with the default configuration — `viyaHost` is `window.location.origin` and `portalFolderUri` points at the sample content folder — so it works as-is only when the portal is served under the same top-level URL as your SAS Viya host and you use the sample content folder. To customize either, build from source instead.
+2. **Build from source.** Bake your own configuration into the bundle by following the steps below.
+
 ## Prerequisites
 
-You will need [Node.js](https://nodejs.org/) (v18 or later) installed to build the project.
+You will need [Node.js](https://nodejs.org/) (v18 or later) to build the portal from source. This is not required if you deploy a prebuilt release.
 
 ## Building the Portal
 

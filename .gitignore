@@ -17,5 +17,5 @@ Thumbs.db
 .env
 .env.local
 
-# Test Documentation Artifacts
-docs/
+# Test Documentation Artifacts (root-level only; must not match website/docs)
+/docs/

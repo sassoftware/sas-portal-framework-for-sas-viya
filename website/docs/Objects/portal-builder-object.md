@@ -2,19 +2,12 @@
 sidebar_position: 14
 ---
 
-# Portal Builder
+# Portal Builder (Removed)
 
-**NOTE:** This object is considered deprecated starting with version 1.4.0, is no longer supported and will be removed in the future.
+The Portal Builder object was deprecated in v1.4.0 and has been removed in v2.0.0.
 
-The Portal Builder is a very special element that allows the user to edit the structure of the portal. This is a tool meant for developers and administrators of a portal to develop and enhance it. Please ensure that the access rights for this application are set correctly and also that the developers can write to the necessary folder in SAS Content.
+With the availability of JSON file editing in SAS Studio (since the 2025.06 release), you can create and edit portal page layouts and object definitions directly in SAS Studio. This is the recommended approach going forward.
 
-In order to create a Portal Builder object you have to set the objects type to *portalBuilder*, there are no additional attributes, but the width has to be 0 - example:
-```json
-{
-    "name": "Display Name",
-    "id": "Object ID",
-    "width": 0,
-    "objectBorder": false,
-    "type": "portalBuilder",
-}
-```
+For details on how to structure your JSON files, see the [Introduction](../introduction) page and the individual object type documentation pages.
+
+There is an example for each object type on the objects page. And you can find instruction on how to create new pages, new objects and the page order in the [Editing the Portal Content](../editing-content).

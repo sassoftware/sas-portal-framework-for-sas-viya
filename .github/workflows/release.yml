@@ -1,0 +1,41 @@
+name: Release Portal Bundle
+
+# Builds the portal and publishes a GitHub Release whenever a semver tag
+# (e.g. v2.0.0) is pushed. The built sas-portal.zip is attached as an asset.
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - run: npm ci
+
+      - name: Build portal
+        run: npm run build
+
+      - name: Publish release with portal bundle
+        uses: softprops/action-gh-release@v2
+        with:
+          files: sas-portal.zip
+          generate_release_notes: true
+          append_body: true
+          body: |
+            Built portal bundle for `${{ github.ref_name }}`.
+
+            Unzip `sas-portal.zip` onto your web server (TLS required). See
+            [CHANGELOG.md](./CHANGELOG.md) for the changes in this release and
+            [setup.md](./website/docs/setup.md) for deployment details.

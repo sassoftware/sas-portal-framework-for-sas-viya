@@ -10,17 +10,59 @@ The guide requires someone that can provide a web-server and someone with the as
 
 A walkthrough of the main steps of the setups are also detailed in this YouTube video: [SAS Portal Framework for SAS Viya - Open Source Project Overview](https://youtu.be/ZifDM_n20p0).
 
-You can have multiple SAS Portals for one SAS Viya environment, in order to do that you will just have to clone this repository into different folders on your webserver and then create different base folders for the SAS Portal.
+While you will only have to do the setup once per environment, you might want to have multiple SAS Portals on the same SAS Viya environment. If that is the case then you will just need to copy the `sas-portal.zip` file into another directory on the webserver and change the `src/config.ts` values for the portalFolderUri and optionally also the portalName.
 
-## Webserver
+## Getting the Portal Bundle
 
-You will need webserver, where you clone the portal to. You can use an Apache HTTP Web Server for this - see the example YAML to deploy it on kubernetes below.
+There are two ways to obtain the deployable `sas-portal.zip`:
 
-If you run the webserver under the same top level URL as the SAS Viya host, you will not have to change `config.js`. If you don't, please see information in the Sample Content & `config.js` section.
+1. **Download a prebuilt release (no build required).** Each tagged version publishes a ready-to-deploy `sas-portal.zip` on the [Releases page](https://github.com/sassoftware/sas-portal-framework-for-sas-viya/releases). Download the latest one and continue at the [Webserver](#webserver) step. This is the quickest option, but the bundle is built with the default configuration — `viyaHost` is `window.location.origin` and `portalFolderUri` points at the sample content folder — so it works as-is only when the portal is served under the same top-level URL as your SAS Viya host and you use the sample content folder. To customize either, build from source instead.
+2. **Build from source.** Bake your own configuration into the bundle by following the steps below.
+
+### Build From Source
+
+Please note this is optional and you can skip ahead to the [Deploy to a Webserver](#webserver) section if you are downloading the prebuild release via the [Releases page](https://github.com/sassoftware/sas-portal-framework-for-sas-viya/releases).
+
+#### Prerequisites
+
+You will need [Node.js](https://nodejs.org/) (v18 or later) to build the portal from source.
+
+#### Building the Portal
+
+1. Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/sassoftware/sas-portal-framework-for-sas-viya.git
+cd sas-portal-framework-for-sas-viya
+npm install
+```
+
+2. Configure the portal by editing `src/config.ts`:
+   - Set `viyaHost` to your SAS Viya host URL (only needed if the portal is not hosted under the same URL as the Viya host)
+   - Set `portalFolderUri` to the UUID of your portal content folder
+   - Set `portalName` to the name displayed in the portal navbar
+
+3. Build the portal:
+
+```bash
+npm run build
+```
+
+This will type-check, bundle, and create a `sas-portal.zip` file ready for deployment.
+
+## Deploy to a Webserver {#webserver}
+
+You will need a webserver where you deploy the built portal. You can use an Apache HTTP Web Server for this - see the example YAML to deploy it on kubernetes below.
+
+Unzip the `sas-portal.zip` onto your web server. The zip contains all static files needed to run the portal, including the bundled application, CSS, and static assets.
+
+If you run the webserver under the same top level URL as the SAS Viya host, you will not have to change `src/config.ts`. If you don't, please see information in the [Sample Content & Configuration](#sampleContent) section.
 
 Please note your webserver needs to have TLS configured, because SAS Viya will not accepts non-HTTPS request for authentication & authorization requests.
 
-When you have setup your webserver go ahead and clone this repository on it and share the URL with the SAS Administrator.
+### Example YAML for Deployment
+
+In order to make use of this example YAML you will have to overwrite the `<>` values.
 
 ```yaml
 apiVersion: apps/v1
@@ -75,7 +117,7 @@ spec:
   tls:
   - hosts:
     - <YOUR_HOST_URL>
-    secretName: webserver-tls-certs
+    secretName: <TLS-SECRET>
   rules:
     - host: <YOUR_HOST_URL>
       http:
@@ -91,20 +133,32 @@ spec:
 
 ## Setup in SAS Environment Manager
 
-As the next step you will have to follow the setup instructions detailed in the SAS Visual Analytics SDK and SAS Content SDK documentation:
-- [SAS Visual Analytics SDK documentation](https://developer.sas.com/sdk/va/docs/guides/viya-setup/)
-- [SAS Content SDK documentation](https://developer.sas.com/sdk/content/docs/getting-started/#sas-viya-setup)
+Next a SAS Administrator will have to perform the [SAS Viya Platform Setup](https://developer.sas.com/sdk/js/getting-started#sas-viya-platform-setup) as described in the SAS Viya SDK documentation.
 
-## Sample Content and Config.js
-If you want to use the sample content, then import the `Portal-Content-EM.json` and `Content-EM.json` using SAS Environment Manager or the viya-admin CLI. 
+## Sample Content and Configuration {#sampleContent}
+If you want to use the sample content, then import the `Portal-Content-EM.json` and `Content-EM.json` using the [Import page of SAS Environment Manager](https://go.documentation.sas.com/doc/en/sasadmincdc/default/evfun/n1oxqn63ad7o64n1hsh6xtxfnq2p.htm) or using the [transfer plugin of the SAS Viya CLI](https://go.documentation.sas.com/doc/en/sasadmincdc/default/calpromotion/n0u4qkc837891vn1w8pd2rbqaxzb.htm).
+
 The examples include also static links to SAS Jobs.
 This applies to `Use Case 1/interactiveContent-example.json` where you will need to replace the URL with your Viya host.
 If you replace the file, you will need to update the `portal-page-layout.json` accordingly with the new file URI.
-The `VA Test` page also requires an additional setup: run the `Load-HMEQ.sas` file in `Content/VA Reports`, which will load the hmeq table from sampsio to public.
+The `VA Test` page also requires an additional setup: run the `Load-HMEQ.sas` file in `Content/VA Reports`, which will load the hmeq table from the built-in sampsio to the CAS Public library.
 
-Go to `config.js`, search for **VIYA** and replace the value `window.location.origin` with your SAS Viya host if your webserver is not located under the same URL as the Viya host.
+Edit `src/config.ts` to configure the portal:
 
-If you imported the sample content you can skip this step, if you created your own portal folder you have to search for **PORTAL** and replace the value `68384628-8305-4285-9f16-0cdc57d13dc5` if the URI of your portal folder (go to the folder in SAS Environment Manager, select it and copy just the URI ID— everything after `/folders/folders/`).
+```typescript
+export const config: AppConfig = {
+  // SAS Viya host URL - change if your web server is not under the same URL as Viya
+  viyaHost: window.location.origin,
+  // UUID of the portal content folder in SAS Viya
+  portalFolderUri: '68384628-8305-4285-9f16-0cdc57d13dc5',
+  // Name displayed in the portal navbar
+  portalName: 'SAS Portal',
+};
+```
+
+If you imported the sample content you can skip changing the `portalFolderUri`. If you created your own portal folder, replace the value with the URI of your folder (go to the folder in SAS Environment Manager, select it and copy just the URI ID — everything after `/folders/folders/`).
+
+After changing the configuration, rebuild the portal with `npm run build` and redeploy the resulting `sas-portal.zip`.
 
 Now the SAS Portal is ready to be used - the two following topics are fully optional.
 
@@ -115,10 +169,11 @@ See the [SAS documentation](https://go.documentation.sas.com/doc/en/bicdc/9.4/va
 
 The two types of content that are supported from SAS 9.4 are Stored Processes (STP) and Web Report Studio Reports (WRS Reports) in the View only mode. The integration is done using the Interactive-Content object.
 
-## Pull dependencies using CDNs or from a local copy
+## CDN Dependencies
 
-The default setup provided in this project is done by pulling the dependencies via CDNs. 
-To see what is used see the links below, if you prefer to use your own hosted versions please take a look at the local setup section.
+The SAS SDKs and some third-party libraries are loaded via CDN at runtime from within the built `index.html`. The bundled application code and CSS are included in the build output.
+
+The following CDN resources are used:
 
 ```html
 <!-- Bootstrap Style -->
@@ -132,77 +187,4 @@ To see what is used see the links below, if you prefer to use your own hosted ve
 <script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@2/dist/zero-md.min.js"></script>
 ```
 
-And if you are making use of the Portal Builder object then you will also need to update */static/portalBuilder.html*:
-
-```html
-<!-- Bootstrap Style -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-
-<!-- Bootstrap SDK -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-```
-
-### Local Setup
-This setup guide will showcase how to use only local resource and not pull any dependencies dynamically from the web. 
-To download the different SDKs & Third-Party libraries [npm](https://www.npmjs.com/) will be used.
-For setup help for npm please refer to [this guide](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
-
-Download the [SAS Auth Browser](https://github.com/sassoftware/sas-viya-sdk-js/tree/main/sdk/sas-auth-browser) using npm:
-
-```bash
-npm install @sassoftware/sas-auth-browser
-cp -r ./node_modules/@sassoftware/sas-auth-browser ./sdk-assets/auth
-```
-
-Download the [SAS Content SDK](https://github.com/sassoftware/sas-viya-sdk-js/tree/main/sdk/content-components) using npm:
-
-```bash
-npm install @sassoftware/content-components
-cp -r ./node_modules/@sassoftware/content-components ./sdk-assets/content
-```
-
-Download the [SAS Visual Analytics SDK](https://github.com/sassoftware/sas-viya-sdk-js/tree/main/sdk/va-report-components) using npm:
-
-```bash
-npm install @sassoftware/va-report-components
-cp -r ./node_modules/@sassoftware/va-report-components ./sdk-assets/va-report-components
-```
-
-Download [Bootstrap](https://getbootstrap.com/docs/5.3/getting-started/download/) using npm:
-
-```bash
-npm install bootstrap@5.3.0-alpha1
-cp -r ./node_modules/bootstrap/dist/css ./sdk-assets/bootstrap/css
-cp -r ./node_modules/bootstrap/dist/js ./sdk-assets/bootstrap/js
-cp -r ./node_modules/bootstrap/scss ./sdk-assets/bootstrap/scss
-```
-
-Download the [Markdown Renderer](https://github.com/zerodevx/zero-md) using npm - used for Text Objects:
-
-```bash
-npm install zero-md@2
-cp -r ./node_modules/zero-md/dist ./sdk-assets/zero-md
-```
-
-If you have followed all of the download and copying steps detailed above, change the following in the `index.html` page under the comment `Import SAS SDKs` and `Third-Party Utilities`:
-
-```html
-<script src="./sdk-assets/auth/dist/index.js"></script>
-<script src="./sdk-assets/content/dist/umd/content-sdk-components.js"></script>
-<script src="./sdk-assets/va-report-components/dist/umd/va-report-components.js"></script>
-<script src="./sdk-assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script type="module" src="./sdk-assets/zero-md/zero-md.min.js"></script>
-```
-
-And in the `head` element under the comment Bootstrap Style replace the `link` element with the following:
-
-```html
-<link href="./sdk-assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-```
-
-And in `static/portalBuilder.html`, also replace the link element in the `head` element as above. 
-Under `Bootstrap SDK`, replace the script element with:
-
-```html
-<script src="./sdk-assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-```
+If you need to self-host these dependencies (e.g., for air-gapped environments), download them and update the `<script>` and `<link>` tags in the built `index.html` to point to your local copies. Please note that the SAS Visual Analytics SDK is updated every stable cadence of SAS Viya and if you update your SAS Viya environment than you have to also update the resource here.

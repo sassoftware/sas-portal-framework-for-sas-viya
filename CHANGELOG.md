@@ -1,5 +1,28 @@
 # Changelog
 
+## SAS Portal Framework for SAS Viya v2.0.0
+
+- Change: Full rewrite from vanilla JavaScript to TypeScript with ES modules
+- Change: Added Vite build pipeline with production bundling and zip output
+- Change: Centralized HTTP client with automatic CSRF token handling (replaces duplicated logic across 24 files)
+- Change: Replaced global variables (`window.VIYA`, `document.csrfToken`, etc.) with typed AppState singleton
+- Change: Consolidated 62 utility files into 12 cohesive API modules
+- Change: Replaced object type switch statement with extensible object type registry
+- Change: Added full type definitions for all SAS Viya API interactions
+- Remove: Portal Builder object (deprecated in v1.4.0, use JSON file editing in SAS Studio instead)
+- Security: HTML-escape all author/user-supplied values rendered via innerHTML in the Data Product Marketplace and the Prompt Builder experiment tracker, and sanitize link URLs (block `javascript:` schemes) — closes stored-XSS vectors
+- Security: Render the LLM response in the Prompt Builder via the DOM/textContent so a response containing `</script>` can no longer break out of the zero-md block
+- Security: Replace `eval()` of definition-supplied code in the Run Custom Code object with an isolated `Function` scope
+- Fix: Restore SCR scoring — inputs now render, submitted values are read correctly, and scored results are appended (broken by the v2 accordion/table redesign)
+- Fix: Restore number-typing, labels, and the input field-name mapping in the shared accordion input renderer (affected SCR and MAS scoring)
+- Fix: Restore the full DS2 reserved-word list and the empty-name fallback in the variable/package-name validators
+- Fix: Correct the RAG Builder generated config to read `SERVER_PORT`/`SERVER_USER`/`SERVER_PW` (was reading `SERVER_HOST` for all three, breaking SingleStore/pgVector auth)
+- Fix: HTTP JSON helpers now throw on non-OK responses instead of parsing error bodies as success
+- Fix: One failing object no longer blanks the rest of a portal page (per-object error isolation in the page generator)
+- Fix: Data Product Marketplace checkout button is correctly disabled for an empty cart; the Registry no longer mis-deletes on an unmatched edit and awaits its saves
+- Fix: Prompt Builder experiment data is kept per object instance instead of on a shared `window` global
+- Change: Centralized the `escapeHtml`/`sanitizeUrl` helpers and the ambient Bootstrap typing; removed dead code (legacy `js/`, `config.js`, duplicated assets, the removed Portal Builder artifact, unused `bootstrap` dependency) and stray debug logging
+
 ## SAS Portal Framework for SAS Viya v1.5.0
 
 For more information on the Prompt Builder object please take a look at [SAS Agentic AI Accelerator project](https://github.com/sassoftware/sas-agentic-ai-accelerator).

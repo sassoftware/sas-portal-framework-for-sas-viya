@@ -19,7 +19,6 @@ const config: Config = {
   projectName: "sas-portal-framework-for-sas-viya", // Usually your repo name.
 
   onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "throw",
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -88,10 +87,15 @@ const config: Config = {
     },
   } satisfies Preset.ThemeConfig,
 
-  // uncomment below for mermaid support
-  // markdown: {
-  //   mermaid: true,
-  // },
+  markdown: {
+    hooks: {
+      // Moved from the deprecated top-level siteConfig.onBrokenMarkdownLinks
+      // (removed in Docusaurus v4).
+      onBrokenMarkdownLinks: "throw",
+    },
+    // uncomment below for mermaid support
+    // mermaid: true,
+  },
 
   themes: [
     [

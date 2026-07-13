@@ -1,5 +1,11 @@
 # Changelog
 
+## SAS Portal Framework for SAS Viya v2.0.1
+
+- Fix: Commit the docs page `website/docs/editing-content.md`, which an over-broad root `.gitignore` rule (`docs/`) had silently excluded — its absence broke the `../editing-content` link and failed the GitHub Pages build. The rule is now anchored to `/docs/` so it no longer matches `website/docs/`.
+- Change: Migrate the deprecated top-level `onBrokenMarkdownLinks` Docusaurus option to `markdown.hooks.onBrokenMarkdownLinks` (removed in Docusaurus v4).
+- Security: Resolve all Dependabot alerts in build/dev-time dependencies — bump Vite to 8.x (pulling in patched esbuild and PostCSS) and pin `serialize-javascript` (>=7.0.7) and `uuid` (>=14) in the docs toolchain via overrides. No change to the shipped portal bundle.
+
 ## SAS Portal Framework for SAS Viya v2.0.0
 
 - Change: Full rewrite from vanilla JavaScript to TypeScript with ES modules

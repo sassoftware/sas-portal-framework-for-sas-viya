@@ -24,7 +24,7 @@ Here we will look at the general setup and authroization around pages, the next 
 
 Now from an authorization perspective the user requires read access to the **Portal** folder. Folders within this **Portal** folder are containing the definition of a page within the SAS Portal - so Folder equals Page.
 
-If you want to restrict the access to a page in the SAS Portal to a certain group, than you just have to apply a corresponding rule to the folder within SAS Content.
+If you want to restrict the access to a page in the SAS Portal to a certain group, than you just have to apply a corresponding authorization rule to the folder within SAS Content.
 
 The **portal-layout.json** is a file that the portal looks for to order the pages in a specific order. If this file is not available than the pages will be displayed in alpabetical order of the folders in SAS Content. If a user is not allowed to see a page that is listed in the order than that page is just skipped, now error will be displayed to the user.
 
@@ -59,7 +59,7 @@ Here is the general structure of the **portal-page-layout.json** - based on the 
         "shorthand": "VAT", 
         "visible": true,
         "numCols": 1,
-        "contact": "david.weik@sas.com"
+        "contact": "contact-mail-address"
     },
     "objects": [
         {
@@ -90,3 +90,5 @@ The **object** section defines the order that objects are displayed on the page.
 - **uri**, here you have to specify the full */files/files/uuid* of the object to be displayed.
 
 Technically speaking the **object** section is optional, but this would than create just a blank page.
+
+On the next page we will discuss how new objects can be added and how to structure that - also how to edit the page order and more in detail.

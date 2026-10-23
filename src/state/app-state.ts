@@ -7,6 +7,7 @@ export interface AppConfig {
   viyaHost: string;
   portalFolderUri: string;
   portalName: string;
+  showViyaLink: boolean;
 }
 
 export interface AppState {

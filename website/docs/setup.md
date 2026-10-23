@@ -41,6 +41,7 @@ npm install
    - Set `viyaHost` to your SAS Viya host URL (only needed if the portal is not hosted under the same URL as the Viya host)
    - Set `portalFolderUri` to the UUID of your portal content folder
    - Set `portalName` to the name displayed in the portal navbar
+   - Set `showViyaLink` to `false` to hide the "Go to SAS Viya" link in the header
 
 3. Build the portal:
 
@@ -153,6 +154,8 @@ export const config: AppConfig = {
   portalFolderUri: '68384628-8305-4285-9f16-0cdc57d13dc5',
   // Name displayed in the portal navbar
   portalName: 'SAS Portal',
+  // Show the "Go to SAS Viya" link in the header
+  showViyaLink: true,
 };
 ```
 

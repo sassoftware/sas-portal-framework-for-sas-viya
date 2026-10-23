@@ -12,4 +12,6 @@ export const config: AppConfig = {
   portalFolderUri: '68384628-8305-4285-9f16-0cdc57d13dc5',
   // Name that appears in the top left of the portal
   portalName: 'SAS Portal',
+  // Show the "Go to SAS Viya" link in the header
+  showViyaLink: true,
 };

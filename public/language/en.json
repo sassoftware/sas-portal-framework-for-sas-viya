@@ -263,7 +263,8 @@
     "reportNotSelectedText": "No report selected"
   },
   "sasContentJob": {
-    "noJobSelectedText": "No job selected"
+    "noJobSelectedText": "No job selected",
+    "refreshButton": "Refresh"
   },
   "jobDefinition": {
     "loadingText": "Loading job definition...",
@@ -272,6 +273,7 @@
     "noPromptText": "This job definition does not have a renderable prompt.",
     "parseError": "Unable to parse the job definition prompt.",
     "runButton": "Run",
+    "resetButton": "Reset",
     "showLogCheckbox": "Show SAS Log",
     "submittingStatus": "Submitting job...",
     "runningSpinner": "Running job, please wait...",

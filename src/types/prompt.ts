@@ -128,6 +128,8 @@ export interface LibraryInfo {
 export interface PromptState {
   values: Record<string, unknown>;
   sessionId: string | null;
+  /** In-flight session creation, shared so concurrent callers start only one session */
+  sessionPromise: Promise<string> | null;
   contextName: string;
   libraries: string[] | null;
   tableCache: Map<string, string[]>;

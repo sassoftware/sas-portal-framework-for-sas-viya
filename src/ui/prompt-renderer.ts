@@ -71,8 +71,9 @@ function createPromptState(
   i18n: Record<string, string>
 ): PromptState {
   return {
-    values: { ...(prompt.values ?? {}) },
+    values: structuredClone(prompt.values ?? {}),
     sessionId: null,
+    sessionPromise: null,
     contextName,
     libraries: null,
     tableCache: new Map(),
@@ -84,24 +85,44 @@ function createPromptState(
 }
 
 /**
- * Lazily create a compute session. Returns the session ID.
+ * Resolve a compute context by name and start a session in it. Returns the session ID.
  */
-export async function ensureSession(state: PromptState): Promise<string> {
-  if (state.sessionId) return state.sessionId;
-
-  console.log(`[promptRenderer] Resolving compute context: ${state.contextName}`);
+export async function createContextSession(contextName: string): Promise<string> {
+  console.log(`[promptRenderer] Resolving compute context: ${contextName}`);
   const contexts = await getComputeContexts(
-    `eq(name,'${state.contextName}')`
+    `eq(name,'${contextName}')`
   );
   if (!contexts.length) {
-    throw new Error(`Compute context '${state.contextName}' not found`);
+    throw new Error(`Compute context '${contextName}' not found`);
   }
 
   const contextId = contexts[0].id;
   console.log(`[promptRenderer] Creating session for context ${contextId}`);
-  state.sessionId = await createSASSession(contextId, 'portal-prompt-session');
-  console.log(`[promptRenderer] Session created: ${state.sessionId}`);
-  return state.sessionId;
+  const sessionId = await createSASSession(contextId, 'portal-prompt-session');
+  console.log(`[promptRenderer] Session created: ${sessionId}`);
+  return sessionId;
+}
+
+/**
+ * Lazily create a compute session. Returns the session ID.
+ * Concurrent callers share the in-flight creation, so only one session is started.
+ */
+export function ensureSession(state: PromptState): Promise<string> {
+  if (state.sessionId) return Promise.resolve(state.sessionId);
+
+  if (!state.sessionPromise) {
+    state.sessionPromise = createContextSession(state.contextName).then(
+      (sessionId) => {
+        state.sessionId = sessionId;
+        return sessionId;
+      },
+      (e) => {
+        state.sessionPromise = null;
+        throw e;
+      }
+    );
+  }
+  return state.sessionPromise;
 }
 
 /**
@@ -221,6 +242,58 @@ function renderPageContent(
   }
 
   return container;
+}
+
+/**
+ * Render all pages of a prompt — directly for a single page, as Bootstrap tabs otherwise.
+ */
+function renderPages(
+  prompt: PromptDefinition,
+  state: PromptState
+): HTMLElement[] {
+  if (prompt.pages.length === 1) {
+    return [renderPageContent(prompt.pages[0], state)];
+  }
+
+  const navTabs = document.createElement('ul');
+  navTabs.className = 'nav nav-tabs';
+  navTabs.setAttribute('role', 'tablist');
+
+  const tabContent = document.createElement('div');
+  tabContent.className = 'tab-content';
+
+  for (let i = 0; i < prompt.pages.length; i++) {
+    const page = prompt.pages[i];
+    const isActive = i === 0;
+    const tabId = `prompt-tab-${page.id}`;
+    const paneId = `prompt-pane-${page.id}`;
+
+    // Tab header
+    const li = document.createElement('li');
+    li.className = 'nav-item';
+    li.setAttribute('role', 'presentation');
+
+    const button = document.createElement('button');
+    button.className = isActive ? 'nav-link active' : 'nav-link';
+    button.id = tabId;
+    button.setAttribute('data-bs-toggle', 'tab');
+    button.setAttribute('data-bs-target', `#${paneId}`);
+    button.setAttribute('type', 'button');
+    button.setAttribute('role', 'tab');
+    button.textContent = page.label;
+    li.appendChild(button);
+    navTabs.appendChild(li);
+
+    // Tab pane
+    const pane = document.createElement('div');
+    pane.className = isActive ? 'tab-pane fade show active' : 'tab-pane fade';
+    pane.id = paneId;
+    pane.setAttribute('role', 'tabpanel');
+    pane.appendChild(renderPageContent(page, state));
+    tabContent.appendChild(pane);
+  }
+
+  return [navTabs, tabContent];
 }
 
 /**
@@ -377,11 +450,9 @@ function validateRequired(state: PromptState): string[] {
 
 /** Options for renderPromptForm */
 export interface RenderPromptFormOptions {
-  /** Pre-existing session to reuse (skips creating a new one) */
-  existingSessionId?: string;
-  /** If true, the caller owns the session — renderPromptForm won't register
-   *  a beforeunload cleanup and won't terminate the session on cleanup(). */
-  externalSession?: boolean;
+  /** Session owned by the caller, resolving to its ID. When set, renderPromptForm
+   *  uses it instead of creating one, doesn't keep it alive, and never terminates it. */
+  externalSession?: Promise<string>;
 }
 
 /** Result returned by renderPromptForm */
@@ -390,6 +461,46 @@ export interface RenderPromptFormResult {
   state: PromptState;
   /** Tears down the keepalive timer and (unless externalSession) the session. */
   cleanup: () => void;
+}
+
+/**
+ * Render a job in a SAS Job Execution iframe (HTML form or XML prompt) with a
+ * Reset button that reloads it. Without a height the iframe fills its container.
+ */
+export function renderJobIframe(
+  src: string,
+  i18n: Record<string, string>,
+  height?: string
+): HTMLElement {
+  const wrapper = document.createElement('div');
+
+  const toolbar = document.createElement('div');
+  toolbar.className = 'mb-2';
+  const resetButton = document.createElement('button');
+  resetButton.type = 'button';
+  resetButton.className = 'btn btn-outline-secondary btn-sm';
+  resetButton.textContent = i18n.resetButton ?? 'Reset';
+  toolbar.appendChild(resetButton);
+  wrapper.appendChild(toolbar);
+
+  const iframe = document.createElement('iframe');
+  iframe.src = src;
+  iframe.style.width = '100%';
+  iframe.style.border = 'none';
+  if (height) {
+    iframe.style.height = height;
+  } else {
+    wrapper.className = 'd-flex flex-column h-100';
+    iframe.style.flex = '1 1 auto';
+  }
+  wrapper.appendChild(iframe);
+
+  // Re-assigning the src reloads the form with its default values
+  resetButton.addEventListener('click', () => {
+    iframe.src = src;
+  });
+
+  return wrapper;
 }
 
 /**
@@ -429,9 +540,12 @@ export async function renderPromptForm(
   const contextName = getContextName(jobDef);
   const state = createPromptState(prompt, contextName, i18n);
 
-  // If a pre-existing session is provided, inject it into state
-  if (options.existingSessionId) {
-    state.sessionId = options.existingSessionId;
+  // If the caller owns the session, use it instead of creating one
+  if (options.externalSession) {
+    state.sessionPromise = options.externalSession.then((sessionId) => {
+      state.sessionId = sessionId;
+      return sessionId;
+    });
   }
 
   // Session status indicator (above the form)
@@ -444,16 +558,28 @@ export async function renderPromptForm(
 
   // Session cleanup and keepalive teardown
   let keepaliveTimer: ReturnType<typeof setInterval> | null = null;
+  let disposed = false;
   const cleanupHandler = () => {
+    disposed = true;
     if (keepaliveTimer) {
       clearInterval(keepaliveTimer);
       keepaliveTimer = null;
     }
-    if (!options.externalSession && state.sessionId) {
-      console.log(`[promptRenderer] Cleaning up session: ${state.sessionId}`);
-      terminateSASSession(state.sessionId);
-      state.sessionId = null;
+    if (!options.externalSession) {
+      window.removeEventListener('beforeunload', cleanupHandler);
+      if (state.sessionId) {
+        console.log(`[promptRenderer] Cleaning up session: ${state.sessionId}`);
+        terminateSASSession(state.sessionId);
+      } else if (state.sessionPromise) {
+        // The session is still being created — terminate it once it exists
+        state.sessionPromise.then((sessionId) => terminateSASSession(sessionId)).catch(() => {});
+      }
     }
+    // Controls still loading must not start a new session for a discarded form
+    const closed = Promise.reject(new Error('Prompt form was closed'));
+    closed.catch(() => {});
+    state.sessionId = null;
+    state.sessionPromise = closed;
   };
 
   if (!options.externalSession) {
@@ -463,9 +589,12 @@ export async function renderPromptForm(
   // Start the compute session eagerly so it's ready when the user clicks Run
   ensureSession(state)
     .then(() => {
+      if (disposed) return;
       sessionIndicator.innerHTML =
         `<span class="text-success">&#9679;</span>` +
         `<span>${i18n.sessionReady ?? 'Compute session ready'}</span>`;
+      // An external session is kept alive by its owner
+      if (options.externalSession) return;
       // Start keepalive — ping the session every 60 seconds to prevent idle timeout
       keepaliveTimer = setInterval(() => {
         if (state.sessionId) {
@@ -476,6 +605,7 @@ export async function renderPromptForm(
       }, 60_000);
     })
     .catch((e) => {
+      if (disposed) return;
       console.log('[promptRenderer] Eager session creation failed:', e);
       sessionIndicator.innerHTML =
         `<span class="text-danger">&#9679;</span>` +
@@ -483,53 +613,7 @@ export async function renderPromptForm(
     });
 
   // Render pages
-  if (prompt.pages.length === 1) {
-    // Single page — render directly without tabs
-    form.appendChild(renderPageContent(prompt.pages[0], state));
-  } else {
-    // Multiple pages — render as Bootstrap tabs
-    const navTabs = document.createElement('ul');
-    navTabs.className = 'nav nav-tabs';
-    navTabs.setAttribute('role', 'tablist');
-
-    const tabContent = document.createElement('div');
-    tabContent.className = 'tab-content';
-
-    for (let i = 0; i < prompt.pages.length; i++) {
-      const page = prompt.pages[i];
-      const isActive = i === 0;
-      const tabId = `prompt-tab-${page.id}`;
-      const paneId = `prompt-pane-${page.id}`;
-
-      // Tab header
-      const li = document.createElement('li');
-      li.className = 'nav-item';
-      li.setAttribute('role', 'presentation');
-
-      const button = document.createElement('button');
-      button.className = isActive ? 'nav-link active' : 'nav-link';
-      button.id = tabId;
-      button.setAttribute('data-bs-toggle', 'tab');
-      button.setAttribute('data-bs-target', `#${paneId}`);
-      button.setAttribute('type', 'button');
-      button.setAttribute('role', 'tab');
-      button.textContent = page.label;
-      li.appendChild(button);
-      navTabs.appendChild(li);
-
-      // Tab pane
-      const pane = document.createElement('div');
-      pane.className = isActive ? 'tab-pane fade show active' : 'tab-pane fade';
-      pane.id = paneId;
-      pane.setAttribute('role', 'tabpanel');
-      pane.appendChild(renderPageContent(page, state));
-      tabContent.appendChild(pane);
-    }
-
-    form.appendChild(navTabs);
-    form.appendChild(tabContent);
-  }
-
+  form.append(...renderPages(prompt, state));
   wrapper.appendChild(form);
 
   // Visual separator between the prompt form and execution controls
@@ -561,10 +645,16 @@ export async function renderPromptForm(
   logCheckWrapper.appendChild(logCheckbox);
   logCheckWrapper.appendChild(logCheckLabel);
 
+  const resetButton = document.createElement('button');
+  resetButton.type = 'button';
+  resetButton.className = 'btn btn-outline-secondary';
+  resetButton.textContent = i18n.resetButton ?? 'Reset';
+
   const statusEl = document.createElement('span');
   statusEl.className = 'text-muted small';
 
   toolbar.appendChild(runButton);
+  toolbar.appendChild(resetButton);
   toolbar.appendChild(logCheckWrapper);
   toolbar.appendChild(statusEl);
   wrapper.appendChild(toolbar);
@@ -573,6 +663,17 @@ export async function renderPromptForm(
   const resultsContainer = document.createElement('div');
   resultsContainer.id = containerId + '-results';
   wrapper.appendChild(resultsContainer);
+
+  // Reset handler — rebuild the form from the prompt's default values, keeping
+  // the session and the cached library/table/column lists
+  resetButton.addEventListener('click', () => {
+    state.values = structuredClone(prompt.values ?? {});
+    state.listeners.clear();
+    state.controlDefs.clear();
+    form.replaceChildren(...renderPages(prompt, state));
+    resultsContainer.replaceChildren();
+    statusEl.textContent = '';
+  });
 
   // Submit handler
   runButton.addEventListener('click', async () => {
@@ -589,6 +690,7 @@ export async function renderPromptForm(
     }
 
     runButton.disabled = true;
+    resetButton.disabled = true;
     statusEl.textContent = i18n.submittingStatus ?? 'Submitting job...';
     resultsContainer.innerHTML = '';
 
@@ -667,6 +769,7 @@ export async function renderPromptForm(
       statusEl.textContent = i18n.failedStatus ?? 'Failed';
     } finally {
       runButton.disabled = false;
+      resetButton.disabled = false;
     }
   });
 

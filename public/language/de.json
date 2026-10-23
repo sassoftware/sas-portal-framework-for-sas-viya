@@ -263,7 +263,8 @@
     "reportNotSelectedText": "Kein Bericht ausgewählt"
   },
   "sasContentJob": {
-    "noJobSelectedText": "Kein Job ausgewählt"
+    "noJobSelectedText": "Kein Job ausgewählt",
+    "refreshButton": "Aktualisieren"
   },
   "jobDefinition": {
     "loadingText": "Jobdefinition wird geladen...",
@@ -272,6 +273,7 @@
     "noPromptText": "Diese Jobdefinition hat kein darstellbares Prompt-Format.",
     "parseError": "Die Prompt-Definition der Jobdefinition konnte nicht gelesen werden.",
     "runButton": "Ausführen",
+    "resetButton": "Zurücksetzen",
     "showLogCheckbox": "SAS-Log anzeigen",
     "submittingStatus": "Job wird gesendet...",
     "runningSpinner": "Job wird ausgeführt, bitte warten...",

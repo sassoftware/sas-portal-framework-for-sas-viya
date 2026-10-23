@@ -118,7 +118,7 @@ registerObjectType({
         console.log('[sasContentJob] persistentSession requires computeContext, falling back to per-context sessions');
       }
     }
-    let session: { contextName: string; id: Promise<string> } | null = null;
+    let session: { contextName: string; id: Promise<string>; resolvedId?: string } | null = null;
     let keepaliveTimer: ReturnType<typeof setInterval> | null = null;
 
     const endSession = () => {
@@ -126,10 +126,13 @@ registerObjectType({
         clearInterval(keepaliveTimer);
         keepaliveTimer = null;
       }
-      if (session) {
+      if (session?.resolvedId) {
+        // Terminate synchronously so it is sent even while the page unloads
+        terminateSASSession(session.resolvedId);
+      } else if (session) {
         session.id.then((sessionId) => terminateSASSession(sessionId)).catch(() => {});
-        session = null;
       }
+      session = null;
     };
 
     const acquireSession = (jobContextName: string): Promise<string> => {
@@ -147,6 +150,7 @@ registerObjectType({
       session = { contextName, id };
       id.then((sessionId) => {
         if (session?.id !== id) return;
+        session.resolvedId = sessionId;
         // Ping every 60 seconds so the session survives while the user browses folders
         keepaliveTimer = setInterval(() => {
           keepSessionAlive(sessionId).catch((e) =>

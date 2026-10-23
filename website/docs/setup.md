@@ -147,7 +147,7 @@ The portal reads its configuration from a `config.json` file next to `index.html
 
 Every setting is optional — anything left out (or everything, if there is no `config.json`) falls back to the built-in defaults from `src/config.ts`. Changes take effect on the next page load. If the file can't be read, the portal logs an error in the browser console and uses the built-in defaults.
 
-The zip only contains `config.example.json`, so unzipping a newer release over an existing deployment keeps your `config.json`.
+The zip only contains `config.example.json`, so unzipping a newer release over an existing deployment keeps your `config.json`. If your deployment process replaces the whole directory instead, keep a copy of `config.json` and put it back afterwards — without it the portal silently uses the built-in defaults.
 
 If you build from source, you can instead change the built-in defaults in `src/config.ts` (same settings), which are baked into the bundle.
 

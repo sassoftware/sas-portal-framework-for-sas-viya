@@ -14,6 +14,8 @@
 - Fix: SAS Content Job and SAS Content VA Report objects now render their content browser reliably — with Content SDK 1.1 the `sas-content-area` silently skipped its first render when it connected before its `sas-content-group` had mounted, leaving the browser empty
 - Fix: The SAS Content Job object builds the correct SAS Content path for the selected job (it read the folder ancestors in the wrong format and order, so Job Execution got `/<job name>` and failed with "Unable to get job definition")
 - Fix: Dynamic dropdowns fed by a column selector are populated again after a form is re-rendered with warm caches
+- Fix: Compute sessions are now actually terminated when the page is closed or reloaded (the DELETE is sent with `keepalive`; previously the browser cancelled it, so sessions lingered until their idle timeout and could exhaust a context's server limit)
+- Fix: A failed compute session creation (e.g. the context's server limit is reached) is now reported as "Failed to start compute session" instead of a "ready" session with an `undefined` ID
 - Fix: A dynamic dropdown's displayed value is now also its submitted value — previously a required dynamic dropdown showed its first option but failed validation until the user changed it
 
 ## SAS Portal Framework for SAS Viya v2.0.1

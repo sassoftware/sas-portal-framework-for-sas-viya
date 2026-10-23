@@ -94,7 +94,7 @@ Copy `config.example.json` (shipped in the zip) to `config.json` next to `index.
 - `showViyaLink` — `false` hides the "Go to SAS Viya" link in the header.
 - `viyaHost` — your SAS Viya host URL; only needed if the portal is not served under the same top-level URL as Viya.
 
-Every setting is optional and falls back to the built-in defaults in `src/config.ts`. Changes apply on the next page load, and unzipping a newer release keeps your `config.json`.
+Every setting is optional and falls back to the built-in defaults in `src/config.ts`. Changes apply on the next page load, and unzipping a newer release over the existing files keeps your `config.json` (if you replace the whole directory, put it back afterwards).
 
 ### Multi-Language Support
 

@@ -8,7 +8,7 @@ The SAS Content Job object combines two elements:
 1. A SAS Content navigation object where you can click through folders and select a SAS Job Definition (a simple click loads the job below). Use the refresh icon in its toolbar to reload the folder contents.
 2. Here the SAS Job Definition is displayed. Its **Reset** button restores the job's default values. The job is unloaded again when you navigate to another folder.
 
-This combined object enables end administrators to provide the easy ability to provide dynamic job selection to the user.
+This combined object enables end administrators to provide the easy ability to provide dynamic job selection to the user. To show one fixed job instead, use the [Job Definition](./job-definition-object.md) object. How jobs are displayed and run, the supported JSON prompt controls, and how compute sessions work are described on the [Job Prompts](./job-prompts.md) page.
 
 In order to create a SAS Content Job object you have to set the objects type to *sasContentJob*, there are additional attributes, but the width has to be 0 - example:
 ```json

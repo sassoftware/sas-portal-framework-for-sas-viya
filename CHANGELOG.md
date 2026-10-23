@@ -8,6 +8,7 @@
 - Change: New `persistentSession`/`computeContext` attributes on the SAS Content Job object keep one compute session alive for all selected jobs
 - Change: The portal is configured at runtime from a `config.json` next to `index.html` on the web server (template: `config.example.json` in the zip), so admins no longer need to rebuild to change `portalFolderUri`, `portalName`, `viyaHost`, or `showViyaLink`; `src/config.ts` remains the built-in defaults
 - Change: New `showViyaLink` setting to hide the "Go to SAS Viya" link in the header
+- Docs: New pages for the Job Definition object (`jobDefinition`, previously undocumented) and a shared Job Prompts reference covering display modes, the supported JSON prompt controls, how values reach the job, and compute sessions
 - Fix: The SAS Content Job object now actually reuses its compute session when switching between jobs — previously every job selection terminated the previous session and started a new one
 - Fix: JSON prompt forms no longer start duplicate compute sessions when controls request the session while it is still being created, and a session still being created when a form is discarded is terminated once it exists
 - Fix: A slow-loading job can no longer replace a job selected after it in the SAS Content Job object

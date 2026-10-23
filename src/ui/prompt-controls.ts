@@ -737,10 +737,11 @@ function buildColumnselector(control: PromptControl, state: PromptState): HTMLEl
   // Subscribe to the referenced inputtable
   if (control.table) {
     addListener(state, control.table, loadColumns);
-    // Try loading immediately if inputtable already has a value
+    // Try loading immediately if inputtable already has a value. Deferred so that
+    // controls rendered after this one have subscribed before a cache hit notifies them.
     const existingVal = state.values[control.table];
     if (existingVal) {
-      loadColumns(existingVal);
+      queueMicrotask(() => loadColumns(existingVal));
     }
   }
 

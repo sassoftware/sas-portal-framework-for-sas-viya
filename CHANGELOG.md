@@ -11,6 +11,9 @@
 - Fix: The SAS Content Job object now actually reuses its compute session when switching between jobs — previously every job selection terminated the previous session and started a new one
 - Fix: JSON prompt forms no longer start duplicate compute sessions when controls request the session while it is still being created, and a session still being created when a form is discarded is terminated once it exists
 - Fix: A slow-loading job can no longer replace a job selected after it in the SAS Content Job object
+- Fix: SAS Content Job and SAS Content VA Report objects now render their content browser reliably — with Content SDK 1.1 the `sas-content-area` silently skipped its first render when it connected before its `sas-content-group` had mounted, leaving the browser empty
+- Fix: The SAS Content Job object builds the correct SAS Content path for the selected job (it read the folder ancestors in the wrong format and order, so Job Execution got `/<job name>` and failed with "Unable to get job definition")
+- Fix: Dynamic dropdowns fed by a column selector are populated again after a form is re-rendered with warm caches
 
 ## SAS Portal Framework for SAS Viya v2.0.1
 

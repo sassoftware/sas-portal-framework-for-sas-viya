@@ -16,6 +16,7 @@ import {
 import type { RenderPromptFormResult } from '../ui/prompt-renderer';
 import { terminateSASSession, keepSessionAlive } from '../api/compute-api';
 import { viyaGet } from '../api/http-client';
+import { renderWhenGroupReady } from '../ui/content-sdk';
 import type { ObjectDefinition, InterfaceText } from '../types';
 
 interface ContentFilterValue {
@@ -191,17 +192,21 @@ registerObjectType({
      */
     async function resolveContentPath(jobDefUri: string, jobName: string): Promise<string | null> {
       try {
+        // Plain application/json returns a bare array; the typed media type wraps it in { ancestors }
         const ancestorsData = await viyaGet<{
           ancestors?: Array<{ name: string }>;
-        }>(`/folders/ancestors?childUri=${encodeURIComponent(jobDefUri)}`);
+        }>(
+          `/folders/ancestors?childUri=${encodeURIComponent(jobDefUri)}`,
+          'application/vnd.sas.content.folder.ancestor+json'
+        );
 
         if (!ancestorsData?.ancestors?.length) {
           console.log('[sasContentJob] No ancestors found, falling back to root');
           return '/' + jobName;
         }
 
-        // ancestors is ordered root → leaf; build the path and append the job name
-        const folderPath = ancestorsData.ancestors.map((a) => a.name).join('/');
+        // ancestors is ordered leaf → root; reverse it to build the path and append the job name
+        const folderPath = ancestorsData.ancestors.map((a) => a.name).reverse().join('/');
         return '/' + folderPath + '/' + jobName;
       } catch (e) {
         console.log('[sasContentJob] Failed to resolve content path:', e);
@@ -330,6 +335,7 @@ registerObjectType({
       }
       sasContentGroup = group;
       sasContentArea = area;
+      renderWhenGroupReady(group, area, () => sasContentGroup === group);
     };
 
     // Opening an item (double-click or Enter) navigates into a folder; for a job the

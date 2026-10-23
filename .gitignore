@@ -19,3 +19,5 @@ Thumbs.db
 
 # Test Documentation Artifacts (root-level only; must not match website/docs)
 /docs/
+# Local runtime configuration (see public/config.example.json)
+public/config.json

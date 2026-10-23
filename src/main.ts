@@ -10,6 +10,7 @@ import { config } from './config';
 import { initAppState } from './state/app-state';
 import { authWithViya } from './portal/auth';
 import { initializeTabsAndDeeplinks } from './portal/deeplink';
+import { loadRuntimeConfig } from './portal/runtime-config';
 
 // Import all object builders so they self-register with the object type registry
 import './objects/text-object';
@@ -28,21 +29,26 @@ import './objects/sas-content-va-report-object';
 import './objects/sas-content-job-object';
 import './objects/job-definition-object';
 
-// Initialize application state from config
-initAppState(config);
+async function startPortal(): Promise<void> {
+  // Initialize application state from config.json on the web server, falling back to src/config.ts
+  const appConfig = await loadRuntimeConfig(config);
+  initAppState(appConfig);
 
-// Set the portal name in the navbar
-const portalNameEl = document.getElementById('PORTALNAME');
-if (portalNameEl) {
-  portalNameEl.innerText = config.portalName;
+  // Set the portal name in the navbar
+  const portalNameEl = document.getElementById('PORTALNAME');
+  if (portalNameEl) {
+    portalNameEl.innerText = appConfig.portalName;
+  }
+
+  const portalContainer = document.getElementById('SASPORTAL');
+  const loginButton = document.getElementById('SASLOGIN') as HTMLButtonElement;
+
+  if (portalContainer && loginButton) {
+    authWithViya(loginButton, portalContainer);
+  }
 }
 
-const portalContainer = document.getElementById('SASPORTAL');
-const loginButton = document.getElementById('SASLOGIN') as HTMLButtonElement;
-
-if (portalContainer && loginButton) {
-  authWithViya(loginButton, portalContainer);
-}
+startPortal();
 
 // Initialize tab deep-linking
 if (document.readyState === 'loading') {

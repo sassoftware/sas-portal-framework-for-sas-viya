@@ -7,7 +7,8 @@
 - Change: Double-clicking a job in the SAS Content Job object no longer opens it in a new SAS Viya tab; set `openOnDoubleClick: 1` to restore the old behavior
 - Change: The SAS Content Job object unloads the displayed job when the user navigates to another folder (including via the breadcrumb)
 - Change: New `persistentSession`/`computeContext` attributes on the SAS Content Job object keep one compute session alive for all selected jobs
-- Change: New `showViyaLink` setting in `src/config.ts` to hide the "Go to SAS Viya" link in the header
+- Change: The portal is configured at runtime from a `config.json` next to `index.html` on the web server (template: `config.example.json` in the zip), so admins no longer need to rebuild to change `portalFolderUri`, `portalName`, `viyaHost`, or `showViyaLink`; `src/config.ts` remains the built-in defaults
+- Change: New `showViyaLink` setting to hide the "Go to SAS Viya" link in the header
 - Fix: The SAS Content Job object now actually reuses its compute session when switching between jobs — previously every job selection terminated the previous session and started a new one
 - Fix: JSON prompt forms no longer start duplicate compute sessions when controls request the session while it is still being created, and a session still being created when a form is discarded is terminated once it exists
 - Fix: A slow-loading job can no longer replace a job selected after it in the SAS Content Job object

@@ -5,6 +5,8 @@
 
 import type { AppConfig } from './state/app-state';
 
+// Built-in defaults. A config.json next to index.html on the web server overrides
+// any of these at runtime (see public/config.example.json), without rebuilding.
 export const config: AppConfig = {
   // SAS Viya host URL
   viyaHost: window.location.origin,

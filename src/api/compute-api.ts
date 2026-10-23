@@ -68,6 +68,9 @@ export async function createSASSession(
     }
   );
   const session = await response.json();
+  if (!response.ok || !session?.id) {
+    throw new Error(session?.message ?? `Failed to create a compute session (HTTP ${response.status})`);
+  }
   return session.id;
 }
 
@@ -175,14 +178,20 @@ export async function keepSessionAlive(
 }
 
 /**
- * Terminate a SAS compute session.
+ * Terminate a SAS compute session. Sent with keepalive so it still reaches the
+ * server when called while the page unloads — otherwise the session lingers
+ * until its idle timeout and keeps occupying a compute server.
  */
 export async function terminateSASSession(
   sasSessionID: string
 ): Promise<number> {
-  const response = await viyaFetch(
-    `/compute/sessions/${sasSessionID}`,
-    { method: 'DELETE' }
-  );
-  return response.status;
+  const path = `/compute/sessions/${sasSessionID}`;
+  try {
+    const response = await viyaFetch(path, { method: 'DELETE', keepalive: true });
+    return response.status;
+  } catch {
+    // Some browsers reject keepalive requests that need a CORS preflight (Viya on another origin)
+    const response = await viyaFetch(path, { method: 'DELETE' });
+    return response.status;
+  }
 }

@@ -14,6 +14,8 @@ export interface ViyaFetchOptions {
   body?: string | FormData | Blob;
   accept?: string;
   contentType?: string;
+  /** Let the request outlive the page (e.g. cleanup sent while it unloads) */
+  keepalive?: boolean;
 }
 
 /**
@@ -48,6 +50,7 @@ export async function viyaFetch(
     headers,
     credentials: 'include',
     redirect: 'follow',
+    keepalive: options.keepalive,
   };
 
   if (options.body !== undefined) {

@@ -1,5 +1,24 @@
 # Changelog
 
+## Unreleased
+
+- Change: Job definitions rendered from a JSON prompt get a **Reset** button that restores the prompt's default values (keeping the compute session); HTML/XML prompt jobs get one that reloads the form
+- Change: Double-clicking a job in the SAS Content Job object no longer opens it in a new SAS Viya tab; set `openOnDoubleClick: 1` to restore the old behavior
+- Change: The SAS Content Job object unloads the displayed job when the user navigates to another folder (including via the breadcrumb)
+- Change: New `persistentSession`/`computeContext` attributes on the SAS Content Job object keep one compute session alive for all selected jobs
+- Change: The portal is configured at runtime from a `config.json` next to `index.html` on the web server (template: `config.example.json` in the zip), so admins no longer need to rebuild to change `portalFolderUri`, `portalName`, `viyaHost`, or `showViyaLink`; `src/config.ts` remains the built-in defaults
+- Change: New `showViyaLink` setting to hide the "Go to SAS Viya" link in the header
+- Docs: New pages for the Job Definition object (`jobDefinition`, previously undocumented) and a shared Job Prompts reference covering display modes, the supported JSON prompt controls, how values reach the job, and compute sessions
+- Fix: The SAS Content Job object now actually reuses its compute session when switching between jobs — previously every job selection terminated the previous session and started a new one
+- Fix: JSON prompt forms no longer start duplicate compute sessions when controls request the session while it is still being created, and a session still being created when a form is discarded is terminated once it exists
+- Fix: A slow-loading job can no longer replace a job selected after it in the SAS Content Job object
+- Fix: SAS Content Job and SAS Content VA Report objects now render their content browser reliably — with Content SDK 1.1 the `sas-content-area` silently skipped its first render when it connected before its `sas-content-group` had mounted, leaving the browser empty
+- Fix: The SAS Content Job object builds the correct SAS Content path for the selected job (it read the folder ancestors in the wrong format and order, so Job Execution got `/<job name>` and failed with "Unable to get job definition")
+- Fix: Dynamic dropdowns fed by a column selector are populated again after a form is re-rendered with warm caches
+- Fix: Compute sessions are now actually terminated when the page is closed or reloaded (the DELETE is sent with `keepalive`; previously the browser cancelled it, so sessions lingered until their idle timeout and could exhaust a context's server limit)
+- Fix: A failed compute session creation (e.g. the context's server limit is reached) is now reported as "Failed to start compute session" instead of a "ready" session with an `undefined` ID
+- Fix: A dynamic dropdown's displayed value is now also its submitted value — previously a required dynamic dropdown showed its first option but failed validation until the user changed it
+
 ## SAS Portal Framework for SAS Viya v2.0.1
 
 - Fix: Commit the docs page `website/docs/editing-content.md`, which an over-broad root `.gitignore` rule (`docs/`) had silently excluded — its absence broke the `../editing-content` link and failed the GitHub Pages build. The rule is now anchored to `/docs/` so it no longer matches `website/docs/`.

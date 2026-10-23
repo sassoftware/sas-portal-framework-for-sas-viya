@@ -18,12 +18,15 @@ export async function addUserProfile(
 
   const userInfoContainer = document.createElement('div');
 
-  const viyaEnvironmentLink = document.createElement('a');
-  viyaEnvironmentLink.href = state.config.viyaHost;
-  viyaEnvironmentLink.style.paddingRight = '16px';
-  viyaEnvironmentLink.innerText = `${text?.goToViyaText}`;
-  viyaEnvironmentLink.setAttribute('target', '_blank');
-  viyaEnvironmentLink.setAttribute('rel', 'noopener noreferrer');
+  if (state.config.showViyaLink) {
+    const viyaEnvironmentLink = document.createElement('a');
+    viyaEnvironmentLink.href = state.config.viyaHost;
+    viyaEnvironmentLink.style.paddingRight = '16px';
+    viyaEnvironmentLink.innerText = `${text?.goToViyaText}`;
+    viyaEnvironmentLink.setAttribute('target', '_blank');
+    viyaEnvironmentLink.setAttribute('rel', 'noopener noreferrer');
+    userInfoContainer.appendChild(viyaEnvironmentLink);
+  }
 
   const logOutLink = document.createElement('a');
   logOutLink.innerText = `${text?.logOutText} ${userInfo?.name}`;
@@ -31,7 +34,6 @@ export async function addUserProfile(
   logOutLink.title = `${text?.logOutText} ${userInfo?.name}`;
   logOutLink.id = 'logoutLink';
 
-  userInfoContainer.appendChild(viyaEnvironmentLink);
   userInfoContainer.appendChild(logOutLink);
 
   loginButton.outerHTML = userInfoContainer.outerHTML;

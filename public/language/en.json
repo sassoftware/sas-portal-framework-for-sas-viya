@@ -272,6 +272,7 @@
     "noPromptText": "This job definition does not have a renderable prompt.",
     "parseError": "Unable to parse the job definition prompt.",
     "runButton": "Run",
+    "resetButton": "Reset",
     "showLogCheckbox": "Show SAS Log",
     "submittingStatus": "Submitting job...",
     "runningSpinner": "Running job, please wait...",

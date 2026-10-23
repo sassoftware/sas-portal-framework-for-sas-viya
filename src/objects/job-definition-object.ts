@@ -6,7 +6,7 @@
 import { registerObjectType } from './registry';
 import { getAppState } from '../state/app-state';
 import { resolveJobDefinitionPath, getJobDefinition } from '../api/job-definitions-api';
-import { renderPromptForm, determineRenderMode } from '../ui/prompt-renderer';
+import { renderPromptForm, renderJobIframe, determineRenderMode } from '../ui/prompt-renderer';
 import type { ObjectDefinition, InterfaceText } from '../types';
 
 registerObjectType({
@@ -59,12 +59,13 @@ registerObjectType({
       if (renderMode === 'iframe') {
         // Render via SAS Job Execution iframe (HTML form or XML prompt)
         const encodedPath = encodeURIComponent(contentPath);
-        const iframe = document.createElement('iframe');
-        iframe.setAttribute('src', `${config.viyaHost}/SASJobExecution/?_program=${encodedPath}`);
-        iframe.style.width = '100%';
-        iframe.style.height = definition.height ?? '600px';
-        iframe.style.border = 'none';
-        container.appendChild(iframe);
+        container.appendChild(
+          renderJobIframe(
+            `${config.viyaHost}/SASJobExecution/?_program=${encodedPath}`,
+            i18n ?? {},
+            definition.height ?? '600px'
+          )
+        );
       } else if (renderMode === 'json') {
         // JSON prompt: render interactive form from prompt_v2
         const result = await renderPromptForm(jobDef, `${paneID}-obj-${definition.id}`, contentPath, i18n ?? {});

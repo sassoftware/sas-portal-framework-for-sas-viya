@@ -5,6 +5,8 @@
 
 import type { AppConfig } from './state/app-state';
 
+// Built-in defaults. A config.json next to index.html on the web server overrides
+// any of these at runtime (see public/config.example.json), without rebuilding.
 export const config: AppConfig = {
   // SAS Viya host URL
   viyaHost: window.location.origin,
@@ -12,4 +14,6 @@ export const config: AppConfig = {
   portalFolderUri: '68384628-8305-4285-9f16-0cdc57d13dc5',
   // Name that appears in the top left of the portal
   portalName: 'SAS Portal',
+  // Show the "Go to SAS Viya" link in the header
+  showViyaLink: true,
 };

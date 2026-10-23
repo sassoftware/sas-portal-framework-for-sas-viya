@@ -356,6 +356,20 @@ function buildDropdown(control: PromptControl, state: PromptState): HTMLElement 
       }
     };
 
+    // After (re)populating, keep a still-valid value selected and make the state match
+    // what the select shows — otherwise its first option is displayed but never submitted
+    const syncSelection = () => {
+      const current = state.values[control.id];
+      if (current != null && Array.from(select.options).some((o) => o.value === String(current))) {
+        select.value = String(current);
+      }
+      const shown = select.value || null;
+      if (shown !== current) {
+        state.values[control.id] = shown;
+        notifyListeners(state, control.id, shown);
+      }
+    };
+
     const populateFromValues = (values: string[]) => {
       clearOptions();
       for (const val of values) {
@@ -364,6 +378,7 @@ function buildDropdown(control: PromptControl, state: PromptState): HTMLElement 
         opt.textContent = val;
         select.appendChild(opt);
       }
+      syncSelection();
     };
 
     addListener(state, refName, async (columns: unknown) => {
@@ -412,6 +427,7 @@ function buildDropdown(control: PromptControl, state: PromptState): HTMLElement 
         opt.textContent = val;
         select.appendChild(opt);
       }
+      syncSelection();
     });
   }
 
@@ -737,10 +753,11 @@ function buildColumnselector(control: PromptControl, state: PromptState): HTMLEl
   // Subscribe to the referenced inputtable
   if (control.table) {
     addListener(state, control.table, loadColumns);
-    // Try loading immediately if inputtable already has a value
+    // Try loading immediately if inputtable already has a value. Deferred so that
+    // controls rendered after this one have subscribed before a cache hit notifies them.
     const existingVal = state.values[control.table];
     if (existingVal) {
-      loadColumns(existingVal);
+      queueMicrotask(() => loadColumns(existingVal));
     }
   }
 

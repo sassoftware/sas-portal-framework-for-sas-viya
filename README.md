@@ -30,7 +30,7 @@ You will need [Node.js](https://nodejs.org/) (v18 or later) to build the portal 
 
 Each tagged version publishes a ready-to-deploy `sas-portal.zip` on the [Releases page](https://github.com/sassoftware/sas-portal-framework-for-sas-viya/releases). Download the latest `sas-portal.zip` and unzip it onto your web server (see [Deploying the Portal](#deploying-the-portal)) — no Node.js or build step required.
 
-> **Note:** the prebuilt bundle is built with the default `src/config.ts`, meaning `viyaHost` is `window.location.origin` (the portal must be served under the same top-level URL as your SAS Viya host) and `portalFolderUri` points at the sample content folder. If your web server runs on a different URL than Viya, or you use your own portal folder, [build from source](#building-from-source) instead so your configuration is baked into the bundle.
+> **Note:** configure the deployed portal with a `config.json` next to `index.html` on the web server — no rebuild needed. See [Configuration](#configuration).
 
 #### Building from Source
 
@@ -42,10 +42,7 @@ cd sas-portal-framework-for-sas-viya
 npm install
 ```
 
-2. Configure the portal by editing `src/config.ts`:
-   - Set `viyaHost` to your SAS Viya host URL (only needed if the portal is not hosted under the same URL as the Viya host)
-   - Set `portalFolderUri` to the UUID of your portal content folder
-   - Set `portalName` to the name displayed in the portal navbar
+2. Optionally change the built-in defaults in `src/config.ts`. A `config.json` on the web server still overrides them (see [Configuration](#configuration)).
 
 3. Build the portal:
 
@@ -82,20 +79,22 @@ The `VA Test` page also requires an additional setup: run the `Load-HMEQ.sas` fi
 
 ### Configuration
 
-Edit `src/config.ts` to configure the portal:
+Copy `config.example.json` (shipped in the zip) to `config.json` next to `index.html` on the web server and edit it — no rebuild needed:
 
-```typescript
-export const config: AppConfig = {
-  // SAS Viya host URL - change if your web server is not under the same URL as Viya
-  viyaHost: window.location.origin,
-  // UUID of the portal content folder in SAS Viya
-  portalFolderUri: '68384628-8305-4285-9f16-0cdc57d13dc5',
-  // Name displayed in the portal navbar
-  portalName: 'SAS Portal',
-};
+```json
+{
+    "portalFolderUri": "68384628-8305-4285-9f16-0cdc57d13dc5",
+    "portalName": "SAS Portal",
+    "showViyaLink": true
+}
 ```
 
-If you imported the sample content you can skip changing the `portalFolderUri`. If you created your own portal folder, replace the value with the URI of your folder (go to the folder in SAS Environment Manager, select it and copy just the URI ID — everything after `/folders/folders/`).
+- `portalFolderUri` — the URI (or just the ID) of your portal content folder. Keep the default if you imported the sample content.
+- `portalName` — the name displayed in the portal navbar.
+- `showViyaLink` — `false` hides the "Go to SAS Viya" link in the header.
+- `viyaHost` — your SAS Viya host URL; only needed if the portal is not served under the same top-level URL as Viya.
+
+Every setting is optional and falls back to the built-in defaults in `src/config.ts`. Changes apply on the next page load, and unzipping a newer release over the existing files keeps your `config.json` (if you replace the whole directory, put it back afterwards).
 
 ### Multi-Language Support
 

@@ -5,6 +5,7 @@
 
 import { registerObjectType } from './registry';
 import { getAppState } from '../state/app-state';
+import { renderWhenGroupReady } from '../ui/content-sdk';
 import type { ObjectDefinition, InterfaceText } from '../types';
 
 interface ContentFilterValue {
@@ -126,6 +127,7 @@ registerObjectType({
     sasContentGroup.appendChild(sasReport);
 
     sasContentVAReportContainer.appendChild(sasContentGroup);
+    renderWhenGroupReady(sasContentGroup, sasContentArea);
 
     return sasContentVAReportContainer;
   },

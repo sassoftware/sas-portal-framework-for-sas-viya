@@ -8,14 +8,16 @@ import { getAppState } from '../state/app-state';
 import { getJobDefinition } from '../api/job-definitions-api';
 import {
   renderPromptForm,
+  renderJobIframe,
   determineRenderMode,
   getContextName,
-  ensureSession,
+  createContextSession,
 } from '../ui/prompt-renderer';
 import type { RenderPromptFormResult } from '../ui/prompt-renderer';
-import { terminateSASSession } from '../api/compute-api';
+import { terminateSASSession, keepSessionAlive } from '../api/compute-api';
 import { viyaGet } from '../api/http-client';
-import type { ObjectDefinition, InterfaceText, PromptState } from '../types';
+import { renderWhenGroupReady } from '../ui/content-sdk';
+import type { ObjectDefinition, InterfaceText } from '../types';
 
 interface ContentFilterValue {
   type: string;
@@ -28,6 +30,7 @@ interface ContentSelectionItem {
     id: string;
     type: {
       sasType: string;
+      isFolder?: boolean;
     };
   };
 }
@@ -43,6 +46,15 @@ interface SasContentGroupElement extends HTMLElement {
 
 interface SasContentAreaElement extends HTMLElement {
   onSelect: (value: ContentSelectionItem[]) => void;
+  onBreadcrumbSelect: (value: { breadcrumbPath: ContentSelectionItem[] }) => void;
+}
+
+function isFolder(item: ContentSelectionItem): boolean {
+  return item.resource?.type?.isFolder === true || item.resource?.type?.sasType === 'folder';
+}
+
+function isTextInput(target: EventTarget | null): boolean {
+  return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement;
 }
 
 registerObjectType({
@@ -57,41 +69,12 @@ registerObjectType({
     const def = definition as Record<string, unknown>;
     const scjInterfaceText = (interfaceText?.sasContentJob ?? {}) as Record<string, string>;
     const jobI18n = (interfaceText?.jobDefinition ?? {}) as Record<string, string>;
+    const objectID = `${paneID}-obj-${definition?.id}`;
 
     const sasContentJobContainer = document.createElement('div');
-    sasContentJobContainer.setAttribute('id', `${paneID}-obj-${definition?.id}`);
+    sasContentJobContainer.setAttribute('id', objectID);
 
-    // ---- SAS Content browser ----
-    const sasContentGroup = document.createElement('sas-content-group') as SasContentGroupElement;
-    sasContentGroup.id = `${paneID}-obj-${definition?.id}-cg`;
-    sasContentGroup.className = 'col-12';
-    sasContentGroup.setAttribute('url', viyaHost);
-    sasContentGroup.initialFilterValue = {
-      queryModeFilter: "or(eq(contentType,'jobDefinition'),eq(contentType,'folder'))",
-    };
-
-    const folderFilter = def?.folderFilter as string | undefined;
-    if (folderFilter && folderFilter.length > 0) {
-      const folderFilterValue: ContentFilterValue = {
-        type: 'folderUri',
-        value: folderFilter,
-      };
-      sasContentGroup.initialNavigationValue = {
-        location: folderFilterValue,
-        locationContextPath: [folderFilterValue],
-        locations: [folderFilterValue],
-      };
-    } else {
-      const sasContentIdentifier: ContentFilterValue = {
-        type: 'persistentLocation',
-        value: 'root',
-      };
-      sasContentGroup.initialNavigationValue = {
-        location: sasContentIdentifier,
-        locationContextPath: [sasContentIdentifier],
-        locations: [sasContentIdentifier],
-      };
-    }
+    let lastSelected: ContentSelectionItem | null = null;
 
     // ---- Job display area ----
     const sasContentJobName = document.createElement('h3');
@@ -101,23 +84,91 @@ registerObjectType({
 
     // Track the current prompt renderer result so we can clean up on selection change
     let currentResult: RenderPromptFormResult | null = null;
-    // Track a shared session state for reuse across jobs with the same compute context
-    let sharedState: PromptState | null = null;
+    // Incremented whenever the job area changes, so a slow load can't render over a newer one
+    let loadToken = 0;
 
-    const cleanupCurrentJob = () => {
+    const clearJob = () => {
+      loadToken++;
       if (currentResult) {
         currentResult.cleanup();
         currentResult = null;
       }
+      if (def?.jobName === 1) {
+        sasContentJobName.innerText = scjInterfaceText?.noJobSelectedText ?? '';
+      }
+      jobContainer.style.display = 'none';
+      jobContainer.replaceChildren();
+    };
+
+    const showJobError = () => {
+      const errorEl = document.createElement('p');
+      errorEl.className = 'text-danger';
+      errorEl.innerText = jobI18n?.errorText ?? 'Unable to load the job definition.';
+      jobContainer.replaceChildren(errorEl);
+    };
+
+    // ---- Compute session ----
+    // One session owned by this object and shared by every JSON-prompt job it renders.
+    // By default it follows each job's compute context; with persistentSession it
+    // always uses the configured computeContext.
+    let persistentContext: string | undefined;
+    if (def?.persistentSession === 1) {
+      persistentContext = definition.computeContext;
+      if (!persistentContext) {
+        console.log('[sasContentJob] persistentSession requires computeContext, falling back to per-context sessions');
+      }
+    }
+    let session: { contextName: string; id: Promise<string>; resolvedId?: string } | null = null;
+    let keepaliveTimer: ReturnType<typeof setInterval> | null = null;
+
+    const endSession = () => {
+      if (keepaliveTimer) {
+        clearInterval(keepaliveTimer);
+        keepaliveTimer = null;
+      }
+      if (session?.resolvedId) {
+        // Terminate synchronously so it is sent even while the page unloads
+        terminateSASSession(session.resolvedId);
+      } else if (session) {
+        session.id.then((sessionId) => terminateSASSession(sessionId)).catch(() => {});
+      }
+      session = null;
+    };
+
+    const acquireSession = (jobContextName: string): Promise<string> => {
+      const contextName = persistentContext ?? jobContextName;
+      if (session?.contextName === contextName) {
+        console.log(`[sasContentJob] Reusing session (context: ${contextName})`);
+        return session.id;
+      }
+      if (session) {
+        console.log(`[sasContentJob] Context changed from "${session.contextName}" to "${contextName}", terminating old session`);
+      }
+      endSession();
+
+      const id = createContextSession(contextName);
+      session = { contextName, id };
+      id.then((sessionId) => {
+        if (session?.id !== id) return;
+        session.resolvedId = sessionId;
+        // Ping every 60 seconds so the session survives while the user browses folders
+        keepaliveTimer = setInterval(() => {
+          keepSessionAlive(sessionId).catch((e) =>
+            console.log('[sasContentJob] Session keepalive failed:', e)
+          );
+        }, 60_000);
+      }).catch((e) => {
+        console.log('[sasContentJob] Session creation failed:', e);
+        // Let the next job retry
+        if (session?.id === id) session = null;
+      });
+      return id;
     };
 
     // Clean up on page unload
     window.addEventListener('beforeunload', () => {
-      cleanupCurrentJob();
-      if (sharedState?.sessionId) {
-        terminateSASSession(sharedState.sessionId);
-        sharedState = null;
-      }
+      clearJob();
+      endSession();
     });
 
     /**
@@ -126,17 +177,21 @@ registerObjectType({
      */
     async function resolveContentPath(jobDefUri: string, jobName: string): Promise<string | null> {
       try {
+        // Plain application/json returns a bare array; the typed media type wraps it in { ancestors }
         const ancestorsData = await viyaGet<{
           ancestors?: Array<{ name: string }>;
-        }>(`/folders/ancestors?childUri=${encodeURIComponent(jobDefUri)}`);
+        }>(
+          `/folders/ancestors?childUri=${encodeURIComponent(jobDefUri)}`,
+          'application/vnd.sas.content.folder.ancestor+json'
+        );
 
         if (!ancestorsData?.ancestors?.length) {
           console.log('[sasContentJob] No ancestors found, falling back to root');
           return '/' + jobName;
         }
 
-        // ancestors is ordered root → leaf; build the path and append the job name
-        const folderPath = ancestorsData.ancestors.map((a) => a.name).join('/');
+        // ancestors is ordered leaf → root; reverse it to build the path and append the job name
+        const folderPath = ancestorsData.ancestors.map((a) => a.name).reverse().join('/');
         return '/' + folderPath + '/' + jobName;
       } catch (e) {
         console.log('[sasContentJob] Failed to resolve content path:', e);
@@ -144,25 +199,11 @@ registerObjectType({
       }
     }
 
-    // ---- Selection handler ----
-    const sasContentArea = document.createElement('sas-content-area') as SasContentAreaElement;
-    sasContentArea.id = `${paneID}-obj-${definition?.id}-ca`;
-    sasContentArea.setAttribute('url', viyaHost);
-    sasContentArea.setAttribute('selection-mode', 'single');
-    sasContentArea.setAttribute('initial-selection-index', '0');
-    sasContentArea.onSelect = async (value: ContentSelectionItem[]) => {
-      if (!value?.length || value[0]?.resource?.type?.sasType !== 'jobDefinition') {
-        // No job selected or not a job definition
-        cleanupCurrentJob();
-        if (def?.jobName === 1) {
-          sasContentJobName.innerText = scjInterfaceText?.noJobSelectedText ?? '';
-        }
-        jobContainer.style.display = 'none';
-        jobContainer.innerHTML = '';
-        return;
-      }
+    // ---- Job loading ----
+    const loadJob = async (job: ContentSelectionItem) => {
+      clearJob();
+      const token = loadToken;
 
-      const job = value[0];
       // resource.id may be a full URI (e.g. "/jobDefinitions/definitions/UUID") or just the UUID
       const resourceId = job.resource.id;
       const jobDefUri = resourceId.startsWith('/') ? resourceId : `/jobDefinitions/definitions/${resourceId}`;
@@ -174,11 +215,10 @@ registerObjectType({
 
       // Show loading indicator
       jobContainer.style.display = 'block';
-      jobContainer.innerHTML = '';
       const loadingEl = document.createElement('p');
       loadingEl.className = 'text-muted';
       loadingEl.innerText = jobI18n?.loadingText ?? 'Loading job definition...';
-      jobContainer.appendChild(loadingEl);
+      jobContainer.replaceChildren(loadingEl);
 
       try {
         // Fetch the full job definition
@@ -188,98 +228,117 @@ registerObjectType({
 
         // Resolve the content path for SAS Job Execution
         const contentPath = await resolveContentPath(jobDefUri, job.name);
+        if (token !== loadToken) return;
         if (!contentPath) {
-          jobContainer.innerHTML = '';
-          const errorEl = document.createElement('p');
-          errorEl.className = 'text-danger';
-          errorEl.innerText = jobI18n?.errorText ?? 'Unable to load the job definition.';
-          jobContainer.appendChild(errorEl);
+          showJobError();
           return;
         }
         console.log(`[sasContentJob] Resolved content path: ${contentPath}`);
 
-        // Clean up the previous prompt renderer
-        cleanupCurrentJob();
-        jobContainer.innerHTML = '';
-
         if (renderMode === 'json') {
-          // Determine if we can reuse the existing session
-          const newContextName = getContextName(jobDef);
-          let existingSessionId: string | undefined;
-
-          if (sharedState?.sessionId && sharedState.contextName === newContextName) {
-            // Same compute context — reuse the session
-            existingSessionId = sharedState.sessionId;
-            console.log(`[sasContentJob] Reusing session ${existingSessionId} (same context: ${newContextName})`);
-          } else if (sharedState?.sessionId) {
-            // Different compute context — terminate old session
-            console.log(`[sasContentJob] Context changed from "${sharedState.contextName}" to "${newContextName}", terminating old session`);
-            terminateSASSession(sharedState.sessionId);
-            sharedState = null;
-          }
-
           const result = await renderPromptForm(
             jobDef,
-            `${paneID}-obj-${definition.id}-job`,
+            `${objectID}-job`,
             contentPath,
             jobI18n,
-            {
-              existingSessionId,
-              externalSession: !!existingSessionId,
-            }
+            { externalSession: acquireSession(getContextName(jobDef)) }
           );
-
-          currentResult = result;
-
-          // If this was a fresh session, track it for sharing
-          if (!existingSessionId) {
-            // Wait for the session to be created, then store state for sharing
-            ensureSession(result.state)
-              .then(() => {
-                sharedState = result.state;
-              })
-              .catch(() => {});
-          } else {
-            sharedState = result.state;
+          if (token !== loadToken) {
+            result.cleanup();
+            return;
           }
-
-          jobContainer.appendChild(result.element);
+          currentResult = result;
+          jobContainer.replaceChildren(result.element);
         } else if (renderMode === 'iframe') {
           // Render via SAS Job Execution iframe (HTML form or XML prompt)
           const encodedPath = encodeURIComponent(contentPath);
-          const iframe = document.createElement('iframe');
-          iframe.src = `${viyaHost}/SASJobExecution/?_program=${encodedPath}`;
-          iframe.style.width = '100%';
-          iframe.style.height = '100%';
-          iframe.style.border = 'none';
-          jobContainer.appendChild(iframe);
+          jobContainer.replaceChildren(
+            renderJobIframe(`${viyaHost}/SASJobExecution/?_program=${encodedPath}`, jobI18n)
+          );
         } else {
           // No renderable prompt
           const noPromptEl = document.createElement('p');
           noPromptEl.innerText = jobI18n?.noPromptText ?? 'This job definition does not have a renderable prompt.';
-          jobContainer.appendChild(noPromptEl);
+          jobContainer.replaceChildren(noPromptEl);
         }
       } catch (e) {
         console.log('[sasContentJob] Error loading job definition:', e);
-        jobContainer.innerHTML = '';
-        const errorEl = document.createElement('p');
-        errorEl.className = 'text-danger';
-        errorEl.innerText = jobI18n?.errorText ?? 'Unable to load the job definition.';
-        jobContainer.appendChild(errorEl);
+        if (token === loadToken) showJobError();
       }
     };
+
+    // ---- SAS Content browser ----
+    const sasContentGroup = document.createElement('sas-content-group') as SasContentGroupElement;
+    sasContentGroup.id = `${objectID}-cg`;
+    sasContentGroup.className = 'col-12';
+    sasContentGroup.setAttribute('url', viyaHost);
+    sasContentGroup.initialFilterValue = {
+      queryModeFilter: "or(eq(contentType,'jobDefinition'),eq(contentType,'folder'))",
+    };
+
+    const folderFilter = def?.folderFilter as string | undefined;
+    const startLocation: ContentFilterValue =
+      folderFilter && folderFilter.length > 0
+        ? { type: 'folderUri', value: folderFilter }
+        : { type: 'persistentLocation', value: 'root' };
+    sasContentGroup.initialNavigationValue = {
+      location: startLocation,
+      locationContextPath: [startLocation],
+      locations: [startLocation],
+    };
+
+    const sasContentArea = document.createElement('sas-content-area') as SasContentAreaElement;
+    sasContentArea.id = `${objectID}-ca`;
+    sasContentArea.setAttribute('url', viyaHost);
+    sasContentArea.setAttribute('selection-mode', 'single');
+    sasContentArea.setAttribute('initial-selection-index', '0');
+    sasContentArea.onSelect = (value: ContentSelectionItem[]) => {
+      lastSelected = value?.[0] ?? null;
+      if (lastSelected?.resource?.type?.sasType === 'jobDefinition') {
+        loadJob(lastSelected);
+      } else {
+        // No job selected or not a job definition
+        clearJob();
+      }
+    };
+    sasContentArea.onBreadcrumbSelect = () => {
+      // The SDK navigates to the selected folder and clears the selection
+      lastSelected = null;
+      clearJob();
+    };
+
+    // Opening an item (double-click or Enter) navigates into a folder; for a job the
+    // SDK opens it in a new SAS Viya tab, with no option to turn that off — so we
+    // swallow those events unless openOnDoubleClick is set.
+    const onOpenGesture = (event: Event) => {
+      if (!sasContentArea.contains(event.target as Node)) return;
+      if (event instanceof KeyboardEvent && (event.key !== 'Enter' || isTextInput(event.target))) return;
+      if (!lastSelected) return;
+
+      if (isFolder(lastSelected)) {
+        lastSelected = null;
+        clearJob();
+      } else if (lastSelected.resource?.type?.sasType === 'jobDefinition' && def?.openOnDoubleClick !== 1) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+    };
+    // Capture phase on an ancestor runs before the SDK's own handlers
+    sasContentJobContainer.addEventListener('dblclick', onOpenGesture, true);
+    sasContentJobContainer.addEventListener('keydown', onOpenGesture, true);
 
     // ---- Assemble DOM ----
     sasContentGroup.appendChild(sasContentArea);
 
     if (def?.jobName === 1) {
-      sasContentJobName.id = `${paneID}-obj-${definition?.id}-jn`;
+      sasContentJobName.id = `${objectID}-jn`;
       sasContentJobName.innerText = scjInterfaceText?.noJobSelectedText ?? '';
       sasContentGroup.appendChild(sasContentJobName);
     }
 
     sasContentGroup.appendChild(jobContainer);
     sasContentJobContainer.appendChild(sasContentGroup);
+    renderWhenGroupReady(sasContentGroup, sasContentArea);
 
     return sasContentJobContainer;
   },

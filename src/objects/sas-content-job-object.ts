@@ -25,7 +25,6 @@ interface ContentFilterValue {
 }
 
 interface ContentSelectionItem {
-  id: string;
   name: string;
   resource: {
     id: string;
@@ -54,16 +53,6 @@ function isFolder(item: ContentSelectionItem): boolean {
   return item.resource?.type?.isFolder === true || item.resource?.type?.sasType === 'folder';
 }
 
-/**
- * Convert a content item to the navigation identifier the Content SDK uses for it
- * (mirrors the SDK's drive data provider).
- */
-function toNavigationIdentifier(item: ContentSelectionItem): ContentFilterValue {
-  return item.id === 'drive-root'
-    ? { type: 'persistentLocation', value: 'root' }
-    : { type: 'driveItemId', value: item.id };
-}
-
 function isTextInput(target: EventTarget | null): boolean {
   return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement;
 }
@@ -85,14 +74,6 @@ registerObjectType({
     const sasContentJobContainer = document.createElement('div');
     sasContentJobContainer.setAttribute('id', objectID);
 
-    // ---- Navigation state ----
-    const folderFilter = def?.folderFilter as string | undefined;
-    const startLocation: ContentFilterValue =
-      folderFilter && folderFilter.length > 0
-        ? { type: 'folderUri', value: folderFilter }
-        : { type: 'persistentLocation', value: 'root' };
-    // Path from the start location to the folder the user is in, so a refresh can return there
-    let locationPath: ContentFilterValue[] = [startLocation];
     let lastSelected: ContentSelectionItem | null = null;
 
     // ---- Job display area ----
@@ -283,71 +264,54 @@ registerObjectType({
     };
 
     // ---- SAS Content browser ----
-    let sasContentGroup: SasContentGroupElement | null = null;
-    let sasContentArea: SasContentAreaElement | null = null;
+    const sasContentGroup = document.createElement('sas-content-group') as SasContentGroupElement;
+    sasContentGroup.id = `${objectID}-cg`;
+    sasContentGroup.className = 'col-12';
+    sasContentGroup.setAttribute('url', viyaHost);
+    sasContentGroup.initialFilterValue = {
+      queryModeFilter: "or(eq(contentType,'jobDefinition'),eq(contentType,'folder'))",
+    };
 
-    /** Create the content browser at the tracked location, replacing the current one. */
-    const mountContentBrowser = () => {
-      const group = document.createElement('sas-content-group') as SasContentGroupElement;
-      group.id = `${objectID}-cg`;
-      group.className = 'col-12';
-      group.setAttribute('url', viyaHost);
-      group.initialFilterValue = {
-        queryModeFilter: "or(eq(contentType,'jobDefinition'),eq(contentType,'folder'))",
-      };
-      group.initialNavigationValue = {
-        location: locationPath[locationPath.length - 1],
-        locationContextPath: locationPath,
-        locations: [startLocation],
-      };
+    const folderFilter = def?.folderFilter as string | undefined;
+    const startLocation: ContentFilterValue =
+      folderFilter && folderFilter.length > 0
+        ? { type: 'folderUri', value: folderFilter }
+        : { type: 'persistentLocation', value: 'root' };
+    sasContentGroup.initialNavigationValue = {
+      location: startLocation,
+      locationContextPath: [startLocation],
+      locations: [startLocation],
+    };
 
-      const area = document.createElement('sas-content-area') as SasContentAreaElement;
-      area.id = `${objectID}-ca`;
-      area.setAttribute('url', viyaHost);
-      area.setAttribute('selection-mode', 'single');
-      area.setAttribute('initial-selection-index', '0');
-      area.onSelect = (value: ContentSelectionItem[]) => {
-        lastSelected = value?.[0] ?? null;
-        if (lastSelected?.resource?.type?.sasType === 'jobDefinition') {
-          loadJob(lastSelected);
-        } else {
-          // No job selected or not a job definition
-          clearJob();
-        }
-      };
-      area.onBreadcrumbSelect = ({ breadcrumbPath }) => {
-        // The SDK navigates to the last breadcrumb item and clears the selection
-        locationPath = breadcrumbPath?.length ? breadcrumbPath.map(toNavigationIdentifier) : [startLocation];
-        lastSelected = null;
-        clearJob();
-      };
-
-      group.appendChild(area);
-      if (def?.jobName === 1) {
-        group.appendChild(sasContentJobName);
-      }
-      group.appendChild(jobContainer);
-
-      if (sasContentGroup) {
-        sasContentGroup.replaceWith(group);
+    const sasContentArea = document.createElement('sas-content-area') as SasContentAreaElement;
+    sasContentArea.id = `${objectID}-ca`;
+    sasContentArea.setAttribute('url', viyaHost);
+    sasContentArea.setAttribute('selection-mode', 'single');
+    sasContentArea.setAttribute('initial-selection-index', '0');
+    sasContentArea.onSelect = (value: ContentSelectionItem[]) => {
+      lastSelected = value?.[0] ?? null;
+      if (lastSelected?.resource?.type?.sasType === 'jobDefinition') {
+        loadJob(lastSelected);
       } else {
-        sasContentJobContainer.appendChild(group);
+        // No job selected or not a job definition
+        clearJob();
       }
-      sasContentGroup = group;
-      sasContentArea = area;
-      renderWhenGroupReady(group, area, () => sasContentGroup === group);
+    };
+    sasContentArea.onBreadcrumbSelect = () => {
+      // The SDK navigates to the selected folder and clears the selection
+      lastSelected = null;
+      clearJob();
     };
 
     // Opening an item (double-click or Enter) navigates into a folder; for a job the
     // SDK opens it in a new SAS Viya tab, with no option to turn that off — so we
     // swallow those events unless openOnDoubleClick is set.
     const onOpenGesture = (event: Event) => {
-      if (!sasContentArea?.contains(event.target as Node)) return;
+      if (!sasContentArea.contains(event.target as Node)) return;
       if (event instanceof KeyboardEvent && (event.key !== 'Enter' || isTextInput(event.target))) return;
       if (!lastSelected) return;
 
       if (isFolder(lastSelected)) {
-        locationPath = [...locationPath, toNavigationIdentifier(lastSelected)];
         lastSelected = null;
         clearJob();
       } else if (lastSelected.resource?.type?.sasType === 'jobDefinition' && def?.openOnDoubleClick !== 1) {
@@ -360,25 +324,17 @@ registerObjectType({
     sasContentJobContainer.addEventListener('keydown', onOpenGesture, true);
 
     // ---- Assemble DOM ----
-    const toolbar = document.createElement('div');
-    toolbar.className = 'mb-2';
-    const refreshButton = document.createElement('button');
-    refreshButton.type = 'button';
-    refreshButton.className = 'btn btn-outline-secondary btn-sm';
-    refreshButton.textContent = scjInterfaceText?.refreshButton ?? 'Refresh';
-    refreshButton.addEventListener('click', () => {
-      lastSelected = null;
-      clearJob();
-      mountContentBrowser();
-    });
-    toolbar.appendChild(refreshButton);
-    sasContentJobContainer.appendChild(toolbar);
+    sasContentGroup.appendChild(sasContentArea);
 
     if (def?.jobName === 1) {
       sasContentJobName.id = `${objectID}-jn`;
       sasContentJobName.innerText = scjInterfaceText?.noJobSelectedText ?? '';
+      sasContentGroup.appendChild(sasContentJobName);
     }
-    mountContentBrowser();
+
+    sasContentGroup.appendChild(jobContainer);
+    sasContentJobContainer.appendChild(sasContentGroup);
+    renderWhenGroupReady(sasContentGroup, sasContentArea);
 
     return sasContentJobContainer;
   },

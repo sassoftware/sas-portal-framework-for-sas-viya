@@ -263,8 +263,7 @@
     "reportNotSelectedText": "No report selected"
   },
   "sasContentJob": {
-    "noJobSelectedText": "No job selected",
-    "refreshButton": "Refresh"
+    "noJobSelectedText": "No job selected"
   },
   "jobDefinition": {
     "loadingText": "Loading job definition...",

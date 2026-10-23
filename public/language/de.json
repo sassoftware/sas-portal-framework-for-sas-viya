@@ -263,8 +263,7 @@
     "reportNotSelectedText": "Kein Bericht ausgewählt"
   },
   "sasContentJob": {
-    "noJobSelectedText": "Kein Job ausgewählt",
-    "refreshButton": "Aktualisieren"
+    "noJobSelectedText": "Kein Job ausgewählt"
   },
   "jobDefinition": {
     "loadingText": "Jobdefinition wird geladen...",

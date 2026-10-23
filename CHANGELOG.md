@@ -2,7 +2,6 @@
 
 ## Unreleased
 
-- Change: SAS Content Job object adds a **Refresh** button that reloads the folder contents, keeping the current folder
 - Change: Job definitions rendered from a JSON prompt get a **Reset** button that restores the prompt's default values (keeping the compute session); HTML/XML prompt jobs get one that reloads the form
 - Change: Double-clicking a job in the SAS Content Job object no longer opens it in a new SAS Viya tab; set `openOnDoubleClick: 1` to restore the old behavior
 - Change: The SAS Content Job object unloads the displayed job when the user navigates to another folder (including via the breadcrumb)
@@ -15,6 +14,7 @@
 - Fix: SAS Content Job and SAS Content VA Report objects now render their content browser reliably — with Content SDK 1.1 the `sas-content-area` silently skipped its first render when it connected before its `sas-content-group` had mounted, leaving the browser empty
 - Fix: The SAS Content Job object builds the correct SAS Content path for the selected job (it read the folder ancestors in the wrong format and order, so Job Execution got `/<job name>` and failed with "Unable to get job definition")
 - Fix: Dynamic dropdowns fed by a column selector are populated again after a form is re-rendered with warm caches
+- Fix: A dynamic dropdown's displayed value is now also its submitted value — previously a required dynamic dropdown showed its first option but failed validation until the user changed it
 
 ## SAS Portal Framework for SAS Viya v2.0.1
 

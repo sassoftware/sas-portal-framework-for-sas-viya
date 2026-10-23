@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## SAS Portal Framework for SAS Viya v2.1.0
 
 - Change: Job definitions rendered from a JSON prompt get a **Reset** button that restores the prompt's default values (keeping the compute session); HTML/XML prompt jobs get one that reloads the form
 - Change: Double-clicking a job in the SAS Content Job object no longer opens it in a new SAS Viya tab; set `openOnDoubleClick: 1` to restore the old behavior
